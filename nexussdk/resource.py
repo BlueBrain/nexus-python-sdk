@@ -1,9 +1,9 @@
 import json
-from . utils.http import httpGet
-from . utils.http import isResponseValid
-from . utils.http import httpPut
-from . utils.http import httpPost
-from . utils.tools import copyThisIntoThat
+from . utils.http import http_get
+from . utils.http import is_response_valid
+from . utils.http import http_put
+from . utils.http import http_post
+from . utils.tools import copy_this_into_that
 import urllib.parse
 
 # This context is the default one when none is provided at the creation of a resource
@@ -33,9 +33,9 @@ def get(org_label, project_label, schema_id, resource_id):
     resource_id = urllib.parse.quote_plus(resource_id)
 
     url = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
-    response_raw = httpGet(url)
+    response_raw = http_get(url)
 
-    if not isResponseValid(response_raw):
+    if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url + " (Status " + str(response_raw.status_code) + ")")
 
     response_obj = json.loads(response_raw.text)
@@ -65,9 +65,9 @@ def update(org_label, project_label, resource):
     # url = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id + "?rev=" + str(previous_rev)
     url = resource["_self"] + "?rev=" + str(previous_rev)
 
-    response_raw = httpPut(url, resource, use_base=False)
+    response_raw = http_put(url, resource, use_base=False)
 
-    if not isResponseValid(response_raw):
+    if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url + " (Status " + str(response_raw.status_code) + ")")
 
     response_obj = json.loads(response_raw.text)
@@ -102,11 +102,11 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
 
     # If the data does not have a '@context' field, we should had a default one
     if "@context" not in data:
-        copyThisIntoThat(DEFAULT_CONTEXT, data)
+        copy_this_into_that(DEFAULT_CONTEXT, data)
 
-    response_raw = httpPost(url, data)
+    response_raw = http_post(url, data)
 
-    if not isResponseValid(response_raw):
+    if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url + " (Status " + str(response_raw.status_code) + ")")
 
     response_obj = json.loads(response_raw.text)
@@ -147,10 +147,15 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         full_text_search_query = urllib.parse.quote_plus(full_text_search_query)
         url = url + "&q=" + full_text_search_query
 
-    response_raw = httpGet(url)
+    response_raw = http_get(url)
 
-    if not isResponseValid(response_raw):
+    if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url + " (Status " + str(response_raw.status_code) + ")")
 
     response_obj = json.loads(response_raw.text)
     return response_obj
+
+
+def deprecate(org_label, project_label, schema_id, resource_id):
+    # TODO
+    print("Not implemented yet")

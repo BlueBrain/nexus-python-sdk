@@ -12,7 +12,7 @@ default_type = 'json'
 header_parts['default'] = header_parts[default_type]
 
 
-def prepareHeader(type='default'):
+def prepare_header(type='default'):
     '''
     type: string. Must be one of the keys in the above declared dict header_parts
     '''
@@ -22,7 +22,7 @@ def prepareHeader(type='default'):
     return header
 
 
-def prepareBody(data, type='default'):
+def prepare_body(data, type='default'):
     if type == 'default':
         type = default_type
     body = None
@@ -38,7 +38,7 @@ def prepareBody(data, type='default'):
     return body
 
 
-def printRequestResponse(r):
+def print_request_response(r):
     print('status: ', r.status_code)
     print('encoding: ', r.encoding)
     print('url: ', r.url)
@@ -50,33 +50,33 @@ def printRequestResponse(r):
     print('history: ', r.history)
 
 
-def httpGet(url, use_base = True):
-    header = prepareHeader()
+def http_get(url, use_base = True):
+    header = prepare_header()
     full_url = (storage.get('environment') if use_base else '') + url
     response = requests.get(full_url, headers=header)
     return response
 
 
 
-def httpPost(url, body=None, data_type='default'):
-    header = prepareHeader(data_type)
+def http_post(url, body=None, data_type='default'):
+    header = prepare_header(data_type)
     full_url = storage.get('environment') + url
-    body_data = prepareBody(body, data_type)
+    body_data = prepare_body(body, data_type)
     response = requests.post(full_url, headers=header, data=body_data)
     return response
 
 
-def httpPut(url, body=None, data_type='default', use_base = True):
-    header = prepareHeader()
+def http_put(url, body=None, data_type='default', use_base = True):
+    header = prepare_header()
     full_url = (storage.get('environment') if use_base else '') + url
 
     print(full_url)
 
     #full_url = 'https://postman-echo.com/put'
-    body_data = prepareBody(body, data_type)
+    body_data = prepare_body(body, data_type)
     response = requests.put(full_url, headers=header, data=body_data)
     return response
 
 
-def isResponseValid(response):
+def is_response_valid(response):
     return (response.status_code < 300)

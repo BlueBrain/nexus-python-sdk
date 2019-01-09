@@ -1,6 +1,6 @@
 #from types import GenericMap
 
-from . nexustypes import GenericMap
+from . genericmap import GenericMap
 
 class Store(GenericMap):
     def __init__(self):

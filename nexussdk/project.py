@@ -1,9 +1,9 @@
 import json
-from . utils.http import httpGet
-from . utils.http import isResponseValid
-from . utils.http import httpPut
-from . utils.http import httpPost
-from . utils.tools import copyThisIntoThat
+from . utils.http import http_get
+from . utils.http import is_response_valid
+from . utils.http import http_put
+from . utils.http import http_post
+from . utils.tools import copy_this_into_that
 import urllib.parse
 
 
@@ -17,4 +17,7 @@ def tag(org_label, project_label, previous_rev, tag):
     print("Not implemented yet")
 
 def list(org_label):
+    print("Not implemented yet")
+
+def deprecate(org_label, project_label):
     print("Not implemented yet")

@@ -1,7 +1,7 @@
 import copy
 import json
 
-def copyThisIntoThat(this, that, deepcopy=False, force=False):
+def copy_this_into_that(this, that, deepcopy=False, force=False):
     """
         Copy the content of a dictionary within another.
 
