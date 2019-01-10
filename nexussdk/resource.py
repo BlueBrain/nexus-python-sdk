@@ -37,30 +37,38 @@ def fetch(org_label, project_label, schema_id, resource_id):
     response_raw = http_get(url)
 
     if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url + " (Status " + str(response_raw.status_code) + ")")
+        raise Exception("Invalid http request for " + response_raw.url +
+                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
+                        response_raw.text)
 
     response_obj = json.loads(response_raw.text)
     return response_obj
 
 
-def update(resource):
+def update(resource, previous_rev=None):
     """
         Update a resource. The resource object is most likely the returned value of a
         nexus.resource.get(), where some fields where modified, added or removed.
         Note that the returned payload only contains the Nexus metadata and not the
         complete resource.
 
-        :param resource: payload of a previoulsy fetched resource, with the modification to be updated
+        :param resource: payload of a previously fetched resource, with the modification to be updated
+        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this updated resource.
     """
 
-    previous_rev = resource["_rev"]
+    if previous_rev is None:
+        previous_rev = resource["_rev"]
+
     url = resource["_self"] + "?rev=" + str(previous_rev)
 
     response_raw = http_put(url, resource, use_base=False)
 
     if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url + " (Status " + str(response_raw.status_code) + ")")
+        raise Exception("Invalid http request for " + response_raw.url +
+                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
+                        response_raw.text)
 
     response_obj = json.loads(response_raw.text)
     return response_obj
@@ -100,7 +108,8 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")")
+                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
+                        response_raw.text)
 
     response_obj = json.loads(response_raw.text)
     return response_obj
@@ -145,30 +154,35 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")")
+                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
+                        response_raw.text)
 
     response_obj = json.loads(response_raw.text)
     return response_obj
 
 
-def deprecate(resource):
+def deprecate(resource, previous_rev=None):
     """
        Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
        possible to update it.
 
        :param resource: payload of a previouslsy fetched resource, with the modification to be updated
+       :param previous_rev: OPTIONAL The previous revision you want to update from.
+       If not provided, the rev from the resource argument will be used.
        :return: A payload containing only the Nexus metadata for this deprecated resource.
     """
 
-    previous_rev = resource["_rev"]
+    if previous_rev is None:
+        previous_rev = resource["_rev"]
+
     url = resource["_self"] + "?rev=" + str(previous_rev)
 
     response_raw = http_delete(url, use_base=False)
 
     if not is_response_valid(response_raw):
-        raise Exception(
-            "Invalid http request for " + response_raw.url +
-            " (Status " + str(response_raw.status_code) + ")")
+        raise Exception("Invalid http request for " + response_raw.url +
+                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
+                        response_raw.text)
 
     response_obj = json.loads(response_raw.text)
     return response_obj
