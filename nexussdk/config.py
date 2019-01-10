@@ -1,5 +1,6 @@
 from . utils.store import storage
 
+
 def set_token(token):
     storage.set("token", token)
 

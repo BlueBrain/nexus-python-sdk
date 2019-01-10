@@ -3,6 +3,7 @@ from . utils.http import http_get
 from . utils.http import is_response_valid
 from . utils.http import http_put
 from . utils.http import http_post
+from . utils.http import http_delete
 from . utils.tools import copy_this_into_that
 import urllib.parse
 
@@ -15,7 +16,7 @@ DEFAULT_CONTEXT = {
 }
 
 
-def get(org_label, project_label, schema_id, resource_id):
+def fetch(org_label, project_label, schema_id, resource_id):
     """
         Fetches a distant resource and returns the payload as a dictionary.
         In case of error, an exception is thrown.
@@ -42,27 +43,18 @@ def get(org_label, project_label, schema_id, resource_id):
     return response_obj
 
 
-def update(org_label, project_label, resource):
+def update(resource):
     """
-        Update a resource. The resource object is mostl likely the returned value of a
+        Update a resource. The resource object is most likely the returned value of a
         nexus.resource.get(), where some fields where modified, added or removed.
         Note that the returned payload only contains the Nexus metadata and not the
         complete resource.
 
-        :param org_label: The label of the organization that the resource belongs to
-        :param project_label: The label of the project that the resource belongs to
         :param resource: payload of a previoulsy fetched resource, with the modification to be updated
         :return: A payload containing only the Nexus metadata for this updated resource.
     """
 
-    # the element composing the query URL need to be URL-encoded
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
-    schema_id = urllib.parse.quote_plus(resource["_constrainedBy"])
-    resource_id = urllib.parse.quote_plus(resource["@id"])
     previous_rev = resource["_rev"]
-
-    # url = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id + "?rev=" + str(previous_rev)
     url = resource["_self"] + "?rev=" + str(previous_rev)
 
     response_raw = http_put(url, resource, use_base=False)
@@ -90,7 +82,7 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
 
     # if no schema is provided, we can create a resource with a non-constraining
     # default schema called 'resource'
-    if schema_id == None:
+    if schema_id is None:
         schema_id = 'resource'
 
     # the element composing the query URL need to be URL-encoded
@@ -107,14 +99,15 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
     response_raw = http_post(url, data)
 
     if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url + " (Status " + str(response_raw.status_code) + ")")
+        raise Exception("Invalid http request for " + response_raw.url +
+                        " (Status " + str(response_raw.status_code) + ")")
 
     response_obj = json.loads(response_raw.text)
     return response_obj
 
 
-
-def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
+def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
+         deprecated=None, full_text_search_query=None):
     """
         List the resources available for a given organization and project.
 
@@ -123,7 +116,9 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         :param schema: OPTIONAL Lists only the resource for a given schema (default: None)
         :param pagination_from: OPTIONAL The pagination index to start from (default: 0)
         :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
-        :param deprecated: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False. If not specified (default), return both deprecated and not deprecated resource.
+        :param deprecated: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False.
+        If not specified (default), return both deprecated and not deprecated resource.
+        :param full_text_search_query: A string to look for as a full text query
         :return: The raw payload as a dictionary
     """
 
@@ -134,10 +129,9 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
 
     if schema:
         schema = urllib.parse.quote_plus(schema)
-        url = url + "/" "schema"
+        url = url + "/" + schema
 
     url = url + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
-
 
     if deprecated is not None:
         deprecated = "true" if deprecated else "false"
@@ -150,12 +144,31 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
     response_raw = http_get(url)
 
     if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url + " (Status " + str(response_raw.status_code) + ")")
+        raise Exception("Invalid http request for " + response_raw.url +
+                        " (Status " + str(response_raw.status_code) + ")")
 
     response_obj = json.loads(response_raw.text)
     return response_obj
 
 
-def deprecate(org_label, project_label, schema_id, resource_id):
-    # TODO
-    print("Not implemented yet")
+def deprecate(resource):
+    """
+       Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
+       possible to update it.
+
+       :param resource: payload of a previouslsy fetched resource, with the modification to be updated
+       :return: A payload containing only the Nexus metadata for this deprecated resource.
+    """
+
+    previous_rev = resource["_rev"]
+    url = resource["_self"] + "?rev=" + str(previous_rev)
+
+    response_raw = http_delete(url, use_base=False)
+
+    if not is_response_valid(response_raw):
+        raise Exception(
+            "Invalid http request for " + response_raw.url +
+            " (Status " + str(response_raw.status_code) + ")")
+
+    response_obj = json.loads(response_raw.text)
+    return response_obj
