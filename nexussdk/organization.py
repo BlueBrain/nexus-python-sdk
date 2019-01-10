@@ -6,9 +6,9 @@ from . utils.http import http_delete
 import urllib.parse
 
 
-def get(org_label, rev=None):
+def fetch(org_label, rev=None):
     """
-    Get an organization.
+    Fetch an organization.
 
     :param org_label: The label of the organization
     :param rev: OPTIONAL The specific revision of the wanted organization. If not provided, will get the last
