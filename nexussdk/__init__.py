@@ -2,7 +2,8 @@
 from . import config
 
 # Main entry points
-#from . import organization
+from . import organization
+
 #from . import project
 from . import resource
 
