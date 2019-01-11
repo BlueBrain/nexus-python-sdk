@@ -35,13 +35,13 @@ def fetch(org_label, project_label, rev=None):
     return response_obj
 
 
-def create(org_label, project_label, data=None):
+def create(org_label, project_label, config=None):
     """
     Create a new project under an organization.
 
     :param org_label: The label of the organization to create the project in
     :param project_label: The label of the project to add
-    :param data: OPTIONAL if provided, must be a dictionary. Can include data such as `name`, `base` or `prefixMapping`
+    :param config: OPTIONAL if provided, must be a dictionary. Can include data such as `name`, `base` or `prefixMapping`
     see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#create-a-project for more info
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
@@ -49,11 +49,10 @@ def create(org_label, project_label, data=None):
     project_label = urllib.parse.quote_plus(project_label)
     url = "/projects/" + org_label + "/" + project_label
 
-    if data is None:
-        data = {}
+    if config is None:
+        config = {}
 
-    response_raw = http_put(url, body=data)
-
+    response_raw = http_put(url, body=config)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
