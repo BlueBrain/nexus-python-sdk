@@ -73,6 +73,14 @@ def http_put(url, body=None, data_type='default', use_base = True):
     return response
 
 
+def http_patch(url, body=None, data_type='default', use_base=True):
+    header = prepare_header()
+    full_url = (storage.get('environment') if use_base else '') + url
+    body_data = prepare_body(body, data_type)
+    response = requests.patch(full_url, headers=header, data=body_data)
+    return response
+
+
 def http_delete(url, body=None, data_type='default', use_base = True):
     header = prepare_header()
     full_url = (storage.get('environment') if use_base else '') + url
