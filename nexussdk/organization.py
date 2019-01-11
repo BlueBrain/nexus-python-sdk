@@ -73,7 +73,7 @@ def update(org, previous_rev=None):
     """
     Update an organization. Only the field "name" can be updated (and "description" in the future).
 
-    :param org: Oranization payload as a ductionary. This is most likely the returned value of `organisation.get(...)`
+    :param org: Organization payload as a dictionary. This is most likely the returned value of `organisation.get(...)`
     :param previous_rev: OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
     this organization. If not provided, the `_rev` number from the `org` argument will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization

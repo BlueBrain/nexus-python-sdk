@@ -101,8 +101,8 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
     url = "/resources/" + org_label + "/" + project_label + "/" + schema_id
 
     # If the data does not have a '@context' field, we should had a default one
-    if "@context" not in data:
-        copy_this_into_that(DEFAULT_CONTEXT, data)
+    # if "@context" not in data:
+    #     copy_this_into_that(DEFAULT_CONTEXT, data)
 
     response_raw = http_post(url, data)
 
