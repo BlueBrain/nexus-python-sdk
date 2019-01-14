@@ -33,8 +33,8 @@ def fetch(org_label, project_label, schema_id, resource_id):
     schema_id = urllib.parse.quote_plus(schema_id)
     resource_id = urllib.parse.quote_plus(resource_id)
 
-    url = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
-    response_raw = http_get(url)
+    path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
+    response_raw = http_get(path)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
@@ -61,9 +61,9 @@ def update(resource, previous_rev=None):
     if previous_rev is None:
         previous_rev = resource["_rev"]
 
-    url = resource["_self"] + "?rev=" + str(previous_rev)
+    path = resource["_self"] + "?rev=" + str(previous_rev)
 
-    response_raw = http_put(url, resource, use_base=False)
+    response_raw = http_put(path, resource, use_base=False)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
@@ -98,13 +98,13 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
     project_label = urllib.parse.quote_plus(project_label)
     schema_id = urllib.parse.quote_plus(schema_id)
 
-    url = "/resources/" + org_label + "/" + project_label + "/" + schema_id
+    path = "/resources/" + org_label + "/" + project_label + "/" + schema_id
 
     # If the data does not have a '@context' field, we should had a default one
     if "@context" not in data:
         copy_this_into_that(DEFAULT_CONTEXT, data)
 
-    response_raw = http_post(url, data)
+    response_raw = http_post(path, data)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
@@ -134,23 +134,23 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
     org_label = urllib.parse.quote_plus(org_label)
     project_label = urllib.parse.quote_plus(project_label)
 
-    url = "/resources/" + org_label + "/" + project_label
+    path = "/resources/" + org_label + "/" + project_label
 
     if schema:
         schema = urllib.parse.quote_plus(schema)
-        url = url + "/" + schema
+        path = path + "/" + schema
 
-    url = url + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
+    path = path + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
 
     if deprecated is not None:
         deprecated = "true" if deprecated else "false"
-        url = url + "&deprecated=" + deprecated
+        path = path + "&deprecated=" + deprecated
 
     if full_text_search_query:
         full_text_search_query = urllib.parse.quote_plus(full_text_search_query)
-        url = url + "&q=" + full_text_search_query
+        path = path + "&q=" + full_text_search_query
 
-    response_raw = http_get(url)
+    response_raw = http_get(path)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
@@ -175,9 +175,9 @@ def deprecate(resource, previous_rev=None):
     if previous_rev is None:
         previous_rev = resource["_rev"]
 
-    url = resource["_self"] + "?rev=" + str(previous_rev)
+    path = resource["_self"] + "?rev=" + str(previous_rev)
 
-    response_raw = http_delete(url, use_base=False)
+    response_raw = http_delete(path, use_base=False)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +

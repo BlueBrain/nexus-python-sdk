@@ -19,12 +19,12 @@ def fetch(org_label, project_label, rev=None):
 
     org_label = urllib.parse.quote_plus(org_label)
     project_label = urllib.parse.quote_plus(project_label)
-    url = "/projects/" + org_label + "/" + project_label
+    path = "/projects/" + org_label + "/" + project_label
 
     if rev is not None:
-        url = url + "?rev=" + str(rev)
+        path = path + "?rev=" + str(rev)
 
-    response_raw = http_get(url)
+    response_raw = http_get(path)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
@@ -47,12 +47,12 @@ def create(org_label, project_label, config=None):
     """
     org_label = urllib.parse.quote_plus(org_label)
     project_label = urllib.parse.quote_plus(project_label)
-    url = "/projects/" + org_label + "/" + project_label
+    path = "/projects/" + org_label + "/" + project_label
 
     if config is None:
         config = {}
 
-    response_raw = http_put(url, body=config)
+    response_raw = http_put(path, body=config)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
@@ -81,9 +81,9 @@ def update(project, previous_rev=None):
     org_label = urllib.parse.quote_plus(project["_organizationLabel"])
     project_label = urllib.parse.quote_plus(project["_label"])
 
-    url = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
+    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_put(url, project)
+    response_raw = http_put(path, project)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
@@ -109,23 +109,23 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata and the list of projects
     """
 
-    url = "/projects"
+    path = "/projects"
 
     if org_label is not None:
         org_label = urllib.parse.quote_plus(org_label)
-        url = url + "/" + org_label
+        path = path + "/" + org_label
 
-    url = url + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
+    path = path + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
 
     if deprecated is not None:
         deprecated = "true" if deprecated else "false"
-        url = url + "&deprecated=" + deprecated
+        path = path + "&deprecated=" + deprecated
 
     if full_text_search_query is not None:
         full_text_search_query = urllib.parse.quote_plus(full_text_search_query)
-        url = url + "&q=" + full_text_search_query
+        path = path + "&q=" + full_text_search_query
 
-    response_raw = http_get(url)
+    response_raw = http_get(path)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
@@ -152,9 +152,9 @@ def deprecate(org_label, project_label, previous_rev):
     org_label = urllib.parse.quote_plus(org_label)
     project_label = urllib.parse.quote_plus(project_label)
 
-    url = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
+    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_delete(url)
+    response_raw = http_delete(path)
 
     if not is_response_valid(response_raw):
         raise Exception("Invalid http request for " + response_raw.url +
