@@ -1,13 +1,11 @@
-import json
+import os
 from . utils.http import http_get
-from . utils.http import is_response_valid
 from . utils.http import http_put
+#from . utils.http import http_put2
 from . utils.http import http_post
 from . utils.http import http_delete
 from . utils.tools import copy_this_into_that
-import urllib.parse
-
-url_encode = urllib.parse.quote_plus
+from urllib.parse import quote_plus as url_encode
 
 # This context is the default one when none is provided at the creation of a resource
 DEFAULT_CONTEXT = {
@@ -37,8 +35,7 @@ def fetch(org_label, project_label, schema_id, resource_id):
     resource_id = url_encode(resource_id)
 
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
-    response_raw = http_get(path)
-    return json.loads(response_raw.text)
+    return http_get(path)
 
 
 
@@ -60,8 +57,7 @@ def update(resource, previous_rev=None):
 
     path = resource["_self"] + "?rev=" + str(previous_rev)
 
-    response_raw = http_put(path, resource, use_base=False)
-    return json.loads(response_raw.text)
+    return http_put(path, resource, use_base=False)
 
 
 def create(org_label, project_label, data, schema_id='resource', resource_id=None):
@@ -94,8 +90,7 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
     if "@context" not in data:
         copy_this_into_that(DEFAULT_CONTEXT, data)
 
-    response_raw = http_post(path, data)
-    return json.loads(response_raw.text)
+    return http_post(path, data)
 
 
 def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
@@ -133,8 +128,7 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
-    response_raw = http_get(path)
-    return json.loads(response_raw.text)
+    return http_get(path)
 
 
 def deprecate(resource, previous_rev=None):
@@ -142,7 +136,7 @@ def deprecate(resource, previous_rev=None):
        Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
        possible to update it.
 
-       :param resource: payload of a previouslsy fetched resource, with the modification to be updated
+       :param resource: payload of a previously fetched resource, with the modification to be updated
        :param previous_rev: OPTIONAL The previous revision you want to update from.
        If not provided, the rev from the resource argument will be used.
        :return: A payload containing only the Nexus metadata for this deprecated resource.
@@ -153,5 +147,27 @@ def deprecate(resource, previous_rev=None):
 
     path = resource["_self"] + "?rev=" + str(previous_rev)
 
-    response_raw = http_delete(path, use_base=False)
-    return json.loads(response_raw.text)
+    return http_delete(path, use_base=False)
+
+
+def add_attachement(resource, filepath, previous_rev=None):
+    """
+        Attach a file to an existing resource
+
+        :param resource: payload of a previously fetched resource, with the modification to be updated
+        :param filepath: Path of the file to upload
+        :return:
+    """
+
+    if previous_rev is None:
+        previous_rev = resource["_rev"]
+
+    file_basename = url_encode( os.path.basename(filepath) )
+    path = resource["_self"] + "/attachments/" + file_basename + "?rev=" + str(previous_rev)
+
+    #file_obj = open(filepath, 'rb').read()
+    #response = http_put(path, use_base=False, body=file_obj, data_type='binary')
+
+    file_obj = {'file': open(filepath, "rb")}
+    response = http_put(path, use_base=False, body=file_obj, data_type='file')
+    return response

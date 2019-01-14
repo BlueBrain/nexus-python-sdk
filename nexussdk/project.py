@@ -1,11 +1,7 @@
-import json
 from . utils.http import http_get
-from . utils.http import is_response_valid
 from . utils.http import http_put
 from . utils.http import http_delete
-import urllib.parse
-
-url_encode = urllib.parse.quote_plus
+from urllib.parse import quote_plus as url_encode
 
 
 def fetch(org_label, project_label, rev=None):
@@ -26,8 +22,7 @@ def fetch(org_label, project_label, rev=None):
     if rev is not None:
         path = path + "?rev=" + str(rev)
 
-    response_raw = http_get(path)
-    return json.loads(response_raw.text)
+    return http_get(path)
 
 
 def create(org_label, project_label, config=None):
@@ -48,8 +43,7 @@ def create(org_label, project_label, config=None):
     if config is None:
         config = {}
 
-    response_raw = http_put(path, body=config)
-    return json.loads(response_raw.text)
+    return http_put(path, body=config)
 
 
 def update(project, previous_rev=None):
@@ -72,8 +66,7 @@ def update(project, previous_rev=None):
 
     path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_put(path, project)
-    return json.loads(response_raw.text)
+    return http_put(path, project)
 
 
 def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
@@ -107,8 +100,7 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
         full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
-    response_raw = http_get(path)
-    return json.loads(response_raw.text)
+    return http_get(path)
 
 
 def deprecate(org_label, project_label, previous_rev):
@@ -129,6 +121,5 @@ def deprecate(org_label, project_label, previous_rev):
 
     path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_delete(path)
-    return json.loads(response_raw.text)
+    return http_delete(path)
 

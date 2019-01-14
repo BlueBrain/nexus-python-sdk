@@ -1,11 +1,7 @@
-import json
 from . utils.http import http_get
-from . utils.http import is_response_valid
 from . utils.http import http_put
 from . utils.http import http_delete
-import urllib.parse
-
-url_encode = urllib.parse.quote_plus
+from urllib.parse import quote_plus as url_encode
 
 
 def fetch(org_label, rev=None):
@@ -22,15 +18,7 @@ def fetch(org_label, rev=None):
     if rev is not None:
         path = path + "?rev=" + str(rev)
 
-    response_raw = http_get(path)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_get(path)
 
 
 def create(org_label, name=None, description=None):
@@ -59,16 +47,7 @@ def create(org_label, name=None, description=None):
     else:
         data["description"] = ""
 
-    response_raw = http_put(path, body=data)
-
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_put(path, body=data)
 
 
 def update(org, previous_rev=None):
@@ -87,14 +66,7 @@ def update(org, previous_rev=None):
 
     path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_put(path, org)
-
-    raise Exception("Invalid http request for " + response_raw.url +
-                    " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                    response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_put(path, org)
 
 
 def list(pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
@@ -121,15 +93,7 @@ def list(pagination_from=0, pagination_size=20, deprecated=None, full_text_searc
         full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
-    response_raw = http_get(path)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_get(path)
 
 
 def deprecate(org_label, previous_rev):
@@ -146,15 +110,7 @@ def deprecate(org_label, previous_rev):
     org_label = url_encode(org_label)
     path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_delete(path)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_delete(path)
 
 
 

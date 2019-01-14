@@ -6,6 +6,7 @@ from . store import storage
 header_parts = {
     'common': {'mode': 'cors'},
     'json': {'Content-Type': 'application/json'},
+    'file': {'Content-Type': 'application/octet-stream'}, # not used
     'text': {'sendAs': 'text', 'Content-Type': 'text/plain'}
 }
 default_type = 'json'
@@ -19,7 +20,13 @@ def prepare_header(type='default'):
 
         :param type: string. Must be one of the keys in the above declared dict header_parts
     """
-    header = {**header_parts['common'], **header_parts[type]}
+
+    # if posting a file, the request module deals with the content-type
+    if type == "file":
+        header = {**header_parts['common']}
+    else:
+        header = {**header_parts['common'], **header_parts[type]}
+
     if storage.has('token'):
         header['Authorization'] = 'Bearer ' + storage.get('token')
     return header
@@ -38,7 +45,7 @@ def prepare_body(data, type='default'):
 
     if type == 'json':
         body = json.dumps(data, ensure_ascii=True)
-    elif type == 'text':
+    else:
         body = data
 
     if data is None:
@@ -64,7 +71,7 @@ def http_get(path, use_base = True):
     full_url = (storage.get('environment') if use_base else '') + path
     response = requests.get(full_url, headers=header)
     response.raise_for_status()
-    return response
+    return json.loads(response.text)
 
 
 def http_post(path, body=None, data_type='default'):
@@ -73,16 +80,33 @@ def http_post(path, body=None, data_type='default'):
     body_data = prepare_body(body, data_type)
     response = requests.post(full_url, headers=header, data=body_data)
     response.raise_for_status()
-    return response
+    return json.loads(response.text)
+
+
+# def http_put(path, body=None, data_type='default', use_base = True):
+#     header = prepare_header()
+#     full_url = (storage.get('environment') if use_base else '') + path
+#     body_data = prepare_body(body, data_type)
+#     response = requests.put(full_url, headers=header, data=body_data)
+#     response.raise_for_status()
+#     return json.loads(response.text)
 
 
 def http_put(path, body=None, data_type='default', use_base = True):
-    header = prepare_header()
+    header = prepare_header(data_type)
     full_url = (storage.get('environment') if use_base else '') + path
-    body_data = prepare_body(body, data_type)
-    response = requests.put(full_url, headers=header, data=body_data)
+
+    response = None
+
+    if data_type != 'file':
+        body_data = prepare_body(body, data_type)
+        response = requests.put(full_url, headers=header, data=body_data)
+    else:
+
+        response = requests.put(full_url, headers=header, files=body)
+
     response.raise_for_status()
-    return response
+    return json.loads(response.text)
 
 
 def http_delete(path, body=None, data_type='default', use_base = True):
@@ -91,7 +115,7 @@ def http_delete(path, body=None, data_type='default', use_base = True):
     body_data = prepare_body(body, data_type)
     response = requests.delete(full_url, headers=header, data=body_data)
     response.raise_for_status()
-    return response
+    return json.loads(response.text)
 
 
 def is_response_valid(response):
