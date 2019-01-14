@@ -5,6 +5,8 @@ from . utils.http import http_put
 from . utils.http import http_delete
 import urllib.parse
 
+url_encode = urllib.parse.quote_plus
+
 
 def fetch(org_label, project_label, rev=None):
     """
@@ -17,22 +19,15 @@ def fetch(org_label, project_label, rev=None):
     :return: All the details of this project, as a dictionary
     """
 
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
     path = "/projects/" + org_label + "/" + project_label
 
     if rev is not None:
         path = path + "?rev=" + str(rev)
 
     response_raw = http_get(path)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return json.loads(response_raw.text)
 
 
 def create(org_label, project_label, config=None):
@@ -45,22 +40,16 @@ def create(org_label, project_label, config=None):
     see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#create-a-project for more info
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
+
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
     path = "/projects/" + org_label + "/" + project_label
 
     if config is None:
         config = {}
 
     response_raw = http_put(path, body=config)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return json.loads(response_raw.text)
 
 
 def update(project, previous_rev=None):
@@ -78,20 +67,13 @@ def update(project, previous_rev=None):
     if previous_rev is None:
         previous_rev = project["_rev"]
 
-    org_label = urllib.parse.quote_plus(project["_organizationLabel"])
-    project_label = urllib.parse.quote_plus(project["_label"])
+    org_label = url_encode(project["_organizationLabel"])
+    project_label = url_encode(project["_label"])
 
     path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
     response_raw = http_put(path, project)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return json.loads(response_raw.text)
 
 
 def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
@@ -112,7 +94,7 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
     path = "/projects"
 
     if org_label is not None:
-        org_label = urllib.parse.quote_plus(org_label)
+        org_label = url_encode(org_label)
         path = path + "/" + org_label
 
     path = path + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
@@ -122,18 +104,11 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
         path = path + "&deprecated=" + deprecated
 
     if full_text_search_query is not None:
-        full_text_search_query = urllib.parse.quote_plus(full_text_search_query)
+        full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
     response_raw = http_get(path)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return json.loads(response_raw.text)
 
 
 def deprecate(org_label, project_label, previous_rev):
@@ -149,17 +124,11 @@ def deprecate(org_label, project_label, previous_rev):
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
 
     path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
     response_raw = http_delete(path)
+    return json.loads(response_raw.text)
 
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj

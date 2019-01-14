@@ -5,6 +5,8 @@ from . utils.http import http_put
 from . utils.http import http_delete
 import urllib.parse
 
+url_encode = urllib.parse.quote_plus
+
 
 def fetch(org_label, rev=None):
     """
@@ -14,7 +16,7 @@ def fetch(org_label, rev=None):
     :param rev: OPTIONAL The specific revision of the wanted organization. If not provided, will get the last
     :return: All the details of this organization, as a dictionary
     """
-    org_label = urllib.parse.quote_plus(org_label)
+    org_label = url_encode(org_label)
     path = "/orgs/" + org_label
 
     if rev is not None:
@@ -40,7 +42,7 @@ def create(org_label, name=None, description=None):
     :param description: NOT USED YET - OPTIONAL The description of the organization
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
-    org_label = urllib.parse.quote_plus(org_label)
+    org_label = url_encode(org_label)
     path = "/orgs/" + org_label
 
     data = {}
@@ -78,7 +80,7 @@ def update(org, previous_rev=None):
     this organization. If not provided, the `_rev` number from the `org` argument will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
-    org_label = urllib.parse.quote_plus(org["label"])
+    org_label = url_encode(org["label"])
 
     if previous_rev is None:
         previous_rev = org["_rev"]
@@ -116,7 +118,7 @@ def list(pagination_from=0, pagination_size=20, deprecated=None, full_text_searc
         path = path + "&deprecated=" + deprecated
 
     if full_text_search_query is not None:
-        full_text_search_query = urllib.parse.quote_plus(full_text_search_query)
+        full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
     response_raw = http_get(path)
@@ -141,7 +143,7 @@ def deprecate(org_label, previous_rev):
     of the last revision of this organisation.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
-    org_label = urllib.parse.quote_plus(org_label)
+    org_label = url_encode(org_label)
     path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
 
     response_raw = http_delete(path)

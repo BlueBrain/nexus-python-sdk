@@ -63,6 +63,7 @@ def http_get(path, use_base = True):
     header = prepare_header()
     full_url = (storage.get('environment') if use_base else '') + path
     response = requests.get(full_url, headers=header)
+    response.raise_for_status()
     return response
 
 
@@ -71,6 +72,7 @@ def http_post(path, body=None, data_type='default'):
     full_url = storage.get('environment') + path
     body_data = prepare_body(body, data_type)
     response = requests.post(full_url, headers=header, data=body_data)
+    response.raise_for_status()
     return response
 
 
@@ -79,6 +81,7 @@ def http_put(path, body=None, data_type='default', use_base = True):
     full_url = (storage.get('environment') if use_base else '') + path
     body_data = prepare_body(body, data_type)
     response = requests.put(full_url, headers=header, data=body_data)
+    response.raise_for_status()
     return response
 
 
@@ -87,6 +90,7 @@ def http_delete(path, body=None, data_type='default', use_base = True):
     full_url = (storage.get('environment') if use_base else '') + path
     body_data = prepare_body(body, data_type)
     response = requests.delete(full_url, headers=header, data=body_data)
+    response.raise_for_status()
     return response
 
 

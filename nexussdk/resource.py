@@ -7,6 +7,8 @@ from . utils.http import http_delete
 from . utils.tools import copy_this_into_that
 import urllib.parse
 
+url_encode = urllib.parse.quote_plus
+
 # This context is the default one when none is provided at the creation of a resource
 DEFAULT_CONTEXT = {
     "@context": {
@@ -27,22 +29,17 @@ def fetch(org_label, project_label, schema_id, resource_id):
         :param resource_id: id of the resource
         :return: Payload of the whole resource as a dictionary
     """
+
     # the element composing the query URL need to be URL-encoded
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
-    schema_id = urllib.parse.quote_plus(schema_id)
-    resource_id = urllib.parse.quote_plus(resource_id)
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
+    schema_id = url_encode(schema_id)
+    resource_id = url_encode(resource_id)
 
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
     response_raw = http_get(path)
+    return json.loads(response_raw.text)
 
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
 
 
 def update(resource, previous_rev=None):
@@ -64,14 +61,7 @@ def update(resource, previous_rev=None):
     path = resource["_self"] + "?rev=" + str(previous_rev)
 
     response_raw = http_put(path, resource, use_base=False)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return json.loads(response_raw.text)
 
 
 def create(org_label, project_label, data, schema_id='resource', resource_id=None):
@@ -94,9 +84,9 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
         schema_id = 'resource'
 
     # the element composing the query URL need to be URL-encoded
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
-    schema_id = urllib.parse.quote_plus(schema_id)
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
+    schema_id = url_encode(schema_id)
 
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id
 
@@ -105,14 +95,7 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
         copy_this_into_that(DEFAULT_CONTEXT, data)
 
     response_raw = http_post(path, data)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return json.loads(response_raw.text)
 
 
 def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
@@ -131,13 +114,13 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         :return: The raw payload as a dictionary
     """
 
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
 
     path = "/resources/" + org_label + "/" + project_label
 
     if schema:
-        schema = urllib.parse.quote_plus(schema)
+        schema = url_encode(schema)
         path = path + "/" + schema
 
     path = path + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
@@ -147,18 +130,11 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         path = path + "&deprecated=" + deprecated
 
     if full_text_search_query:
-        full_text_search_query = urllib.parse.quote_plus(full_text_search_query)
+        full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
     response_raw = http_get(path)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return json.loads(response_raw.text)
 
 
 def deprecate(resource, previous_rev=None):
@@ -178,11 +154,4 @@ def deprecate(resource, previous_rev=None):
     path = resource["_self"] + "?rev=" + str(previous_rev)
 
     response_raw = http_delete(path, use_base=False)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return json.loads(response_raw.text)
