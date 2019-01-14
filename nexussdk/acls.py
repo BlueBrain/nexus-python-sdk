@@ -1,7 +1,7 @@
 import json
 from typing import Dict
 
-from utils.http import (http_delete, http_get, http_patch, http_put)
+from nexussdk.utils.http import (http_delete, http_get, http_patch, http_put)
 
 
 def output(with_pretty_print=True):
