@@ -1,9 +1,7 @@
 import json
-from typing import Any, Dict, Optional
+from typing import Dict
 
 from utils.http import (http_delete, http_get, http_patch, http_put)
-
-JSON = Dict[str, Any]
 
 
 def output(with_pretty_print=True):
@@ -22,7 +20,7 @@ def output(with_pretty_print=True):
 # Create functions.
 
 @output()
-def create(path: str, acls: JSON) -> JSON:
+def create(path: str, acls: Dict) -> Dict:
     # PUT /v1/acls/{subpath}
     return http_put(path, acls, use_base=False)
 
@@ -30,7 +28,7 @@ def create(path: str, acls: JSON) -> JSON:
 # Read functions.
 
 @output()
-def fetch(path: str, rev: Optional[int] = None, self: bool = True) -> JSON:
+def fetch(path: str, rev: int = None, self: bool = True) -> Dict:
     # GET /v1/acls/{subpath}?rev={rev}&self={self}
     if rev is None:
         url = "{}?self={}".format(path, self)
@@ -40,7 +38,7 @@ def fetch(path: str, rev: Optional[int] = None, self: bool = True) -> JSON:
 
 
 @output()
-def list_(path: str, ancestors: bool = False, self: bool = True) -> JSON:
+def list_(path: str, ancestors: bool = False, self: bool = True) -> Dict:
     # GET /v1/acls/{subpath}?ancestors={ancestors}&self={self}
     url = "{}?ancestors={}&self={}".format(path, ancestors, self)
     return http_get(url, use_base=False)
@@ -49,21 +47,21 @@ def list_(path: str, ancestors: bool = False, self: bool = True) -> JSON:
 # Update functions.
 
 @output()
-def replace(path: str, rev: int, acls: JSON) -> JSON:
+def replace(path: str, rev: int, acls: Dict) -> Dict:
     # PUT /v1/acls/{subpath}?rev={rev}
     url = "{}?rev={}".format(path, rev)
     return http_put(url, acls, use_base=False)
 
 
 @output()
-def append(path: str, rev: int, acls: JSON) -> JSON:
+def append(path: str, rev: int, acls: Dict) -> Dict:
     # PATCH /v1/acls/{subpath}?rev={rev}
     url = "{}?rev={}".format(path, rev)
     return http_patch(url, acls, use_base=False)
 
 
 @output()
-def subtract(path: str, rev: int, acls: JSON) -> JSON:
+def subtract(path: str, rev: int, acls: Dict) -> Dict:
     # PATCH /v1/acls/{subpath}?rev={rev}
     url = "{}?rev={}".format(path, rev)
     return http_patch(url, acls, use_base=False)
@@ -72,7 +70,7 @@ def subtract(path: str, rev: int, acls: JSON) -> JSON:
 # Delete functions.
 
 @output()
-def delete(path: str, rev: int) -> JSON:
+def delete(path: str, rev: int) -> Dict:
     # DELETE /v1/acls/{subpath}?rev={rev}
     url = "{}?rev={}".format(path, rev)
     return http_delete(url, use_base=False)
