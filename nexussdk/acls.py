@@ -4,14 +4,17 @@ from typing import Dict
 from nexussdk.utils.http import (http_delete, http_get, http_patch, http_put)
 
 
-def output(with_pretty_print=True):
+# FIXME Default value will change after first release.
+def output(is_debug=True):
     def decorator(func):
         def wrapper(*args, **kwargs):
             response = func(*args, **kwargs)
-            if with_pretty_print:
+            if is_debug:
                 print("{} {}".format(response.request.method, response.url))
                 print(json.dumps(response.json(), indent=2))
-            if not with_pretty_print:
+            else:
+                # FIXME Behaviour will change after return type and exceptions
+                # will be handled by the http module.
                 return response.json()
         return wrapper
     return decorator
