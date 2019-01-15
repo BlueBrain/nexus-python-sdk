@@ -66,12 +66,16 @@ def print_request_response(r):
     print('history: ', r.history)
 
 
-def http_get(path, use_base = True):
+def http_get(path, use_base = True, get_raw_response=False, stream=False):
     header = prepare_header()
     full_url = (storage.get('environment') if use_base else '') + path
-    response = requests.get(full_url, headers=header)
+    response = requests.get(full_url, headers=header, stream=stream)
     response.raise_for_status()
-    return json.loads(response.text)
+
+    if get_raw_response:
+        return response
+    else:
+        return json.loads(response.text)
 
 
 def http_post(path, body=None, data_type='default'):
@@ -102,7 +106,6 @@ def http_put(path, body=None, data_type='default', use_base = True):
         body_data = prepare_body(body, data_type)
         response = requests.put(full_url, headers=header, data=body_data)
     else:
-
         response = requests.put(full_url, headers=header, files=body)
 
     response.raise_for_status()

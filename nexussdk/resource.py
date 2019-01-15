@@ -1,11 +1,13 @@
 import os
 from . utils.http import http_get
 from . utils.http import http_put
+from . utils.http import print_request_response
 #from . utils.http import http_put2
 from . utils.http import http_post
 from . utils.http import http_delete
 from . utils.tools import copy_this_into_that
 from urllib.parse import quote_plus as url_encode
+import shutil
 
 # This context is the default one when none is provided at the creation of a resource
 DEFAULT_CONTEXT = {
@@ -136,7 +138,7 @@ def deprecate(resource, previous_rev=None):
        Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
        possible to update it.
 
-       :param resource: payload of a previously fetched resource, with the modification to be updated
+       :param resource: payload of a previously fetched resource
        :param previous_rev: OPTIONAL The previous revision you want to update from.
        If not provided, the rev from the resource argument will be used.
        :return: A payload containing only the Nexus metadata for this deprecated resource.
@@ -152,11 +154,15 @@ def deprecate(resource, previous_rev=None):
 
 def add_attachement(resource, filepath, previous_rev=None):
     """
-        Attach a file to an existing resource
+        DEPRECATED
 
-        :param resource: payload of a previously fetched resource, with the modification to be updated
+        Attach a file to an existing resource. A new revision is created.
+
+        :param resource: payload of a previously fetched resource
         :param filepath: Path of the file to upload
-        :return:
+        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        If not provided, the rev from the resource argument will be used.
+        :return: A payload containing only the Nexus metadata for this resource.
     """
 
     if previous_rev is None:
@@ -164,10 +170,78 @@ def add_attachement(resource, filepath, previous_rev=None):
 
     file_basename = url_encode( os.path.basename(filepath) )
     path = resource["_self"] + "/attachments/" + file_basename + "?rev=" + str(previous_rev)
-
-    #file_obj = open(filepath, 'rb').read()
-    #response = http_put(path, use_base=False, body=file_obj, data_type='binary')
-
     file_obj = {'file': open(filepath, "rb")}
-    response = http_put(path, use_base=False, body=file_obj, data_type='file')
-    return response
+    return http_put(path, use_base=False, body=file_obj, data_type='file')
+
+
+def delete_attachment(resource, basename, previous_rev=None):
+    """
+        DEPRECATED
+
+        Delete the attachment of a resource. This creates a new revision.
+
+        :param resource: payload of a previously fetched resource
+        :param basename: The attachment basename (filename with extension but without full path)
+        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        If not provided, the rev from the resource argument will be used.
+        :return: A payload containing only the Nexus metadata for this resource.
+    """
+
+    if previous_rev is None:
+        previous_rev = resource["_rev"]
+
+    path = resource["_self"] + "/attachments/" + basename + "?rev=" + str(previous_rev)
+    return http_delete(path, use_base=False)
+
+
+def fetch_attachment(resource, name, previous_rev=None, tag=None, out_filename=None):
+    """
+        DEPRECATED
+
+        Fetch the attachment of a a resource. Two ways are possible: by specifying an output filepath (out_filename),
+        then the distant file will be downloaded under this name. Or, if out_filename is not specified,
+        the binary buffer of the distant file is returned by this function.
+
+        If the distant file is large, it is advised to write it directly as a file because streaming is handled. Keeping
+        a large file into memory may not be a good idea.
+
+    :param resource: payload of a previously fetched resource
+    :param name: ID of the resource's attachment
+    :param previous_rev: OPTIONAL The previous revision you want to update from.
+        If not provided, the rev from the resource argument will be used.
+        Note that this cannot be given along tag
+    :param tag: OPTIONAL tag of a resource. Note that this cannot be given along previous_rev
+    :param out_filename: OPTIONAL file path to which write the fetched file.
+    :return: If out_filename is provided None is returned.
+        If out_filename is not provided, the binary buffer is returned as a byte_arr
+    """
+
+    if (previous_rev is not None) and (tag is not None):
+        raise Exception("The arguments previous_rev and tag are mutually exclusive and should not be used together.")
+
+    path = resource["_self"] + "/attachments/" + name
+
+    if previous_rev is not None:
+        path = path + "?rev=" + str(previous_rev)
+
+    if tag is not None:
+        path = path + "?tag=" + str(tag)
+
+    response = http_get(path, use_base=False, get_raw_response=True, stream=True)
+
+    if out_filename is not None:
+        # we write the result of the request into a file
+        with open(out_filename, 'wb') as f:
+            for chunk in response.iter_content():
+                f.write(chunk)
+        return None
+
+    else:
+        # we concat all the chunks to make a larger bytearray containing the response
+        byte_arr = bytearray(0)
+
+        for chunk in response.iter_content():
+            byte_arr = byte_arr + chunk
+
+        return byte_arr
+
