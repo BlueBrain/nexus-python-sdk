@@ -18,7 +18,7 @@ def fetch(org_label, rev=None):
     if rev is not None:
         path = path + "?rev=" + str(rev)
 
-    return http_get(path)
+    return http_get(path, use_base=True)
 
 
 def create(org_label, name=None, description=None):
@@ -47,7 +47,7 @@ def create(org_label, name=None, description=None):
     else:
         data["description"] = ""
 
-    return http_put(path, body=data)
+    return http_put(path, use_base=True, body=data)
 
 
 def update(org, previous_rev=None):
@@ -66,7 +66,7 @@ def update(org, previous_rev=None):
 
     path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
 
-    return http_put(path, org)
+    return http_put(path, org, use_base=True)
 
 
 def list(pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
@@ -93,7 +93,7 @@ def list(pagination_from=0, pagination_size=20, deprecated=None, full_text_searc
         full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
-    return http_get(path)
+    return http_get(path, use_base=True)
 
 
 def deprecate(org_label, previous_rev):
@@ -110,7 +110,7 @@ def deprecate(org_label, previous_rev):
     org_label = url_encode(org_label)
     path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
 
-    return http_delete(path)
+    return http_delete(path, use_base=True)
 
 
 

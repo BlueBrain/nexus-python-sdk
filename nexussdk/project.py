@@ -22,7 +22,7 @@ def fetch(org_label, project_label, rev=None):
     if rev is not None:
         path = path + "?rev=" + str(rev)
 
-    return http_get(path)
+    return http_get(path, use_base=True)
 
 
 def create(org_label, project_label, config=None):
@@ -43,7 +43,7 @@ def create(org_label, project_label, config=None):
     if config is None:
         config = {}
 
-    return http_put(path, body=config)
+    return http_put(path, use_base=True, body=config)
 
 
 def update(project, previous_rev=None):
@@ -66,7 +66,7 @@ def update(project, previous_rev=None):
 
     path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
-    return http_put(path, project)
+    return http_put(path, project, use_base=True)
 
 
 def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
@@ -100,7 +100,7 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
         full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
-    return http_get(path)
+    return http_get(path, use_base=True)
 
 
 def deprecate(org_label, project_label, previous_rev):
@@ -121,5 +121,5 @@ def deprecate(org_label, project_label, previous_rev):
 
     path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
-    return http_delete(path)
+    return http_delete(path, use_base=True)
 

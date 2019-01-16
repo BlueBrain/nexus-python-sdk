@@ -1,13 +1,10 @@
 import os
 from . utils.http import http_get
 from . utils.http import http_put
-from . utils.http import print_request_response
-#from . utils.http import http_put2
 from . utils.http import http_post
 from . utils.http import http_delete
 from . utils.tools import copy_this_into_that
 from urllib.parse import quote_plus as url_encode
-import shutil
 
 # This context is the default one when none is provided at the creation of a resource
 DEFAULT_CONTEXT = {
@@ -37,7 +34,7 @@ def fetch(org_label, project_label, schema_id, resource_id):
     resource_id = url_encode(resource_id)
 
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
-    return http_get(path)
+    return http_get(path, use_base=True)
 
 
 
@@ -130,7 +127,7 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         full_text_search_query = url_encode(full_text_search_query)
         path = path + "&q=" + full_text_search_query
 
-    return http_get(path)
+    return http_get(path, use_base=True)
 
 
 def deprecate(resource, previous_rev=None):
