@@ -1,9 +1,7 @@
-import json
 from . utils.http import http_get
-from . utils.http import is_response_valid
 from . utils.http import http_put
 from . utils.http import http_delete
-import urllib.parse
+from urllib.parse import quote_plus as url_encode
 
 
 def fetch(org_label, project_label, rev=None):
@@ -17,22 +15,14 @@ def fetch(org_label, project_label, rev=None):
     :return: All the details of this project, as a dictionary
     """
 
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
-    url = "/projects/" + org_label + "/" + project_label
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
+    path = "/projects/" + org_label + "/" + project_label
 
     if rev is not None:
-        url = url + "?rev=" + str(rev)
+        path = path + "?rev=" + str(rev)
 
-    response_raw = http_get(url)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_get(path, use_base=True)
 
 
 def create(org_label, project_label, config=None):
@@ -45,22 +35,15 @@ def create(org_label, project_label, config=None):
     see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#create-a-project for more info
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
-    url = "/projects/" + org_label + "/" + project_label
+
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
+    path = "/projects/" + org_label + "/" + project_label
 
     if config is None:
         config = {}
 
-    response_raw = http_put(url, body=config)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_put(path, use_base=True, body=config)
 
 
 def update(project, previous_rev=None):
@@ -78,20 +61,12 @@ def update(project, previous_rev=None):
     if previous_rev is None:
         previous_rev = project["_rev"]
 
-    org_label = urllib.parse.quote_plus(project["_organizationLabel"])
-    project_label = urllib.parse.quote_plus(project["_label"])
+    org_label = url_encode(project["_organizationLabel"])
+    project_label = url_encode(project["_label"])
 
-    url = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
+    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_put(url, project)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_put(path, project, use_base=True)
 
 
 def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
@@ -109,31 +84,23 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata and the list of projects
     """
 
-    url = "/projects"
+    path = "/projects"
 
     if org_label is not None:
-        org_label = urllib.parse.quote_plus(org_label)
-        url = url + "/" + org_label
+        org_label = url_encode(org_label)
+        path = path + "/" + org_label
 
-    url = url + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
+    path = path + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
 
     if deprecated is not None:
         deprecated = "true" if deprecated else "false"
-        url = url + "&deprecated=" + deprecated
+        path = path + "&deprecated=" + deprecated
 
     if full_text_search_query is not None:
-        full_text_search_query = urllib.parse.quote_plus(full_text_search_query)
-        url = url + "&q=" + full_text_search_query
+        full_text_search_query = url_encode(full_text_search_query)
+        path = path + "&q=" + full_text_search_query
 
-    response_raw = http_get(url)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_get(path, use_base=True)
 
 
 def deprecate(org_label, project_label, previous_rev):
@@ -149,17 +116,10 @@ def deprecate(org_label, project_label, previous_rev):
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
-    org_label = urllib.parse.quote_plus(org_label)
-    project_label = urllib.parse.quote_plus(project_label)
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
 
-    url = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
+    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_delete(url)
+    return http_delete(path, use_base=True)
 
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj

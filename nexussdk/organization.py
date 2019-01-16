@@ -1,9 +1,7 @@
-import json
 from . utils.http import http_get
-from . utils.http import is_response_valid
 from . utils.http import http_put
 from . utils.http import http_delete
-import urllib.parse
+from urllib.parse import quote_plus as url_encode
 
 
 def fetch(org_label, rev=None):
@@ -14,21 +12,13 @@ def fetch(org_label, rev=None):
     :param rev: OPTIONAL The specific revision of the wanted organization. If not provided, will get the last
     :return: All the details of this organization, as a dictionary
     """
-    org_label = urllib.parse.quote_plus(org_label)
-    url = "/orgs/" + org_label
+    org_label = url_encode(org_label)
+    path = "/orgs/" + org_label
 
     if rev is not None:
-        url = url + "?rev=" + str(rev)
+        path = path + "?rev=" + str(rev)
 
-    response_raw = http_get(url)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_get(path, use_base=True)
 
 
 def create(org_label, name=None, description=None):
@@ -40,8 +30,8 @@ def create(org_label, name=None, description=None):
     :param description: NOT USED YET - OPTIONAL The description of the organization
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
-    org_label = urllib.parse.quote_plus(org_label)
-    url = "/orgs/" + org_label
+    org_label = url_encode(org_label)
+    path = "/orgs/" + org_label
 
     data = {}
 
@@ -57,16 +47,7 @@ def create(org_label, name=None, description=None):
     else:
         data["description"] = ""
 
-    response_raw = http_put(url, body=data)
-
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_put(path, use_base=True, body=data)
 
 
 def update(org, previous_rev=None):
@@ -78,21 +59,14 @@ def update(org, previous_rev=None):
     this organization. If not provided, the `_rev` number from the `org` argument will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
-    org_label = urllib.parse.quote_plus(org["label"])
+    org_label = url_encode(org["label"])
 
     if previous_rev is None:
         previous_rev = org["_rev"]
 
-    url = "/orgs/" + org_label + "?rev=" + str(previous_rev)
+    path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_put(url, org)
-
-    raise Exception("Invalid http request for " + response_raw.url +
-                    " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                    response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_put(path, org, use_base=True)
 
 
 def list(pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
@@ -109,25 +83,17 @@ def list(pagination_from=0, pagination_size=20, deprecated=None, full_text_searc
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
 
-    url = "/orgs?from=" + str(pagination_from) + "&size=" + str(pagination_size)
+    path = "/orgs?from=" + str(pagination_from) + "&size=" + str(pagination_size)
 
     if deprecated is not None:
         deprecated = "true" if deprecated else "false"
-        url = url + "&deprecated=" + deprecated
+        path = path + "&deprecated=" + deprecated
 
     if full_text_search_query is not None:
-        full_text_search_query = urllib.parse.quote_plus(full_text_search_query)
-        url = url + "&q=" + full_text_search_query
+        full_text_search_query = url_encode(full_text_search_query)
+        path = path + "&q=" + full_text_search_query
 
-    response_raw = http_get(url)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_get(path, use_base=True)
 
 
 def deprecate(org_label, previous_rev):
@@ -141,18 +107,10 @@ def deprecate(org_label, previous_rev):
     of the last revision of this organisation.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
-    org_label = urllib.parse.quote_plus(org_label)
-    url = "/orgs/" + org_label + "?rev=" + str(previous_rev)
+    org_label = url_encode(org_label)
+    path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
 
-    response_raw = http_delete(url)
-
-    if not is_response_valid(response_raw):
-        raise Exception("Invalid http request for " + response_raw.url +
-                        " (Status " + str(response_raw.status_code) + ")" + "\n" +
-                        response_raw.text)
-
-    response_obj = json.loads(response_raw.text)
-    return response_obj
+    return http_delete(path, use_base=True)
 
 
 
