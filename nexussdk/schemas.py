@@ -1,4 +1,3 @@
-import os
 import json
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
