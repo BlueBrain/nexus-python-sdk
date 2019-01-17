@@ -69,7 +69,7 @@ def fetch(org_label, project_label, schema_id, rev=None, tag=None):
     return http_get(path, use_base=True)
 
 
-def create(org_label, project_label, schema_obj):
+def create(org_label, project_label, schema_obj, id=None):
     """
         Create a new schema
 
@@ -88,7 +88,13 @@ def create(org_label, project_label, schema_obj):
     project_label = url_encode(project_label)
     path = "/schemas/" + org_label + "/" + project_label
 
-    return http_post(path, schema_obj)
+    if id is None:
+        return http_post(path, schema_obj)
+    else:
+        schema_id = url_encode(id)
+        path = path + "/" + schema_id
+        return http_put(path, schema_obj, use_base=True)
+
 
 
 def update(schema, previous_rev=None):
