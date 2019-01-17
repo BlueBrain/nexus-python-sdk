@@ -69,7 +69,7 @@ def update(resource, previous_rev=None):
     return http_put(path, resource, use_base=False)
 
 
-def create(org_label, project_label, data, schema_id='resource', resource_id=None):
+def create(org_label, project_label, data, schema_id='resource', id=None):
     """
         This is the POST method, when the user does not provide a resource ID.
 
@@ -77,7 +77,7 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
         :param project_label: The label of the project that the resource belongs to
         :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non contrained data (default: 'resource')
         :param data: dictionary containing the data to store in this new resource
-        :param resource_id: OPTIONAL - NOT UESED YET
+        :param id: OPTIONAL - NOT UESED YET
         :return: A payload containing only the Nexus metadata for this updated resource.
 
         If the data does not have a '@context' value, a default one is automatically added.
@@ -96,10 +96,16 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id
 
     # If the data does not have a '@context' field, we should had a default one
-    if "@context" not in data:
-        copy_this_into_that(DEFAULT_CONTEXT, data)
+    # if "@context" not in data:
+    #     copy_this_into_that(DEFAULT_CONTEXT, data)
 
-    return http_post(path, data, )
+    if id is None:
+        return http_post(path, data)
+    else:
+        resource_id = url_encode(id)
+        path = path + "/" + resource_id
+        return http_put(path, data, use_base=True)
+
 
 
 def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
