@@ -1,4 +1,4 @@
-from . utils.store import storage
+from nexussdk.utils.store import storage
 
 
 def set_token(token):

@@ -1,17 +1,18 @@
 # Settings
-from . import config
+from nexussdk import config
 
 # Main entry points
-from . import organization
-from . import project
-from . import resource
+from nexussdk import organizations
+from nexussdk import projects
+from nexussdk import resources
+from nexussdk import schemas
 
 # Views
 #from . import elasticsearchview
 #from . import sparqlview
 
 
-from . utils import tools
+from nexussdk.utils import tools
 
 # Expose this error so that a user of the nexus sdk can refer to it as nexussdk.HTTPError
 # and does not have to figure out from what lib it comes from

@@ -1,6 +1,6 @@
 import requests
 import json
-from .store import storage
+from nexussdk.utils.store import storage
 
 # defines some parts of the header, to combine together
 header_parts = {

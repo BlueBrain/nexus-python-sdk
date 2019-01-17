@@ -1,9 +1,9 @@
 import os
-from . utils.http import http_get
-from . utils.http import http_put
-from . utils.http import http_post
-from . utils.http import http_delete
-from . utils.tools import copy_this_into_that
+from nexussdk.utils.http import http_get
+from nexussdk.utils.http import http_put
+from nexussdk.utils.http import http_post
+from nexussdk.utils.http import http_delete
+from nexussdk.utils.tools import copy_this_into_that
 from urllib.parse import quote_plus as url_encode
 
 # This context is the default one when none is provided at the creation of a resource
@@ -15,7 +15,7 @@ DEFAULT_CONTEXT = {
 }
 
 
-def fetch(org_label, project_label, schema_id, resource_id):
+def fetch(org_label, project_label, schema_id, resource_id, rev=None, tag=None):
     """
         Fetches a distant resource and returns the payload as a dictionary.
         In case of error, an exception is thrown.
@@ -27,6 +27,9 @@ def fetch(org_label, project_label, schema_id, resource_id):
         :return: Payload of the whole resource as a dictionary
     """
 
+    if rev is not None and tag is not None:
+        raise Exception("The arguments rev and tag are mutually exclusive. One or the other must be chosen.")
+
     # the element composing the query URL need to be URL-encoded
     org_label = url_encode(org_label)
     project_label = url_encode(project_label)
@@ -34,6 +37,13 @@ def fetch(org_label, project_label, schema_id, resource_id):
     resource_id = url_encode(resource_id)
 
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
+
+    if rev is not None:
+        path = path + "?rev=" + str(rev)
+
+    if tag is not None:
+        path = path + "?tag=" + str(tag)
+
     return http_get(path, use_base=True)
 
 
@@ -41,7 +51,7 @@ def fetch(org_label, project_label, schema_id, resource_id):
 def update(resource, previous_rev=None):
     """
         Update a resource. The resource object is most likely the returned value of a
-        nexus.resource.get(), where some fields where modified, added or removed.
+        nexus.resource.fetch(), where some fields where modified, added or removed.
         Note that the returned payload only contains the Nexus metadata and not the
         complete resource.
 
@@ -89,7 +99,7 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
     if "@context" not in data:
         copy_this_into_that(DEFAULT_CONTEXT, data)
 
-    return http_post(path, data)
+    return http_post(path, data, )
 
 
 def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
@@ -147,6 +157,35 @@ def deprecate(resource, previous_rev=None):
     path = resource["_self"] + "?rev=" + str(previous_rev)
 
     return http_delete(path, use_base=False)
+
+
+def tag(resource, tag_value, rev_to_tag=None, previous_rev=None):
+    """
+        Add a tag to a a specific revision of the resource. Note that a new revision (untagged) will be created
+
+        :param resource: payload of a previously fetched resource
+        :param tag_value: The value (or name) of a tag
+        :param rev_to_tag: OPTIONAL Number of the revision to tag. If not provided, this will take the revision number
+        from the provided resource payload.
+        :param previous_rev: OPTIONAL The previous revision you want to update from.
+       If not provided, the rev from the resource argument will be used.
+        :return: A payload containing only the Nexus metadata for this resource.
+    """
+
+    if previous_rev is None:
+        previous_rev = resource["_rev"]
+
+    if rev_to_tag is None:
+        rev_to_tag = resource["_rev"]
+
+    path = resource["_self"] + "/tags?rev=" + str(previous_rev)
+
+    data = {
+        "tag": tag_value,
+        "rev": rev_to_tag
+    }
+
+    return http_put(path, body=data, use_base=False)
 
 
 def add_attachement(resource, filepath, previous_rev=None):
