@@ -1,6 +1,10 @@
 import requests
 import json
+import collections
 from nexussdk.utils.store import storage
+
+# to make sure the output response dictionary are always ordered like the response's json
+decode_json_ordered = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode
 
 # defines some parts of the header, to combine together
 header_parts = {
@@ -89,7 +93,7 @@ def http_get(path, params=None, use_base=False, get_raw_response=False, stream=F
     if get_raw_response:
         return response
     else:
-        return json.loads(response.text)
+        return decode_json_ordered(response.text)
 
 
 def http_post(path, body=None, data_type='default', params=None):
@@ -107,7 +111,7 @@ def http_post(path, body=None, data_type='default', params=None):
     body_data = prepare_body(body, data_type)
     response = requests.post(full_url, headers=header, data=body_data, params=params)
     response.raise_for_status()
-    return json.loads(response.text)
+    return decode_json_ordered(response.text)
 
 
 def http_put(path, body=None, data_type='default', use_base=False, params=None):
@@ -133,7 +137,7 @@ def http_put(path, body=None, data_type='default', use_base=False, params=None):
         response = requests.put(full_url, headers=header, files=body, params=params)
 
     response.raise_for_status()
-    return json.loads(response.text)
+    return decode_json_ordered(response.text)
 
 
 def http_patch(path, body=None, data_type='default', use_base=False, params=None):
@@ -172,7 +176,7 @@ def http_delete(path, body=None, data_type='default', use_base=False, params=Non
     body_data = prepare_body(body, data_type)
     response = requests.delete(full_url, headers=header, data=body_data, params=params)
     response.raise_for_status()
-    return json.loads(response.text)
+    return decode_json_ordered(response.text)
 
 
 def is_response_valid(response):
