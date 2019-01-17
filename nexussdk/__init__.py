@@ -6,6 +6,12 @@ from . import organization
 from . import project
 from . import resource
 
+# IAM
+from . import acls
+from . import identities
+from . import permissions
+from . import realms
+
 # Views
 #from . import elasticsearchview
 #from . import sparqlview

@@ -82,7 +82,7 @@ def http_get(path, params=None, use_base=False, get_raw_response=False, stream=F
         dictionary that is equivalent to the json response
     """
     header = prepare_header()
-    full_url = (storage.get('environment') if use_base else '') + path
+    full_url = _full_url(path)
     response = requests.get(full_url, headers=header, stream=stream, params=params)
     response.raise_for_status()
 
@@ -123,7 +123,7 @@ def http_put(path, body=None, data_type='default', use_base=False, params=None):
         :return: the dictionary that is equivalent to the json response
     """
     header = prepare_header(data_type)
-    full_url = (storage.get('environment') if use_base else '') + path
+    full_url = _full_url(path)
     response = None
 
     if data_type != 'file':
@@ -149,7 +149,7 @@ def http_patch(path, body=None, data_type='default', use_base=False, params=None
         :return: the dictionary that is equivalent to the json response
     """
     header = prepare_header()
-    full_url = (storage.get('environment') if use_base else '') + path
+    full_url = _full_url(path)
     body_data = prepare_body(body, data_type)
     response = requests.patch(full_url, headers=header, data=body_data, params=params)
     return response
@@ -168,7 +168,7 @@ def http_delete(path, body=None, data_type='default', use_base=False, params=Non
         :return: the dictionary that is equivalent to the json response
     """
     header = prepare_header()
-    full_url = (storage.get('environment') if use_base else '') + path
+    full_url = _full_url(path)
     body_data = prepare_body(body, data_type)
     response = requests.delete(full_url, headers=header, data=body_data, params=params)
     response.raise_for_status()
@@ -183,3 +183,16 @@ def is_response_valid(response):
         :return: True if status is below 300, False if above
     """
     return response.status_code < 300
+
+
+# Internal helpers
+
+def _full_url(path):
+    if isinstance(path, str):
+        return path
+    elif isinstance(path, list):
+        base = storage.get('environment')
+        path.insert(0, base)
+        return "/".join(path)
+    else:
+        raise TypeError("Expecting a string or a list!")
