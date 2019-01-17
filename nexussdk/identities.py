@@ -1,6 +1,6 @@
 from typing import Dict
 
-from nexussdk.utils import iam
+from nexussdk.utils.http import http_get
 
 SEGMENT = "identities"
 
@@ -8,8 +8,8 @@ SEGMENT = "identities"
 # Read functions.
 
 def fetch():
-    return iam.get([SEGMENT])
+    return http_get([SEGMENT])
 
 
 def fetch_(endpoint: str) -> Dict:
-    return iam.get(endpoint)
+    return http_get(endpoint)
