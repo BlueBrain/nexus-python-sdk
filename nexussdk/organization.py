@@ -59,7 +59,7 @@ def update(org, previous_rev=None):
     this organization. If not provided, the `_rev` number from the `org` argument will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
-    org_label = url_encode(org["label"])
+    org_label = url_encode(org["_label"])
 
     if previous_rev is None:
         previous_rev = org["_rev"]

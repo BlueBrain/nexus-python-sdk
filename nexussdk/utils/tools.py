@@ -21,5 +21,5 @@ def copy_this_into_that(this, that, deepcopy=False, force=False):
             that[key] = value
 
 
-def prettyPrint(payload):
+def pretty_print(payload):
     print(json.dumps(payload, indent=2))
