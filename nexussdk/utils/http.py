@@ -1,5 +1,8 @@
-import requests
 import json
+from typing import List, Union
+
+import requests
+
 from .store import storage
 
 # defines some parts of the header, to combine together
@@ -66,7 +69,7 @@ def print_request_response(r):
     print('history: ', r.history)
 
 
-def http_get(path, params=None, use_base=False, get_raw_response=False, stream=False):
+def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, use_base=False, **kwargs):
     """
         Wrapper to perform a GET request.
 
@@ -82,8 +85,8 @@ def http_get(path, params=None, use_base=False, get_raw_response=False, stream=F
         dictionary that is equivalent to the json response
     """
     header = prepare_header()
-    full_url = (storage.get('environment') if use_base else '') + path
-    response = requests.get(full_url, headers=header, stream=stream, params=params)
+    full_url = _full_url(path, use_base)
+    response = requests.get(full_url, headers=header, stream=stream, params=kwargs)
     response.raise_for_status()
 
     if get_raw_response:
@@ -110,7 +113,7 @@ def http_post(path, body=None, data_type='default', params=None):
     return json.loads(response.text)
 
 
-def http_put(path, body=None, data_type='default', use_base=False, params=None):
+def http_put(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
     """
         Performs a PUT request
 
@@ -123,20 +126,20 @@ def http_put(path, body=None, data_type='default', use_base=False, params=None):
         :return: the dictionary that is equivalent to the json response
     """
     header = prepare_header(data_type)
-    full_url = (storage.get('environment') if use_base else '') + path
+    full_url = _full_url(path, use_base)
     response = None
 
     if data_type != 'file':
         body_data = prepare_body(body, data_type)
-        response = requests.put(full_url, headers=header, data=body_data, params=params)
+        response = requests.put(full_url, headers=header, data=body_data, params=kwargs)
     else:
-        response = requests.put(full_url, headers=header, files=body, params=params)
+        response = requests.put(full_url, headers=header, files=body, params=kwargs)
 
     response.raise_for_status()
     return json.loads(response.text)
 
 
-def http_patch(path, body=None, data_type='default', use_base=False, params=None):
+def http_patch(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
     """
         Performs a PATCH request
 
@@ -149,13 +152,14 @@ def http_patch(path, body=None, data_type='default', use_base=False, params=None
         :return: the dictionary that is equivalent to the json response
     """
     header = prepare_header()
-    full_url = (storage.get('environment') if use_base else '') + path
+    full_url = _full_url(path, use_base)
     body_data = prepare_body(body, data_type)
-    response = requests.patch(full_url, headers=header, data=body_data, params=params)
-    return response
+    response = requests.patch(full_url, headers=header, data=body_data, params=kwargs)
+    response.raise_for_status()
+    return json.loads(response.text)
 
 
-def http_delete(path, body=None, data_type='default', use_base=False, params=None):
+def http_delete(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
     """
         Performs a DELETE request
 
@@ -168,9 +172,9 @@ def http_delete(path, body=None, data_type='default', use_base=False, params=Non
         :return: the dictionary that is equivalent to the json response
     """
     header = prepare_header()
-    full_url = (storage.get('environment') if use_base else '') + path
+    full_url = _full_url(path, use_base)
     body_data = prepare_body(body, data_type)
-    response = requests.delete(full_url, headers=header, data=body_data, params=params)
+    response = requests.delete(full_url, headers=header, data=body_data, params=kwargs)
     response.raise_for_status()
     return json.loads(response.text)
 
@@ -183,3 +187,20 @@ def is_response_valid(response):
         :return: True if status is below 300, False if above
     """
     return response.status_code < 300
+
+
+# Internal helpers
+
+def _full_url(path: Union[str, List[str]], use_base: bool) -> str:
+    # 'use_base' is temporary for compatibility with previous code sections.
+    if use_base:
+        return storage.get('environment') + path
+
+    if isinstance(path, str):
+        return path
+    elif isinstance(path, list):
+        base = storage.get('environment')
+        path.insert(0, base)
+        return "/".join(path)
+    else:
+        raise TypeError("Expecting a string or a list!")
