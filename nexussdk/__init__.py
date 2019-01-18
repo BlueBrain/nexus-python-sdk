@@ -1,23 +1,24 @@
 # Settings
-from . import config
+from nexussdk import config
 
 # Main entry points
-from . import organization
-from . import project
-from . import resource
+from nexussdk import organizations
+from nexussdk import projects
+from nexussdk import resources
+from nexussdk import schemas
 
 # IAM
-from . import acls
-from . import identities
-from . import permissions
-from . import realms
+from nexussdk import acls
+from nexussdk import identities
+from nexussdk import permissions
+from nexussdk import realms
 
 # Views
-#from . import elasticsearchview
+from nexussdk import views
 #from . import sparqlview
 
 
-from . utils import tools
+from nexussdk.utils import tools
 
 # Expose this error so that a user of the nexus sdk can refer to it as nexussdk.HTTPError
 # and does not have to figure out from what lib it comes from

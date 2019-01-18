@@ -1,15 +1,19 @@
 import json
-from typing import List, Union
-
+import collections
 import requests
+from typing import List, Union
+from nexussdk.utils.store import storage
 
-from .store import storage
+# to make sure the output response dictionary are always ordered like the response's json
+decode_json_ordered = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode
+
 
 # defines some parts of the header, to combine together
 header_parts = {
     'common': {'mode': 'cors'},
     'json': {'Content-Type': 'application/json'},
-    'text': {'sendAs': 'text', 'Content-Type': 'text/plain'}
+    'text': {'sendAs': 'text', 'Content-Type': 'text/plain'},
+    'sparql': {'Content-Type': 'application/sparql-query'}
 }
 default_type = 'json'
 header_parts['default'] = header_parts[default_type]
@@ -92,10 +96,29 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
     if get_raw_response:
         return response
     else:
-        return json.loads(response.text)
+        return decode_json_ordered(response.text)
 
 
-def http_post(path, body=None, data_type='default', params=None):
+# orig
+# def http_post(path, body=None, data_type='default', params=None):
+#     """
+#         Perform a POST request.
+#
+#         :param path: complete URL if use_base si False or just the ending if use_base is True
+#         :param body: OPTIONAL Things to send, can be a dictionary
+#         :param data_type: OPTIONAL can be 'json' or 'text' (default: 'default' = 'json')
+#         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
+#         :return: the dictionary that is equivalent to the json response
+#     """
+#     header = prepare_header(data_type)
+#     full_url = storage.get('environment') + path
+#     body_data = prepare_body(body, data_type)
+#     response = requests.post(full_url, headers=header, data=body_data, params=params)
+#     response.raise_for_status()
+#     return decode_json_ordered(response.text)
+
+
+def http_post(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
     """
         Perform a POST request.
 
@@ -106,11 +129,13 @@ def http_post(path, body=None, data_type='default', params=None):
         :return: the dictionary that is equivalent to the json response
     """
     header = prepare_header(data_type)
-    full_url = storage.get('environment') + path
+    full_url = _full_url(path, use_base)
+
     body_data = prepare_body(body, data_type)
-    response = requests.post(full_url, headers=header, data=body_data, params=params)
+    response = requests.post(full_url, headers=header, data=body_data, params=kwargs)
+
     response.raise_for_status()
-    return json.loads(response.text)
+    return decode_json_ordered(response.text)
 
 
 def http_put(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
@@ -136,7 +161,7 @@ def http_put(path: Union[str, List[str]], body=None, data_type='default', use_ba
         response = requests.put(full_url, headers=header, files=body, params=kwargs)
 
     response.raise_for_status()
-    return json.loads(response.text)
+    return decode_json_ordered(response.text)
 
 
 def http_patch(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
@@ -156,7 +181,7 @@ def http_patch(path: Union[str, List[str]], body=None, data_type='default', use_
     body_data = prepare_body(body, data_type)
     response = requests.patch(full_url, headers=header, data=body_data, params=kwargs)
     response.raise_for_status()
-    return json.loads(response.text)
+    return decode_json_ordered(response.text)
 
 
 def http_delete(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
@@ -176,7 +201,7 @@ def http_delete(path: Union[str, List[str]], body=None, data_type='default', use
     body_data = prepare_body(body, data_type)
     response = requests.delete(full_url, headers=header, data=body_data, params=kwargs)
     response.raise_for_status()
-    return json.loads(response.text)
+    return decode_json_ordered(response.text)
 
 
 def is_response_valid(response):

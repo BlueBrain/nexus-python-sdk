@@ -1,6 +1,6 @@
-from . utils.http import http_get
-from . utils.http import http_put
-from . utils.http import http_delete
+from nexussdk.utils.http import http_get
+from nexussdk.utils.http import http_put
+from nexussdk.utils.http import http_delete
 from urllib.parse import quote_plus as url_encode
 
 

@@ -1,6 +1,4 @@
-#from types import GenericMap
-
-from . genericmap import GenericMap
+from nexussdk.utils.genericmap import GenericMap
 
 class Store(GenericMap):
     def __init__(self):
