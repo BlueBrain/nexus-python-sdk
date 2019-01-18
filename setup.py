@@ -3,7 +3,7 @@ __maintainer__ = "Pierre-Alexandre Fonta"
 
 import os
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 VERSION = "0.1.0"
 
@@ -24,7 +24,7 @@ setup(
     author="Pierre-Alexandre Fonta, Jonathan Lurie",
     author_email=", pierre-alexandre.fonta@epfl.ch, jonathan.lurie@epfl.ch",
     license="Apache License, Version 2.0",
-    packages=["nexussdk"],
+    packages=find_packages(),
     python_requires=">=3.5",
     install_requires=[
         "requests",
