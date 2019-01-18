@@ -24,6 +24,8 @@ def fetch(org_label, project_label, schema_id, resource_id, rev=None, tag=None):
         :param project_label: The label of the project that the resource belongs to
         :param schema_id: id of the schema
         :param resource_id: id of the resource
+        :param rev: OPTIONAL fetches a specific revision of a resource (default: None, fetches the last)
+        :param tag: OPTIONAL fetches the resource version that has a specific tag (default: None)
         :return: Payload of the whole resource as a dictionary
     """
 
@@ -100,7 +102,7 @@ def create(org_label, project_label, data, schema_id='resource', id=None):
     #     copy_this_into_that(DEFAULT_CONTEXT, data)
 
     if id is None:
-        return http_post(path, data)
+        return http_post(path, data, use_base=True)
     else:
         resource_id = url_encode(id)
         path = path + "/" + resource_id

@@ -8,13 +8,13 @@ from nexussdk import resources
 from nexussdk import schemas
 
 # IAM
-from . import acls
-from . import identities
-from . import permissions
-from . import realms
+from nexussdk import acls
+from nexussdk import identities
+from nexussdk import permissions
+from nexussdk import realms
 
 # Views
-#from . import elasticsearchview
+from nexussdk import views
 #from . import sparqlview
 
 

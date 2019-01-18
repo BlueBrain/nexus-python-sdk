@@ -88,7 +88,7 @@ def create(org_label, project_label, schema_obj, id=None):
     path = "/schemas/" + org_label + "/" + project_label
 
     if id is None:
-        return http_post(path, schema_obj)
+        return http_post(path, schema_obj, use_base=True)
     else:
         schema_id = url_encode(id)
         path = path + "/" + schema_id
