@@ -7,6 +7,12 @@ from nexussdk import projects
 from nexussdk import resources
 from nexussdk import schemas
 
+# IAM
+from . import acls
+from . import identities
+from . import permissions
+from . import realms
+
 # Views
 #from . import elasticsearchview
 #from . import sparqlview
