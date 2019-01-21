@@ -1,6 +1,3 @@
-__author__ = "Pierre-Alexandre Fonta"
-__maintainer__ = "Pierre-Alexandre Fonta"
-
 import os
 
 from setuptools import find_packages, setup
@@ -21,8 +18,8 @@ setup(
     long_description_content_type="text/markdown",
     keywords="nexus sdk",
     url="https://github.com/BlueBrain/nexus-python-sdk",
-    author="Pierre-Alexandre Fonta, Jonathan Lurie",
-    author_email=", pierre-alexandre.fonta@epfl.ch, jonathan.lurie@epfl.ch",
+    author="Jonathan Lurie, Pierre-Alexandre Fonta",
+    author_email="jonathan.lurie@epfl.ch, pierre-alexandre.fonta@epfl.ch",
     license="Apache License, Version 2.0",
     packages=find_packages(),
     python_requires=">=3.5",
@@ -34,7 +31,7 @@ setup(
     },
     data_files=[("", ["LICENSE.txt"])],
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "Intended Audience :: Information Technology",
