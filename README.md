@@ -18,15 +18,20 @@ Pre-Alpha.
 ### Installation
 
 ```bash
-pip3 install nexus-sdk
+pip install nexus-sdk
+```
+
+### Installation of the development version
+
+```bash
+pip install git+https://github.com/BlueBrain/nexus-python-sdk
 ```
 
 ### Installation in development mode
 
 ```bash
-git clone https://github.com/BlueBrain/nexus-python-sdk.git
-cd nexus-python-sdk
-python setup.py develop
+git clone https://github.com/bluebrain/nexus-python-sdk
+pip install --editable nexus-python-sdk
 ```
 
 #### Requirements
