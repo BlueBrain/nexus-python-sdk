@@ -16,9 +16,8 @@ nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
 # nexus.tools.pretty_print(payload)
 
 # getting a specific organization
-# WORKS
-# payload = nexus.projects.fetch("jojorg", "first_project")
-# nexus.tools.pretty_print(payload)
+payload = nexus.projects.fetch("my_org", "third_project")
+nexus.tools.pretty_print(payload)
 
 
 # Updating values of an organization
@@ -29,12 +28,8 @@ nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
 
 # Create an Project
 # WORKS
-data = {
-    "name": "The First Project",
-    "description": "The description of the first project"
-}
-payload = nexus.projects.create("my_org", "first_project")
-nexus.tools.pretty_print(payload)
+# payload = nexus.projects.create("my_org", "third_project", description="bla bla", api_mappings=None, vocab=None)
+# nexus.tools.pretty_print(payload)
 
 
 # Deprecate an project
