@@ -4,14 +4,14 @@ import nexussdk as nexus
 prod = "https://bbp.epfl.ch/nexus/v1/"
 staging = 'https://bbp-nexus.epfl.ch/staging/v1'
 
-token = open('token.txt', 'r').read().strip()
-nexus.config.set_token(token)
-nexus.config.set_environment(staging)
+# token = open('token.txt', 'r').read().strip()
+# nexus.config.set_token(token)
+# nexus.config.set_environment(staging)
 
 # DEV with Github token
-# token = open('token-gh.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
+token = open('token-gh.txt', 'r').read().strip()
+nexus.config.set_token(token)
+nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
 
 # DEV with Github token
 # token = open('token-gh.txt', 'r').read().strip()
@@ -20,23 +20,21 @@ nexus.config.set_environment(staging)
 
 
 # # # WORKS but the API does not list everything
-payload = nexus.resources.list('bbp', 'example', schema=None)
-nexus.tools.pretty_print(payload)
+# payload = nexus.resources.list('my_org', 'first_project')
+# nexus.tools.pretty_print(payload)
 #
 # exit()
 
 # # WORKS but the API does not list everything
-# payload = nexus.resources.list('bbp', 'example', schema="resource")
+# payload = nexus.resources.list('my_org', 'first_project', schema="resource")
 # nexus.tools.pretty_print(payload)
 
 
 # WORKS
 # payload = None
-# try:
-#     payload = nexus.resources.fetch('bbp', 'example', 'resource', "http://example.com/77cba9c7-437d-42dc-8721-55f0cb491345")
-#     # nexus.tools.pretty_print(payload)
-# except nexus.HTTPError as e:
-#     print(e.response.text)
+
+# payload = nexus.resources.fetch('my_org', 'first_project', 'resource', "13744e26-92a7-45fa-b9c5-7e5e4dd80110")
+# nexus.tools.pretty_print(payload)
 # #
 # #
 # print('===========================================================')
@@ -45,21 +43,21 @@ nexus.tools.pretty_print(payload)
 
 # Create a resource (NOT providing an ID)
 # data = {
-#     "firstname": "Johnny6",
-#     "lastname": "Bravo6"
+#     "firstname": "Johnny2",
+#     "lastname": "Bravo2"
 # }
-# payload = nexus.resources.create('jojo', 'first_project', data)
-# payload = nexus.resources.create('bbp', 'example', data)
+# payload = nexus.resources.create('my_org', 'first_project', data)
+# # payload = nexus.resources.create('bbp', 'example', data)
 # nexus.tools.pretty_print(payload)
 
 
 # Create a resource (providing an ID)
 # data = {
-#     "firstname": "Johnny7",
-#     "lastname": "Bravo7"
+#     "firstname": "Johnny1",
+#     "lastname": "Bravo1"
 # }
-# # payload = nexus.resources.create('jojo', 'first_project', data, )
-# payload = nexus.resources.create('bbp', 'example', data, id="00000000-1111-2222-3333-444444444444")
+# payload = nexus.resources.create('my_org', 'first_project', data )
+# # payload = nexus.resources.create('jojorg', 'second_project', data, id="the-fancy-id-i-absolutely-need")
 # nexus.tools.pretty_print(payload)
 
 
@@ -95,4 +93,11 @@ nexus.tools.pretty_print(payload)
 
 # Works
 # Tag a resource
-# payload = nexus.resources.tag(payload, "some_tag", 4)
+# payload = nexus.resources.fetch('my_org', 'first_project', 'resource', "http://dev.nexus.ocp.bbp.epfl.ch/v1/resources/my_org/first_project/_/13744e26-92a7-45fa-b9c5-7e5e4dd80110")
+# payload = nexus.resources.tag(payload, "some_tag")
+# nexus.tools.pretty_print(payload)
+
+# Get all the tags for a resource
+payload = nexus.resources.fetch('my_org', 'first_project', 'resource', "13744e26-92a7-45fa-b9c5-7e5e4dd80110")
+payload = nexus.resources.tags(payload)
+nexus.tools.pretty_print(payload)

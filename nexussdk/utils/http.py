@@ -13,13 +13,21 @@ header_parts = {
     'common': {'mode': 'cors'},
     'json': {'Content-Type': 'application/json'},
     'text': {'sendAs': 'text', 'Content-Type': 'text/plain'},
-    'sparql': {'Content-Type': 'application/sparql-query'}
+    'sparql': {'Content-Type': 'application/sparql-query'},
+
 }
+
+# so that a get request can decide to retrieve JSON or binary
+header_accept = {
+    'json': 'application/ld+json, application/json',
+    'all': '*/*'
+}
+
 default_type = 'json'
 header_parts['default'] = header_parts[default_type]
 
 
-def prepare_header(type='default'):
+def prepare_header(type='default', accept='json'):
     """
         Prepare the header of the HTTP request by fetching the token from the config
         and few other things.
@@ -33,8 +41,11 @@ def prepare_header(type='default'):
     else:
         header = {**header_parts['common'], **header_parts[type]}
 
+    if accept in header_accept:
+        header["Accept"] = header_accept[accept]
+
     if storage.has('token'):
-        header['Authorization'] = 'Bearer ' + storage.get('token')
+        header["Accept"] = header_accept[accept]
     return header
 
 
@@ -65,15 +76,15 @@ def print_request_response(r):
     print('status: ', r.status_code)
     print('encoding: ', r.encoding)
     print('url: ', r.url)
-    print('json: ', r.json())
-    print('text: ', r.text)
+    # print('json: ', r.json())
+    # print('text: ', r.text)
     print('headers: ')
     print(r.headers)
     print('cookies:', r.cookies)
     print('history: ', r.history)
 
 
-def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, use_base=False, **kwargs):
+def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, use_base=False, data_type='default', accept='json', **kwargs):
     """
         Wrapper to perform a GET request.
 
@@ -88,7 +99,7 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
         :return: if get_raw_response is True, returns the request.get object. If get_raw_response is False, return the
         dictionary that is equivalent to the json response
     """
-    header = prepare_header()
+    header = prepare_header(data_type, accept)
     full_url = _full_url(path, use_base)
     response = requests.get(full_url, headers=header, stream=stream, params=kwargs)
     response.raise_for_status()
@@ -131,8 +142,16 @@ def http_post(path: Union[str, List[str]], body=None, data_type='default', use_b
     header = prepare_header(data_type)
     full_url = _full_url(path, use_base)
 
-    body_data = prepare_body(body, data_type)
-    response = requests.post(full_url, headers=header, data=body_data, params=kwargs)
+    # body_data = prepare_body(body, data_type)
+    # response = requests.post(full_url, headers=header, data=body_data, params=kwargs)
+
+    response = None
+
+    if data_type != 'file':
+        body_data = prepare_body(body, data_type)
+        response = requests.post(full_url, headers=header, data=body_data, params=kwargs)
+    else:
+        response = requests.post(full_url, headers=header, files=body, params=kwargs)
 
     response.raise_for_status()
     return decode_json_ordered(response.text)

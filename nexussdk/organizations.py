@@ -18,6 +18,8 @@ def fetch(org_label, rev=None):
     if rev is not None:
         path = path + "?rev=" + str(rev)
 
+
+
     return http_get(path, use_base=True)
 
 
@@ -69,29 +71,17 @@ def update(org, previous_rev=None):
     return http_put(path, org, use_base=True)
 
 
-def list(pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None):
+def list(pagination_from=0, pagination_size=20):
     """
     NOT WORKING
     List all the organizations.
 
     :param pagination_from: OPTIONAL Index of the list to start from (default: 0)
     :param pagination_size: OPTIONAL Size of the list (default: 20)
-    :param deprecated: OPTIONAL Lists only the deprecated if True,
-    lists only the non-deprecated if False,
-    lists everything if not provided or None (default: None)
-    :param full_text_search_query: OPTIONAL List only the orgs that match this query
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
 
     path = "/orgs?from=" + str(pagination_from) + "&size=" + str(pagination_size)
-
-    if deprecated is not None:
-        deprecated = "true" if deprecated else "false"
-        path = path + "&deprecated=" + deprecated
-
-    if full_text_search_query is not None:
-        full_text_search_query = url_encode(full_text_search_query)
-        path = path + "&q=" + full_text_search_query
 
     return http_get(path, use_base=True)
 
