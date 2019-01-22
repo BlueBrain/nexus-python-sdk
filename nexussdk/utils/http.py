@@ -45,7 +45,7 @@ def prepare_header(type='default', accept='json'):
         header["Accept"] = header_accept[accept]
 
     if storage.has('token'):
-        header["Accept"] = header_accept[accept]
+        header['Authorization'] = 'Bearer ' + storage.get('token')
     return header
 
 
