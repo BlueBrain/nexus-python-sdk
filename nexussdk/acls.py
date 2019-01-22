@@ -70,7 +70,7 @@ def replace(subpath: str, permissions: List[str], identity: Dict, rev: int) -> D
 
     :param subpath: Subpath on which replacing the ACLs.
     :param permissions: List of permissions.
-    :param identity: Payload of the identity to which grant the permissions.
+    :param identity: Payload of the identity for which to replace permissions.
     :param rev: Last revision of the ACLs.
     :return: The Nexus metadata of the ACLs.
     """
@@ -94,7 +94,7 @@ def append(subpath: str, permissions: List[str], identity: Dict, rev: int) -> Di
 
     :param subpath: Subpath on which appending ACLs.
     :param permissions: List of permissions.
-    :param identity: Payload of the identity to which grant the permissions.
+    :param identity: Payload of the identity for which to append the permissions.
     :param rev: Last revision of the ACLs.
     :return: The Nexus metadata of the ACLs.
     """
@@ -118,7 +118,7 @@ def subtract(subpath: str, permissions: List[str], identity: Dict, rev: int) -> 
 
     :param subpath: Subpath on which subtracting ACLs.
     :param permissions: List of permissions.
-    :param identity: Payload of the identity to which remove the permissions.
+    :param identity: Payload of the identity for which to remove the permissions.
     :param rev: Last revision of the ACLs.
     :return: The Nexus metadata of the ACLs.
     """
@@ -165,7 +165,7 @@ def _payload(permissions: List[str], identity: Dict, operation: str = None) -> D
     """Create an ACLs payload.
 
     :param permissions: List of permissions.
-    :param identity: Payload of the identity on which the permissions apply.
+    :param identity: Payload of the identity to which the permissions apply.
     :param operation: (optional) Corresponding operation: 'Append' or 'Subtract'.
     :return: Payload of the ACLs.
     """
