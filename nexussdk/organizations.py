@@ -18,8 +18,6 @@ def fetch(org_label, rev=None):
     if rev is not None:
         path = path + "?rev=" + str(rev)
 
-
-
     return http_get(path, use_base=True)
 
 
@@ -52,21 +50,21 @@ def create(org_label, name=None, description=None):
     return http_put(path, use_base=True, body=data)
 
 
-def update(org, previous_rev=None):
+def update(org, rev=None):
     """
     Update an organization. Only the field "name" can be updated (and "description" in the future).
 
     :param org: Organization payload as a dictionary. This is most likely the returned value of `organisation.get(...)`
-    :param previous_rev: OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
+    :param rev: OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
     this organization. If not provided, the `_rev` number from the `org` argument will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
     org_label = url_encode(org["_label"])
 
-    if previous_rev is None:
-        previous_rev = org["_rev"]
+    if rev is None:
+        rev = org["_rev"]
 
-    path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
+    path = "/orgs/" + org_label + "?rev=" + str(rev)
 
     return http_put(path, org, use_base=True)
 
@@ -86,19 +84,19 @@ def list(pagination_from=0, pagination_size=20):
     return http_get(path, use_base=True)
 
 
-def deprecate(org_label, previous_rev):
+def deprecate(org_label, rev):
     """
     Deprecate an organization. Nexus does not allow deleting organizations so deprecating is the way to flag them as
     not usable anymore.
     A deprecated organization can not be modified/updated.
 
     :param org_label: The label of the organization to deprecate
-    :param previous_rev: The previous revision number. To be provided to make sure the user is well aware of the details
+    :param rev: The previous revision number. To be provided to make sure the user is well aware of the details
     of the last revision of this organisation.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
     org_label = url_encode(org_label)
-    path = "/orgs/" + org_label + "?rev=" + str(previous_rev)
+    path = "/orgs/" + org_label + "?rev=" + str(rev)
 
     return http_delete(path, use_base=True)
 

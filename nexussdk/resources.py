@@ -50,7 +50,7 @@ def fetch(org_label, project_label, schema_id, resource_id, rev=None, tag=None):
 
 
 
-def update(resource, previous_rev=None):
+def update(resource, rev=None):
     """
         Update a resource. The resource object is most likely the returned value of a
         nexus.resource.fetch(), where some fields where modified, added or removed.
@@ -58,28 +58,29 @@ def update(resource, previous_rev=None):
         complete resource.
 
         :param resource: payload of a previously fetched resource, with the modification to be updated
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this updated resource.
     """
 
-    if previous_rev is None:
-        previous_rev = resource["_rev"]
+    if rev is None:
+        rev = resource["_rev"]
 
-    path = resource["_self"] + "?rev=" + str(previous_rev)
+    path = resource["_self"] + "?rev=" + str(rev)
 
     return http_put(path, resource, use_base=False)
 
 
-def create(org_label, project_label, data, schema_id='resource', id=None):
+def create(org_label, project_label, data, schema_id='resource', resource_id=None):
     """
-        This is the POST method, when the user does not provide a resource ID.
+        Create a resource. If resource_id is provided, this given ID will be used. If resource_id not provided,
+        an ID will be automatically generated for this new resource.
 
         :param org_label: The label of the organization that the resource belongs to
         :param project_label: The label of the project that the resource belongs to
-        :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non contrained data (default: 'resource')
+        :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: 'resource')
         :param data: dictionary containing the data to store in this new resource
-        :param id: OPTIONAL - NOT UESED YET
+        :param resource_id: OPTIONAL force the use of a specific id when creating the new resource
         :return: A payload containing only the Nexus metadata for this updated resource.
 
         If the data does not have a '@context' value, a default one is automatically added.
@@ -101,10 +102,10 @@ def create(org_label, project_label, data, schema_id='resource', id=None):
     if "@context" not in data:
         copy_this_into_that(DEFAULT_CONTEXT, data)
 
-    if id is None:
+    if resource_id is None:
         return http_post(path, data, use_base=True)
     else:
-        resource_id = url_encode(id)
+        resource_id = url_encode(resource_id)
         path = path + "/" + resource_id
         return http_put(path, data, use_base=True)
 
@@ -148,26 +149,26 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
     return http_get(path, use_base=True)
 
 
-def deprecate(resource, previous_rev=None):
+def deprecate(resource, rev=None):
     """
        Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
        possible to update it.
 
        :param resource: payload of a previously fetched resource
-       :param previous_rev: OPTIONAL The previous revision you want to update from.
+       :param rev: OPTIONAL The previous revision you want to update from.
        If not provided, the rev from the resource argument will be used.
        :return: A payload containing only the Nexus metadata for this deprecated resource.
     """
 
-    if previous_rev is None:
-        previous_rev = resource["_rev"]
+    if rev is None:
+        rev = resource["_rev"]
 
-    path = resource["_self"] + "?rev=" + str(previous_rev)
+    path = resource["_self"] + "?rev=" + str(rev)
 
     return http_delete(path, use_base=False)
 
 
-def tag(resource, tag_value, rev_to_tag=None, previous_rev=None):
+def tag(resource, tag_value, rev_to_tag=None, rev=None):
     """
         Add a tag to a a specific revision of the resource. Note that a new revision (untagged) will be created
 
@@ -175,18 +176,18 @@ def tag(resource, tag_value, rev_to_tag=None, previous_rev=None):
         :param tag_value: The value (or name) of a tag
         :param rev_to_tag: OPTIONAL Number of the revision to tag. If not provided, this will take the revision number
         from the provided resource payload.
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
        If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this resource.
     """
 
-    if previous_rev is None:
-        previous_rev = resource["_rev"]
+    if rev is None:
+        rev = resource["_rev"]
 
     if rev_to_tag is None:
         rev_to_tag = resource["_rev"]
 
-    path = resource["_self"] + "/tags?rev=" + str(previous_rev)
+    path = resource["_self"] + "/tags?rev=" + str(rev)
 
     data = {
         "tag": tag_value,
@@ -208,7 +209,7 @@ def tags(resource):
     return http_get(path, use_base=False)
 
 
-def add_attachement(resource, filepath, previous_rev=None):
+def add_attachement(resource, filepath, rev=None):
     """
         DEPRECATED
 
@@ -216,21 +217,21 @@ def add_attachement(resource, filepath, previous_rev=None):
 
         :param resource: payload of a previously fetched resource
         :param filepath: Path of the file to upload
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this resource.
     """
 
-    if previous_rev is None:
-        previous_rev = resource["_rev"]
+    if rev is None:
+        rev = resource["_rev"]
 
     file_basename = url_encode( os.path.basename(filepath) )
-    path = resource["_self"] + "/attachments/" + file_basename + "?rev=" + str(previous_rev)
+    path = resource["_self"] + "/attachments/" + file_basename + "?rev=" + str(rev)
     file_obj = {'file': open(filepath, "rb")}
     return http_put(path, use_base=False, body=file_obj, data_type='file')
 
 
-def delete_attachment(resource, basename, previous_rev=None):
+def delete_attachment(resource, basename, rev=None):
     """
         DEPRECATED
 
@@ -238,19 +239,19 @@ def delete_attachment(resource, basename, previous_rev=None):
 
         :param resource: payload of a previously fetched resource
         :param basename: The attachment basename (filename with extension but without full path)
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this resource.
     """
 
-    if previous_rev is None:
-        previous_rev = resource["_rev"]
+    if rev is None:
+        rev = resource["_rev"]
 
-    path = resource["_self"] + "/attachments/" + basename + "?rev=" + str(previous_rev)
+    path = resource["_self"] + "/attachments/" + basename + "?rev=" + str(rev)
     return http_delete(path, use_base=False)
 
 
-def fetch_attachment(resource, name, previous_rev=None, tag=None, out_filename=None):
+def fetch_attachment(resource, name, rev=None, tag=None, out_filename=None):
     """
         DEPRECATED
 
@@ -263,22 +264,22 @@ def fetch_attachment(resource, name, previous_rev=None, tag=None, out_filename=N
 
     :param resource: payload of a previously fetched resource
     :param name: ID of the resource's attachment
-    :param previous_rev: OPTIONAL The previous revision you want to update from.
+    :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the resource argument will be used.
         Note that this cannot be given along tag
-    :param tag: OPTIONAL tag of a resource. Note that this cannot be given along previous_rev
+    :param tag: OPTIONAL tag of a resource. Note that this cannot be given along rev
     :param out_filename: OPTIONAL file path to which write the fetched file.
     :return: If out_filename is provided None is returned.
         If out_filename is not provided, the binary buffer is returned as a byte_arr
     """
 
-    if (previous_rev is not None) and (tag is not None):
-        raise Exception("The arguments previous_rev and tag are mutually exclusive and should not be used together.")
+    if (rev is not None) and (tag is not None):
+        raise Exception("The arguments rev and tag are mutually exclusive and should not be used together.")
 
     path = resource["_self"] + "/attachments/" + name
 
-    if previous_rev is not None:
-        path = path + "?rev=" + str(previous_rev)
+    if rev is not None:
+        path = path + "?rev=" + str(rev)
 
     if tag is not None:
         path = path + "?tag=" + str(tag)
