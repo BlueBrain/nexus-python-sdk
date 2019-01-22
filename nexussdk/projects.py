@@ -31,7 +31,7 @@ def create(org_label, project_label, config=None):
 
     :param org_label: The label of the organization to create the project in
     :param project_label: The label of the project to add
-    :param config: OPTIONAL if provided, must be a dictionary. Can include data such as `name`, `base` or `prefixMapping`
+    :param config: OPTIONAL if provided, must be a dictionary. Can include data such as `name`, `base` or `apiMappings`
     see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#create-a-project for more info
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
@@ -48,7 +48,7 @@ def create(org_label, project_label, config=None):
 
 def update(project, previous_rev=None):
     """
-    Update a project. The data to update on a project are mostly related to the prefix mapping. To do so, you must
+    Update a project. The data to update on a project are mostly related to the api mapping. To do so, you must
     get the project information as a payload, most likely using `project.fetch(...)`, then, modify this payload
     according to the update to perform, and finally, use this modified payload as the `project` argument of this method.
 
@@ -103,7 +103,7 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
     return http_get(path, use_base=True)
 
 
-def deprecate(org_label, project_label, previous_rev):
+def deprecate_2(org_label, project_label, previous_rev):
     """
     Deprecate a project. Nexus does not allow deleting projects so deprecating is the way to flag them as
     not usable anymore.
@@ -123,3 +123,25 @@ def deprecate(org_label, project_label, previous_rev):
 
     return http_delete(path, use_base=True)
 
+
+def deprecate(project, previous_rev=None):
+    """
+    Deprecate a project. Nexus does not allow deleting projects so deprecating is the way to flag them as
+    not usable anymore.
+    A deprecated project cannot be modified/updated.
+
+    :param project: The project payload, most likely retrieved with fetch()
+    :param previous_rev: OPTIONAL provide the last version of the project to make sure the user has full knowledge of
+    the version being deprecated. If not provided, the revision number from the project payload will be used.
+    :return:
+    """
+
+    org_label = url_encode(project["_organizationLabel"])
+    project_label = url_encode(project["_label"])
+
+    if previous_rev is None:
+        previous_rev = project["_rev"]
+
+    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
+
+    return http_delete(path, use_base=True)

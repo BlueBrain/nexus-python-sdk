@@ -98,8 +98,8 @@ def create(org_label, project_label, data, schema_id='resource', id=None):
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id
 
     # If the data does not have a '@context' field, we should had a default one
-    # if "@context" not in data:
-    #     copy_this_into_that(DEFAULT_CONTEXT, data)
+    if "@context" not in data:
+        copy_this_into_that(DEFAULT_CONTEXT, data)
 
     if id is None:
         return http_post(path, data, use_base=True)
@@ -193,7 +193,19 @@ def tag(resource, tag_value, rev_to_tag=None, previous_rev=None):
         "rev": rev_to_tag
     }
 
-    return http_put(path, body=data, use_base=False)
+    return http_post(path, body=data, use_base=False)
+
+
+def tags(resource):
+    """
+        List all the tags added to this resource, along with their version numbers
+
+        :param resource: payload of a previously fetched resource
+        :return: payload containing the list of tags and versions
+    """
+
+    path = resource["_self"] + "/tags"
+    return http_get(path, use_base=False)
 
 
 def add_attachement(resource, filepath, previous_rev=None):

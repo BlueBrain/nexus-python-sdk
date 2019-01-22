@@ -6,6 +6,7 @@ from nexussdk import organizations
 from nexussdk import projects
 from nexussdk import resources
 from nexussdk import schemas
+from nexussdk import files
 
 # IAM
 from nexussdk import acls
