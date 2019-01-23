@@ -1,3 +1,7 @@
+"""
+Organizations can represent a lab, a company or even a team of collaborators. They are used to store projects.
+"""
+
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
 from nexussdk.utils.http import http_delete
@@ -99,6 +103,3 @@ def deprecate(org_label, rev):
     path = "/orgs/" + org_label + "?rev=" + str(rev)
 
     return http_delete(path, use_base=True)
-
-
-

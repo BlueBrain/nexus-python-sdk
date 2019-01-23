@@ -1,3 +1,8 @@
+"""
+Files are a particular kind of resource that contain binary data. In addition, like any other resource, they are bound
+to a project (and thus, an organization) and can be described with their metadata.
+"""
+
 import os
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put

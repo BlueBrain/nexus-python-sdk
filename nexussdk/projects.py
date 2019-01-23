@@ -1,8 +1,12 @@
+"""
+A project is a place to store data (files, resources, schemas, etc.). It belongs to an organization.
+"""
+
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
 from nexussdk.utils.http import http_delete
 from urllib.parse import quote_plus as url_encode
-"""The Orgnization is made to deal with orgs """
+
 
 def fetch(org_label, project_label, rev=None):
     """

@@ -79,12 +79,17 @@ for package in dir(nexussdk):
     if package in blacklist:
         continue
 
+    package_obj = getattr(nexussdk, package)
+
     add_to_toc(package, 0)
     add_to_doc("# " + package)
 
+    package_doc = digest_doc(package_obj.__doc__)
+    add_to_doc(package_doc)
+
     # print(package)
 
-    all_functions = dir(getattr(nexussdk, package))
+    all_functions = dir(package_obj)
 
     for func in all_functions:
 
@@ -94,7 +99,7 @@ for package in dir(nexussdk):
         if (func[0] == "_") or (func[-1] == "_"):
             continue
 
-        func_obj = getattr(getattr(nexussdk, package), func)
+        func_obj = getattr(package_obj, func)
 
         if not callable(func_obj):
             continue

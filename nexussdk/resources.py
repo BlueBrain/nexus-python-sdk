@@ -1,3 +1,9 @@
+"""
+A resource represents a set of organized data represented with JSON. Hence, a resource can handle data such as numbers,
+strings, arrays, boolean and complex objects made of those primitive types. In addition, Nexus adds some metadata.
+Resources belong to projects and their access rights are defined at the project level.
+"""
+
 import os
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
@@ -47,7 +53,6 @@ def fetch(org_label, project_label, schema_id, resource_id, rev=None, tag=None):
         path = path + "?tag=" + str(tag)
 
     return http_get(path, use_base=True)
-
 
 
 def update(resource, rev=None):
@@ -108,7 +113,6 @@ def create(org_label, project_label, data, schema_id='resource', resource_id=Non
         resource_id = url_encode(resource_id)
         path = path + "/" + resource_id
         return http_put(path, data, use_base=True)
-
 
 
 def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
@@ -225,7 +229,7 @@ def add_attachement(resource, filepath, rev=None):
     if rev is None:
         rev = resource["_rev"]
 
-    file_basename = url_encode( os.path.basename(filepath) )
+    file_basename = url_encode(os.path.basename(filepath))
     path = resource["_self"] + "/attachments/" + file_basename + "?rev=" + str(rev)
     file_obj = {'file': open(filepath, "rb")}
     return http_put(path, use_base=False, body=file_obj, data_type='file')
@@ -301,4 +305,3 @@ def fetch_attachment(resource, name, rev=None, tag=None, out_filename=None):
             byte_arr = byte_arr + chunk
 
         return byte_arr
-

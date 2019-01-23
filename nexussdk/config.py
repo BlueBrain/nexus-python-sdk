@@ -1,3 +1,8 @@
+"""
+The config provides an easy way to handle the Nexus environment and token.
+"""
+
+
 from nexussdk.utils.store import storage
 
 

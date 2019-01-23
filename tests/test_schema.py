@@ -80,7 +80,7 @@ my_schema = """{
     }
   ]
 }"""
-payload = nexus.schemas.create('bbp', 'example', my_schema, id="the_id2")
+payload = nexus.schemas.create('bbp', 'example', my_schema, schema_id="the_id2")
 nexus.tools.pretty_print(payload)
 
 
