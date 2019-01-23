@@ -1,5 +1,6 @@
+Documentation of Nexus Python SDK
+# Table of content
 - [acls](#acls)
-	- [acls: List](#acls-List)
 	- [acls: append](#acls-append)
 	- [acls: delete](#acls-delete)
 	- [acls: fetch](#acls-fetch)
@@ -18,7 +19,6 @@
 	- [files: tag](#files-tag)
 	- [files: tags](#files-tags)
 	- [files: update](#files-update)
-	- [files: quote_plus](#files-quoteplus)
 - [identities](#identities)
 	- [identities: fetch](#identities-fetch)
 - [organizations](#organizations)
@@ -27,9 +27,7 @@
 	- [organizations: fetch](#organizations-fetch)
 	- [organizations: list](#organizations-list)
 	- [organizations: update](#organizations-update)
-	- [organizations: quote_plus](#organizations-quoteplus)
 - [permissions](#permissions)
-	- [permissions: List](#permissions-List)
 	- [permissions: append](#permissions-append)
 	- [permissions: delete](#permissions-delete)
 	- [permissions: fetch](#permissions-fetch)
@@ -41,7 +39,6 @@
 	- [projects: fetch](#projects-fetch)
 	- [projects: list](#projects-list)
 	- [projects: update](#projects-update)
-	- [projects: quote_plus](#projects-quoteplus)
 - [realms](#realms)
 	- [realms: create](#realms-create)
 	- [realms: deprecate](#realms-deprecate)
@@ -59,7 +56,6 @@
 	- [resources: tag](#resources-tag)
 	- [resources: tags](#resources-tags)
 	- [resources: update](#resources-update)
-	- [resources: quote_plus](#resources-quoteplus)
 - [schemas](#schemas)
 	- [schemas: create](#schemas-create)
 	- [schemas: deprecate](#schemas-deprecate)
@@ -67,7 +63,6 @@
 	- [schemas: list](#schemas-list)
 	- [schemas: tag](#schemas-tag)
 	- [schemas: update](#schemas-update)
-	- [schemas: quote_plus](#schemas-quoteplus)
 - [tools](#tools)
 	- [tools: pretty_print](#tools-prettyprint)
 - [views](#views)
@@ -82,14 +77,9 @@
 	- [views: query_sparql](#views-querysparql)
 	- [views: tag_es](#views-tages)
 	- [views: update_es](#views-updatees)
-	- [views: quote_plus](#views-quoteplus)
 
 
 # acls
-## acls: List
-(no documentation provided)
-
-
 ## acls: append
 Append ACLs on a subpath.
 
@@ -154,15 +144,19 @@ Subtract ACLs on a subpath.
 
 # config
 ## config: remove_token
-(no documentation provided)
+Remove the token. Then Nexus will no longer be able to perform any operations.
 
 
 ## config: set_environment
-(no documentation provided)
+Define the base URL of the Nexus environment. This URL should be of the form `https://my-nexus-env.com/v1`
+Note that it should not finish with a slash.
+- *argument* **env**: The base URL for the environment
 
 
 ## config: set_token
-(no documentation provided)
+Set the token for the Nexus environment.
+
+- *argument* **token**: The token is a string given by Nexus or a connected service.
 
 
 # files
@@ -248,12 +242,6 @@ If not provided, the rev from the file argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated file.
 
 
-## files: quote_plus
-Like quote(), but also replace ' ' with '+', as required for quoting
-HTML form values. Plus signs in the original string are escaped unless
-they are included in safe. It also does not have safe default to '/'.
-
-
 # identities
 ## identities: fetch
 Fetch the identities.
@@ -308,17 +296,7 @@ this organization. If not provided, the `_rev` number from the `org` argument wi
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
 
 
-## organizations: quote_plus
-Like quote(), but also replace ' ' with '+', as required for quoting
-HTML form values. Plus signs in the original string are escaped unless
-they are included in safe. It also does not have safe default to '/'.
-
-
 # permissions
-## permissions: List
-(no documentation provided)
-
-
 ## permissions: append
 Append user-defined permissions.
 
@@ -414,12 +392,6 @@ according to the update to perform, and finally, use this modified payload as th
 - *argument* **rev**: OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
 this project. If not provided, the `_rev` number from the `project` argument will be used.
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
-
-
-## projects: quote_plus
-Like quote(), but also replace ' ' with '+', as required for quoting
-HTML form values. Plus signs in the original string are escaped unless
-they are included in safe. It also does not have safe default to '/'.
 
 
 # realms
@@ -592,12 +564,6 @@ If not provided, the rev from the resource argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated resource.
 
 
-## resources: quote_plus
-Like quote(), but also replace ' ' with '+', as required for quoting
-HTML form values. Plus signs in the original string are escaped unless
-they are included in safe. It also does not have safe default to '/'.
-
-
 # schemas
 ## schemas: create
 Create a new schema
@@ -667,15 +633,10 @@ If not provided, the rev from the schema argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated schema.
 
 
-## schemas: quote_plus
-Like quote(), but also replace ' ' with '+', as required for quoting
-HTML form values. Plus signs in the original string are escaped unless
-they are included in safe. It also does not have safe default to '/'.
-
-
 # tools
 ## tools: pretty_print
-(no documentation provided)
+This helper function display a Python dict in a nice way, using the JSON syntax and an indentation of 2.
+- *argument* **payload**: A Python dict
 
 
 # views
@@ -786,12 +747,6 @@ complete view.
 - *argument* **rev**: OPTIONAL The previous revision you want to update from.
 If not provided, the rev from the view argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated view.
-
-
-## views: quote_plus
-Like quote(), but also replace ' ' with '+', as required for quoting
-HTML form values. Plus signs in the original string are escaped unless
-they are included in safe. It also does not have safe default to '/'.
 
 
 

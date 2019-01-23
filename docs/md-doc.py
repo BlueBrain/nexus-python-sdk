@@ -15,10 +15,11 @@ blacklist = [
     "http_delete",
     "http_post",
     "http_patch",
-    "is_response_valid"
+    "is_response_valid",
     "List",
     "Dict",
     "quote_plus",
+    "url_encode",
     "deprecate_2",
     "copy_this_into_that",
     "HTTPError",
@@ -81,9 +82,12 @@ for package in dir(nexussdk):
     add_to_toc(package, 0)
     add_to_doc("# " + package)
 
+    # print(package)
+
     all_functions = dir(getattr(nexussdk, package))
 
     for func in all_functions:
+
         if func in blacklist:
             continue
 
@@ -95,7 +99,13 @@ for package in dir(nexussdk):
         if not callable(func_obj):
             continue
 
-        func_name = func_obj.__name__
+        func_name = str(func_obj.__name__)
+
+        if func_name in blacklist:
+            continue
+
+        # print("\t" + func_name)
+
         func_doc = digest_doc(func_obj.__doc__)
 
         subtitle = package + ": " + str(func_name)
@@ -106,13 +116,8 @@ for package in dir(nexussdk):
         add_to_doc(str(func_doc))
         add_to_doc("\n")
 
-        # print("\t## " + func_name)
-
-
+print("Documentation of Nexus Python SDK")
+print("# Table of content")
 print(toc)
 print('')
 print(doc)
-
-
-
-# from docstring_parser import parse
