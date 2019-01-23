@@ -64,7 +64,7 @@ def add_to_doc(line):
 
 def add_to_toc(entry, level):
     global toc
-    whitelist = set('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    whitelist = set('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ_')
     link = ''.join(filter(whitelist.__contains__, entry))
     link = "#" + re.sub("\s+", "-", link)
 
