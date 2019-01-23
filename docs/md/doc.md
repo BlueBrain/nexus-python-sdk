@@ -260,8 +260,7 @@ Organizations can represent a lab, a company or even a team of collaborators. Th
 Create a new organization.
 
 - *argument* **org_label**: The label of the organization. Does not allow spaces or special characters
-- *argument* **name**: OPTIONAL Name of the organization. If not provided, the `org_label` will be used
-- *argument* **description**: NOT USED YET - OPTIONAL The description of the organization
+- *argument* **description**: OPTIONAL The description of the organization
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
 
 

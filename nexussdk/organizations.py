@@ -25,13 +25,12 @@ def fetch(org_label, rev=None):
     return http_get(path, use_base=True)
 
 
-def create(org_label, name=None, description=None):
+def create(org_label, description=None):
     """
     Create a new organization.
 
     :param org_label: The label of the organization. Does not allow spaces or special characters
-    :param name: OPTIONAL Name of the organization. If not provided, the `org_label` will be used
-    :param description: NOT USED YET - OPTIONAL The description of the organization
+    :param description: OPTIONAL The description of the organization
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
     org_label = url_encode(org_label)
@@ -39,13 +38,6 @@ def create(org_label, name=None, description=None):
 
     data = {}
 
-    # this field is mandatory
-    if "name" is not None:
-        data["name"] = name
-    else:
-        data["name"] = org_label
-
-    # this field will probably become mandatory
     if "description" is not None:
         data["description"] = description
     else:
