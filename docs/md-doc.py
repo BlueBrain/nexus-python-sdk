@@ -4,6 +4,10 @@ import nexussdk
 regex_param = r"(:\s*param\s*(\w+)\s*:)\s*(.*)"
 regex_return = r":\s*return\s*:\s*(.*)"
 
+toc = ""
+doc = ""
+
+
 blacklist = [
     "http_get",
     "http",
@@ -17,7 +21,8 @@ blacklist = [
     "quote_plus",
     "deprecate_2",
     "copy_this_into_that",
-    "HTTPError"
+    "HTTPError",
+    "utils"
 ]
 
 
@@ -51,6 +56,21 @@ def digest_doc(raw_doc):
 
 
 
+
+def add_to_doc(line):
+    global doc
+    doc = doc + line + "\n"
+
+def add_to_toc(entry, level):
+    global toc
+    whitelist = set('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    link = ''.join(filter(whitelist.__contains__, entry))
+    link = "#" + re.sub("\s+", "-", link)
+
+    toc = toc + ("\t" * level) + "- [" + entry + "](" + link + ")\n"
+
+
+
 for package in dir(nexussdk):
     if package.startswith("_"):
         continue
@@ -58,8 +78,8 @@ for package in dir(nexussdk):
     if package in blacklist:
         continue
 
-    # print("-------------------------------------------------")
-    print("# " + package)
+    add_to_toc(package, 0)
+    add_to_doc("# " + package)
 
     all_functions = dir(getattr(nexussdk, package))
 
@@ -78,14 +98,20 @@ for package in dir(nexussdk):
         func_name = func_obj.__name__
         func_doc = digest_doc(func_obj.__doc__)
 
-        print("## " + str(func_name))
-        print(str(func_doc))
-        print("\n")
+        subtitle = package + ": " + str(func_name)
+
+        add_to_doc("## " + subtitle)
+        add_to_toc(subtitle, 1)
+
+        add_to_doc(str(func_doc))
+        add_to_doc("\n")
 
         # print("\t## " + func_name)
 
 
-
+print(toc)
+print('')
+print(doc)
 
 
 

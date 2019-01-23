@@ -1,9 +1,96 @@
+- [acls](#acls)
+	- [acls: List](#acls-List)
+	- [acls: append](#acls-append)
+	- [acls: delete](#acls-delete)
+	- [acls: fetch](#acls-fetch)
+	- [acls: list](#acls-list)
+	- [acls: replace](#acls-replace)
+	- [acls: subtract](#acls-subtract)
+- [config](#config)
+	- [config: remove_token](#config-removetoken)
+	- [config: set_environment](#config-setenvironment)
+	- [config: set_token](#config-settoken)
+- [files](#files)
+	- [files: create](#files-create)
+	- [files: deprecate](#files-deprecate)
+	- [files: fetch](#files-fetch)
+	- [files: list](#files-list)
+	- [files: tag](#files-tag)
+	- [files: tags](#files-tags)
+	- [files: update](#files-update)
+	- [files: quote_plus](#files-quoteplus)
+- [identities](#identities)
+	- [identities: fetch](#identities-fetch)
+- [organizations](#organizations)
+	- [organizations: create](#organizations-create)
+	- [organizations: deprecate](#organizations-deprecate)
+	- [organizations: fetch](#organizations-fetch)
+	- [organizations: list](#organizations-list)
+	- [organizations: update](#organizations-update)
+	- [organizations: quote_plus](#organizations-quoteplus)
+- [permissions](#permissions)
+	- [permissions: List](#permissions-List)
+	- [permissions: append](#permissions-append)
+	- [permissions: delete](#permissions-delete)
+	- [permissions: fetch](#permissions-fetch)
+	- [permissions: replace](#permissions-replace)
+	- [permissions: subtract](#permissions-subtract)
+- [projects](#projects)
+	- [projects: create](#projects-create)
+	- [projects: deprecate](#projects-deprecate)
+	- [projects: fetch](#projects-fetch)
+	- [projects: list](#projects-list)
+	- [projects: update](#projects-update)
+	- [projects: quote_plus](#projects-quoteplus)
+- [realms](#realms)
+	- [realms: create](#realms-create)
+	- [realms: deprecate](#realms-deprecate)
+	- [realms: fetch](#realms-fetch)
+	- [realms: list](#realms-list)
+	- [realms: update](#realms-update)
+- [resources](#resources)
+	- [resources: add_attachement](#resources-addattachement)
+	- [resources: create](#resources-create)
+	- [resources: delete_attachment](#resources-deleteattachment)
+	- [resources: deprecate](#resources-deprecate)
+	- [resources: fetch](#resources-fetch)
+	- [resources: fetch_attachment](#resources-fetchattachment)
+	- [resources: list](#resources-list)
+	- [resources: tag](#resources-tag)
+	- [resources: tags](#resources-tags)
+	- [resources: update](#resources-update)
+	- [resources: quote_plus](#resources-quoteplus)
+- [schemas](#schemas)
+	- [schemas: create](#schemas-create)
+	- [schemas: deprecate](#schemas-deprecate)
+	- [schemas: fetch](#schemas-fetch)
+	- [schemas: list](#schemas-list)
+	- [schemas: tag](#schemas-tag)
+	- [schemas: update](#schemas-update)
+	- [schemas: quote_plus](#schemas-quoteplus)
+- [tools](#tools)
+	- [tools: pretty_print](#tools-prettyprint)
+- [views](#views)
+	- [views: aggregate_es](#views-aggregatees)
+	- [views: create_es](#views-createes)
+	- [views: deprecate_es](#views-deprecatees)
+	- [views: fetch](#views-fetch)
+	- [views: list](#views-list)
+	- [views: list_keep_only_es](#views-listkeeponlyes)
+	- [views: list_keep_only_sparql](#views-listkeeponlysparql)
+	- [views: query_es](#views-queryes)
+	- [views: query_sparql](#views-querysparql)
+	- [views: tag_es](#views-tages)
+	- [views: update_es](#views-updatees)
+	- [views: quote_plus](#views-quoteplus)
+
+
 # acls
-## List
+## acls: List
 (no documentation provided)
 
 
-## append
+## acls: append
 Append ACLs on a subpath.
 
 - *argument* **subpath**: Subpath on which appending ACLs.
@@ -13,7 +100,7 @@ Append ACLs on a subpath.
 - *returned*: The Nexus metadata of the ACLs.
 
 
-## delete
+## acls: delete
 Delete ACLs on a subpath.
 
 - *argument* **subpath**: Subpath on which deleting ACLs.
@@ -21,7 +108,7 @@ Delete ACLs on a subpath.
 - *returned*: The Nexus metadata of the ACLs.
 
 
-## fetch
+## acls: fetch
 Fetch the ACLs on a subpath.
 
 - *argument* **subpath**: Subpath on which fetching the ACLs.
@@ -32,7 +119,7 @@ on the current subpath are returned.
 - *returned*: A Nexus results list with the Nexus payloads of the ACLs.
 
 
-## list
+## acls: list
 List ACLs on a subpath.
 
 - *argument* **subpath**: Subpath on which listing the ACLs.
@@ -45,7 +132,7 @@ on the current subpath are returned.
 - *returned*: A Nexus results list with the Nexus payloads of the ACLs.
 
 
-## replace
+## acls: replace
 Replace ACLs on a subpath.
 
 - *argument* **subpath**: Subpath on which replacing the ACLs.
@@ -55,7 +142,7 @@ Replace ACLs on a subpath.
 - *returned*: The Nexus metadata of the ACLs.
 
 
-## subtract
+## acls: subtract
 Subtract ACLs on a subpath.
 
 - *argument* **subpath**: Subpath on which subtracting ACLs.
@@ -66,20 +153,20 @@ Subtract ACLs on a subpath.
 
 
 # config
-## remove_token
+## config: remove_token
 (no documentation provided)
 
 
-## set_environment
+## config: set_environment
 (no documentation provided)
 
 
-## set_token
+## config: set_token
 (no documentation provided)
 
 
 # files
-## create
+## files: create
 This is the POST method, when the user does not provide a file ID.
 
 - *argument* **org_label**: The label of the organization that the file belongs to
@@ -89,7 +176,7 @@ This is the POST method, when the user does not provide a file ID.
 - *returned*: A payload containing only the Nexus metadata for this updated file.
 
 
-## deprecate
+## files: deprecate
 Flag a file as deprecated. files cannot be deleted in Nexus, once one is deprecated, it is no longer
 possible to update it.
 
@@ -99,7 +186,7 @@ If not provided, the rev from the file argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this deprecated file.
 
 
-## fetch
+## files: fetch
 Fetches a distant file and returns the metadata of this file. In addition, if the argument `out_filepath` can
 be of three forms:
 - out_filepath=None (default): the binary is not fetched
@@ -117,7 +204,7 @@ In case of error, an exception is thrown.
 - *returned*: Payload of the whole file as a dictionary
 
 
-## list
+## files: list
 List the files available for a given organization and project.
 
 - *argument* **org_label**: The label of the organization that the file belongs to
@@ -130,7 +217,7 @@ If not specified (default), return both deprecated and not deprecated file.
 - *returned*: The raw payload as a dictionary
 
 
-## tag
+## files: tag
 Add a tag to a a specific revision of the file. Note that a new revision (untagged) will be created
 
 - *argument* **file**: payload of a previously fetched file
@@ -142,14 +229,14 @@ If not provided, the rev from the file argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this file.
 
 
-## tags
+## files: tags
 List all the tags added to this file, along with their version numbers
 
 - *argument* **file**: payload of a previously fetched file
 - *returned*: payload containing the list of tags and versions
 
 
-## update
+## files: update
 Update a file. The file object is most likely the returned value of a
 nexus.file.fetch(), where some fields where modified, added or removed.
 Note that the returned payload only contains the Nexus metadata and not the
@@ -161,21 +248,21 @@ If not provided, the rev from the file argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated file.
 
 
-## quote_plus
+## files: quote_plus
 Like quote(), but also replace ' ' with '+', as required for quoting
 HTML form values. Plus signs in the original string are escaped unless
 they are included in safe. It also does not have safe default to '/'.
 
 
 # identities
-## fetch
+## identities: fetch
 Fetch the identities.
 
 - *returned*: A list with the Nexus payloads of the identities.
 
 
 # organizations
-## create
+## organizations: create
 Create a new organization.
 
 - *argument* **org_label**: The label of the organization. Does not allow spaces or special characters
@@ -184,7 +271,7 @@ Create a new organization.
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
 
 
-## deprecate
+## organizations: deprecate
 Deprecate an organization. Nexus does not allow deleting organizations so deprecating is the way to flag them as
 not usable anymore.
 A deprecated organization can not be modified/updated.
@@ -195,7 +282,7 @@ of the last revision of this organisation.
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
 
 
-## fetch
+## organizations: fetch
 Fetch an organization.
 
 - *argument* **org_label**: The label of the organization
@@ -203,7 +290,7 @@ Fetch an organization.
 - *returned*: All the details of this organization, as a dictionary
 
 
-## list
+## organizations: list
 NOT WORKING
 List all the organizations.
 
@@ -212,7 +299,7 @@ List all the organizations.
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
 
 
-## update
+## organizations: update
 Update an organization. Only the field "name" can be updated (and "description" in the future).
 
 - *argument* **org**: Organization payload as a dictionary. This is most likely the returned value of `organisation.get(...)`
@@ -221,18 +308,18 @@ this organization. If not provided, the `_rev` number from the `org` argument wi
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
 
 
-## quote_plus
+## organizations: quote_plus
 Like quote(), but also replace ' ' with '+', as required for quoting
 HTML form values. Plus signs in the original string are escaped unless
 they are included in safe. It also does not have safe default to '/'.
 
 
 # permissions
-## List
+## permissions: List
 (no documentation provided)
 
 
-## append
+## permissions: append
 Append user-defined permissions.
 
 - *argument* **permissions**: List of user-defined permissions.
@@ -240,21 +327,21 @@ Append user-defined permissions.
 - *returned*: The Nexus metadata of the permissions.
 
 
-## delete
+## permissions: delete
 Delete user-defined permissions.
 
 - *argument* **rev**: Last revision of the permissions.
 - *returned*: The Nexus metadata of the permissions.
 
 
-## fetch
+## permissions: fetch
 Fetch the permissions.
 
 - *argument* **rev**: (optional) Revision number of the permissions.
 - *returned*: A Nexus payload with the permissions.
 
 
-## replace
+## permissions: replace
 Replace the user-defined permissions.
 
 - *argument* **permissions**: List of user-defined permissions.
@@ -262,7 +349,7 @@ Replace the user-defined permissions.
 - *returned*: The Nexus metadata of the permissions.
 
 
-## subtract
+## permissions: subtract
 Subtract user-defined permissions.
 
 - *argument* **permissions**: List of user-defined permissions.
@@ -271,7 +358,7 @@ Subtract user-defined permissions.
 
 
 # projects
-## create
+## projects: create
 Create a new project under an organization.
 
 - *argument* **org_label**: The label of the organization to create the project in
@@ -283,7 +370,7 @@ see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
 
 
-## deprecate
+## projects: deprecate
 Deprecate a project. Nexus does not allow deleting projects so deprecating is the way to flag them as
 not usable anymore.
 A deprecated project cannot be modified/updated.
@@ -294,7 +381,7 @@ the version being deprecated. If not provided, the revision number from the proj
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
 
 
-## fetch
+## projects: fetch
 Fetch a project and all its details.
 Note: This does not give the list of resources. To get that, use the `resource` package.
 
@@ -304,7 +391,7 @@ Note: This does not give the list of resources. To get that, use the `resource` 
 - *returned*: All the details of this project, as a dictionary
 
 
-## list
+## projects: list
 List all the projects. If the arguments org_label is provided, this will list only the projects of this given
 organization. If not provided, all the projects from all organizations will be listed.
 
@@ -318,7 +405,7 @@ lists everything if not provided or None (default: None)
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata and the list of projects
 
 
-## update
+## projects: update
 Update a project. The data to update on a project are mostly related to the api mapping. To do so, you must
 get the project information as a payload, most likely using `project.fetch(...)`, then, modify this payload
 according to the update to perform, and finally, use this modified payload as the `project` argument of this method.
@@ -329,14 +416,14 @@ this project. If not provided, the `_rev` number from the `project` argument wil
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
 
 
-## quote_plus
+## projects: quote_plus
 Like quote(), but also replace ' ' with '+', as required for quoting
 HTML form values. Plus signs in the original string are escaped unless
 they are included in safe. It also does not have safe default to '/'.
 
 
 # realms
-## create
+## realms: create
 Create a realm.
 
 - *argument* **name**: Name of the realm.
@@ -345,7 +432,7 @@ Create a realm.
 - *returned*: The Nexus metadata of the created realm.
 
 
-## deprecate
+## realms: deprecate
 Deprecate a realm.
 
 - *argument* **name**: Name of the realm.
@@ -353,7 +440,7 @@ Deprecate a realm.
 - *returned*: The Nexus metadata of the deprecated realm.
 
 
-## fetch
+## realms: fetch
 Fetch a realm.
 
 - *argument* **name**: Name of the realm.
@@ -361,13 +448,13 @@ Fetch a realm.
 - *returned*: The Nexus payload of the fetched realm.
 
 
-## list
+## realms: list
 List realms.
 
 - *returned*: A Nexus results list with the Nexus payloads of the realms.
 
 
-## update
+## realms: update
 Update a realm.
 
 - *argument* **name**: Name of the realm.
@@ -378,7 +465,7 @@ Update a realm.
 
 
 # resources
-## add_attachement
+## resources: add_attachement
 DEPRECATED
 
 Attach a file to an existing resource. A new revision is created.
@@ -390,7 +477,7 @@ If not provided, the rev from the resource argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this resource.
 
 
-## create
+## resources: create
 Create a resource. If resource_id is provided, this given ID will be used. If resource_id not provided,
 an ID will be automatically generated for this new resource.
 
@@ -404,7 +491,7 @@ an ID will be automatically generated for this new resource.
 If the data does not have a '@context' value, a default one is automatically added.
 
 
-## delete_attachment
+## resources: delete_attachment
 DEPRECATED
 
 Delete the attachment of a resource. This creates a new revision.
@@ -416,7 +503,7 @@ If not provided, the rev from the resource argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this resource.
 
 
-## deprecate
+## resources: deprecate
 Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
 possible to update it.
 
@@ -426,7 +513,7 @@ If not provided, the rev from the resource argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this deprecated resource.
 
 
-## fetch
+## resources: fetch
 Fetches a distant resource and returns the payload as a dictionary.
 In case of error, an exception is thrown.
 
@@ -439,7 +526,7 @@ In case of error, an exception is thrown.
 - *returned*: Payload of the whole resource as a dictionary
 
 
-## fetch_attachment
+## resources: fetch_attachment
 DEPRECATED
 
 Fetch the attachment of a a resource. Two ways are possible: by specifying an output filepath (out_filename),
@@ -460,7 +547,7 @@ Note that this cannot be given along tag
 If out_filename is not provided, the binary buffer is returned as a byte_arr
 
 
-## list
+## resources: list
 List the resources available for a given organization and project.
 
 - *argument* **org_label**: The label of the organization that the resource belongs to
@@ -474,7 +561,7 @@ If not specified (default), return both deprecated and not deprecated resource.
 - *returned*: The raw payload as a dictionary
 
 
-## tag
+## resources: tag
 Add a tag to a a specific revision of the resource. Note that a new revision (untagged) will be created
 
 - *argument* **resource**: payload of a previously fetched resource
@@ -486,14 +573,14 @@ If not provided, the rev from the resource argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this resource.
 
 
-## tags
+## resources: tags
 List all the tags added to this resource, along with their version numbers
 
 - *argument* **resource**: payload of a previously fetched resource
 - *returned*: payload containing the list of tags and versions
 
 
-## update
+## resources: update
 Update a resource. The resource object is most likely the returned value of a
 nexus.resource.fetch(), where some fields where modified, added or removed.
 Note that the returned payload only contains the Nexus metadata and not the
@@ -505,14 +592,14 @@ If not provided, the rev from the resource argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated resource.
 
 
-## quote_plus
+## resources: quote_plus
 Like quote(), but also replace ' ' with '+', as required for quoting
 HTML form values. Plus signs in the original string are escaped unless
 they are included in safe. It also does not have safe default to '/'.
 
 
 # schemas
-## create
+## schemas: create
 Create a new schema
 
 - *argument* **org_label**: Label of the organization in which to create the schema
@@ -522,7 +609,7 @@ Create a new schema
 To get the full schema payload, use the fetch() method.
 
 
-## deprecate
+## schemas: deprecate
 Flag a schema as deprecated. Schema cannot be deleted in Nexus, once one is deprecated, it is no longer
 possible to update it.
 
@@ -532,7 +619,7 @@ If not provided, the rev from the schema argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this deprecated schema.
 
 
-## fetch
+## schemas: fetch
 Fetches a distant schema and returns the payload as a dictionary.
 In case of error, an exception is thrown.
 
@@ -542,7 +629,7 @@ In case of error, an exception is thrown.
 - *returned*: Payload of the whole schema as a dictionary
 
 
-## list
+## schemas: list
 List all the schemas available
 
 - *argument* **org_label**: Label of the organization to which listing the schema
@@ -556,7 +643,7 @@ If not specified (default), return both deprecated and not deprecated resource.
 - *returned*: List of schema and some Nexus metadata
 
 
-## tag
+## schemas: tag
 Add a tag to a a specific revision of the schema. Note that a new revision (untagged) will be created
 
 - *argument* **schema**: payload of a previously fetched schema
@@ -568,7 +655,7 @@ If not provided, the rev from the schema argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this schema.
 
 
-## update
+## schemas: update
 Update a schema. The schema object is most likely the returned value of a
 nexus.schema.fetch(), where some fields where modified, added or removed.
 Note that the returned payload only contains the Nexus metadata and not the
@@ -580,20 +667,19 @@ If not provided, the rev from the schema argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated schema.
 
 
-## quote_plus
+## schemas: quote_plus
 Like quote(), but also replace ' ' with '+', as required for quoting
 HTML form values. Plus signs in the original string are escaped unless
 they are included in safe. It also does not have safe default to '/'.
 
 
 # tools
-## pretty_print
+## tools: pretty_print
 (no documentation provided)
 
 
-# utils
 # views
-## aggregate_es
+## views: aggregate_es
 Creates an aggregated view for ElasticSearch.
 
 - *argument* **org_label**: Label of the organization the view wil belong to
@@ -603,7 +689,7 @@ Creates an aggregated view for ElasticSearch.
 - *returned*: A payload containing only the Nexus metadata for this aggregated view.
 
 
-## create_es
+## views: create_es
 Creates an ElasticSearch view
 
 - *argument* **org_label**: Label of the organization the view wil belong to
@@ -612,7 +698,7 @@ Creates an ElasticSearch view
 - *returned*: The payload representing the view. This payload only contains the Nexus metadata
 
 
-## deprecate_es
+## views: deprecate_es
 Update a ElasticSearch view. The esview object is most likely the returned value of a
 nexus.views.fetch(), where some fields where modified, added or removed.
 Note that the returned payload only contains the Nexus metadata and not the
@@ -624,7 +710,7 @@ If not provided, the rev from the view argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated view.
 
 
-## fetch
+## views: fetch
 Fetches a distant view and returns the payload as a dictionary.
 In case of error, an exception is thrown.
 
@@ -636,7 +722,7 @@ In case of error, an exception is thrown.
 - *returned*: Payload of the whole view as a dictionary
 
 
-## list
+## views: list
 List the views available for a given organization and project. All views, of all kinds.
 
 - *argument* **org_label**: The label of the organization that the view belongs to
@@ -649,19 +735,19 @@ If not specified (default), return both deprecated and not deprecated view.
 - *returned*: The raw payload as a dictionary
 
 
-## list_keep_only_es
+## views: list_keep_only_es
 Helper function to keep only the ElasticSearch views metadata from the result of a .list() call
 - *argument* **viewlist**: the payload returned by .list()
 - *returned*: the list of ElasticSearch view metadata (beware: not complete payloads like if it was the result of .fetch() calls)
 
 
-## list_keep_only_sparql
+## views: list_keep_only_sparql
 Helper function to keep only the SparQL views metadata from the result of a .list() call
 - *argument* **viewlist**: the payload returned by .list()
 - *returned*: the list of SparQL view metadata (beware: not complete payloads like if it was the result of .fetch() calls)
 
 
-## query_es
+## views: query_es
 Perform a ElasticSearch query
 
 - *argument* **esview**: Payload of an ElasticSearch view, most likely got with the .fetch() function
@@ -669,7 +755,7 @@ Perform a ElasticSearch query
 - *returned*: the result of the query as a dictionary
 
 
-## query_sparql
+## views: query_sparql
 Perform a SparQL query.
 
 - *argument* **org_label**: Label of the oragnization to perform the query on
@@ -678,7 +764,7 @@ Perform a SparQL query.
 - *returned*: result of the query as a dictionary
 
 
-## tag_es
+## views: tag_es
 Add a tag to a a specific revision of an ElasticSearch view. Note that a new revision (untagged) will be created
 
 - *argument* **esview**: payload of a previously fetched view (ElasticSearch)
@@ -690,7 +776,7 @@ If not provided, the rev from the resource argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this view.
 
 
-## update_es
+## views: update_es
 Update a ElasticSearch view. The esview object is most likely the returned value of a
 nexus.views.fetch(), where some fields where modified, added or removed.
 Note that the returned payload only contains the Nexus metadata and not the
@@ -702,9 +788,10 @@ If not provided, the rev from the view argument will be used.
 - *returned*: A payload containing only the Nexus metadata for this updated view.
 
 
-## quote_plus
+## views: quote_plus
 Like quote(), but also replace ' ' with '+', as required for quoting
 HTML form values. Plus signs in the original string are escaped unless
 they are included in safe. It also does not have safe default to '/'.
+
 
 
