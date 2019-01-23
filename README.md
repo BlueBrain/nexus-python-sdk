@@ -48,3 +48,6 @@ pip3 install --upgrade nexus-sdk
 
 Versions and their notable changes are listed in the [releases section](
 https://github.com/BlueBrain/nexus-python-sdk/releases/).
+
+## Documentation
+- [Markdown API documentation](./docs/md/doc.md)
