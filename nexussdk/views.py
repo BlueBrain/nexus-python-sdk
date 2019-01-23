@@ -39,9 +39,7 @@ def create_es(org_label, project_label, view_data, id=None):
         return http_put(path, body=view_data, use_base=True)
 
 
-
-
-def update_es(esview, previous_rev=None):
+def update_es(esview, rev=None):
     """
         Update a ElasticSearch view. The esview object is most likely the returned value of a
         nexus.views.fetch(), where some fields where modified, added or removed.
@@ -49,20 +47,20 @@ def update_es(esview, previous_rev=None):
         complete view.
 
         :param esview: payload of a previously fetched view, with the modification to be updated
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the view argument will be used.
         :return: A payload containing only the Nexus metadata for this updated view.
     """
 
-    if previous_rev is None:
-        previous_rev = esview["_rev"]
+    if rev is None:
+        rev = esview["_rev"]
 
-    path = esview["_self"] + "?rev=" + str(previous_rev)
+    path = esview["_self"] + "?rev=" + str(rev)
 
     return http_put(path, esview, use_base=False)
 
 
-def deprecate_es(esview, previous_rev=None):
+def deprecate_es(esview, rev=None):
     """
         Update a ElasticSearch view. The esview object is most likely the returned value of a
         nexus.views.fetch(), where some fields where modified, added or removed.
@@ -70,15 +68,15 @@ def deprecate_es(esview, previous_rev=None):
         complete view.
 
         :param esview: payload of a previously fetched view, with the modification to be updated
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the view argument will be used.
         :return: A payload containing only the Nexus metadata for this updated view.
     """
 
-    if previous_rev is None:
-        previous_rev = esview["_rev"]
+    if rev is None:
+        rev = esview["_rev"]
 
-    path = esview["_self"] + "?rev=" + str(previous_rev)
+    path = esview["_self"] + "?rev=" + str(rev)
 
     return http_delete(path, esview, use_base=False)
 
@@ -147,7 +145,7 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
     return http_get(path, use_base=True)
 
 
-def tag_es(esview, tag_value, rev_to_tag=None, previous_rev=None):
+def tag_es(esview, tag_value, rev_to_tag=None, rev=None):
     """
         Add a tag to a a specific revision of an ElasticSearch view. Note that a new revision (untagged) will be created
 
@@ -155,18 +153,18 @@ def tag_es(esview, tag_value, rev_to_tag=None, previous_rev=None):
         :param tag_value: The value (or name) of a tag
         :param rev_to_tag: OPTIONAL Number of the revision to tag. If not provided, this will take the revision number
         from the provided resource payload.
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
        If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this view.
     """
 
-    if previous_rev is None:
-        previous_rev = esview["_rev"]
+    if rev is None:
+        rev = esview["_rev"]
 
     if rev_to_tag is None:
         rev_to_tag = esview["_rev"]
 
-    path = esview["_self"] + "/tags?rev=" + str(previous_rev)
+    path = esview["_self"] + "/tags?rev=" + str(rev)
 
     data = {
         "tag": tag_value,

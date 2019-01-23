@@ -25,14 +25,16 @@ def fetch(org_label, project_label, rev=None):
     return http_get(path, use_base=True)
 
 
-def create(org_label, project_label, config=None):
+def create(org_label, project_label, description=None, api_mappings=None, vocab=None):
     """
     Create a new project under an organization.
 
     :param org_label: The label of the organization to create the project in
     :param project_label: The label of the project to add
-    :param config: OPTIONAL if provided, must be a dictionary. Can include data such as `name`, `base` or `apiMappings`
-    see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#create-a-project for more info
+    :param description: OPTIONAL a description for this project
+    :param api_mappings: OPTIONAL apiMappings
+    see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings
+    :param vocab: OPTIONAL vocab as a string
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
@@ -40,31 +42,39 @@ def create(org_label, project_label, config=None):
     project_label = url_encode(project_label)
     path = "/projects/" + org_label + "/" + project_label
 
-    if config is None:
-        config = {}
+    config = {}
+
+    if description is not None:
+        config["description"] = description
+
+    if api_mappings is not None:
+        config["apiMappings"] = api_mappings
+
+    if vocab is not None:
+        config["vocab"] = vocab
 
     return http_put(path, use_base=True, body=config)
 
 
-def update(project, previous_rev=None):
+def update(project, rev=None):
     """
     Update a project. The data to update on a project are mostly related to the api mapping. To do so, you must
     get the project information as a payload, most likely using `project.fetch(...)`, then, modify this payload
     according to the update to perform, and finally, use this modified payload as the `project` argument of this method.
 
     :param project: Project payload as a dictionary. This is most likely the returned value of `project.fetch(...)`
-    :param previous_rev: OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
+    :param rev: OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
     this project. If not provided, the `_rev` number from the `project` argument will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
-    if previous_rev is None:
-        previous_rev = project["_rev"]
+    if rev is None:
+        rev = project["_rev"]
 
     org_label = url_encode(project["_organizationLabel"])
     project_label = url_encode(project["_label"])
 
-    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
+    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(rev)
 
     return http_put(path, project, use_base=True)
 
@@ -103,7 +113,7 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
     return http_get(path, use_base=True)
 
 
-def deprecate_2(org_label, project_label, previous_rev):
+def deprecate_2(org_label, project_label, rev):
     """
     Deprecate a project. Nexus does not allow deleting projects so deprecating is the way to flag them as
     not usable anymore.
@@ -111,7 +121,7 @@ def deprecate_2(org_label, project_label, previous_rev):
 
     :param org_label: The label of the organization the project to deprecate belongs to
     :param project_label: The label of the project to deprecate
-    :param previous_rev: The previous revision number. Provided to make sure the user is well aware of the details
+    :param rev: The previous revision number. Provided to make sure the user is well aware of the details
     of the last revision of this project.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
@@ -119,19 +129,19 @@ def deprecate_2(org_label, project_label, previous_rev):
     org_label = url_encode(org_label)
     project_label = url_encode(project_label)
 
-    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
+    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(rev)
 
     return http_delete(path, use_base=True)
 
 
-def deprecate(project, previous_rev=None):
+def deprecate(project, rev=None):
     """
     Deprecate a project. Nexus does not allow deleting projects so deprecating is the way to flag them as
     not usable anymore.
     A deprecated project cannot be modified/updated.
 
     :param project: The project payload, most likely retrieved with fetch()
-    :param previous_rev: OPTIONAL provide the last version of the project to make sure the user has full knowledge of
+    :param rev: OPTIONAL provide the last version of the project to make sure the user has full knowledge of
     the version being deprecated. If not provided, the revision number from the project payload will be used.
     :return:
     """
@@ -139,9 +149,9 @@ def deprecate(project, previous_rev=None):
     org_label = url_encode(project["_organizationLabel"])
     project_label = url_encode(project["_label"])
 
-    if previous_rev is None:
-        previous_rev = project["_rev"]
+    if rev is None:
+        rev = project["_rev"]
 
-    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(previous_rev)
+    path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(rev)
 
     return http_delete(path, use_base=True)

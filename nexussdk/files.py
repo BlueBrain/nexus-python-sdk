@@ -56,7 +56,7 @@ def fetch(org_label, project_label, file_id, rev=None, tag=None, out_filepath=No
     return response_metadata
 
 
-def update(file, filepath, previous_rev=None):
+def update(file, filepath, rev=None):
     """
         Update a file. The file object is most likely the returned value of a
         nexus.file.fetch(), where some fields where modified, added or removed.
@@ -64,15 +64,15 @@ def update(file, filepath, previous_rev=None):
         complete file.
 
         :param file: payload of a previously fetched file, with the modification to be updated
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the file argument will be used.
         :return: A payload containing only the Nexus metadata for this updated file.
     """
 
-    if previous_rev is None:
-        previous_rev = file["_rev"]
+    if rev is None:
+        rev = file["_rev"]
 
-    path = file["_self"] + "?rev=" + str(previous_rev)
+    path = file["_self"] + "?rev=" + str(rev)
 
     file_obj = {'file': open(filepath, "rb")}
 
@@ -137,26 +137,26 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
     return http_get(path, use_base=True)
 
 
-def deprecate(file, previous_rev=None):
+def deprecate(file, rev=None):
     """
        Flag a file as deprecated. files cannot be deleted in Nexus, once one is deprecated, it is no longer
        possible to update it.
 
        :param file: payload of a previously fetched file
-       :param previous_rev: OPTIONAL The previous revision you want to update from.
+       :param rev: OPTIONAL The previous revision you want to update from.
        If not provided, the rev from the file argument will be used.
        :return: A payload containing only the Nexus metadata for this deprecated file.
     """
 
-    if previous_rev is None:
-        previous_rev = file["_rev"]
+    if rev is None:
+        rev = file["_rev"]
 
-    path = file["_self"] + "?rev=" + str(previous_rev)
+    path = file["_self"] + "?rev=" + str(rev)
 
     return http_delete(path, use_base=False)
 
 
-def tag(file, tag_value, rev_to_tag=None, previous_rev=None):
+def tag(file, tag_value, rev_to_tag=None, rev=None):
     """
         Add a tag to a a specific revision of the file. Note that a new revision (untagged) will be created
 
@@ -164,18 +164,18 @@ def tag(file, tag_value, rev_to_tag=None, previous_rev=None):
         :param tag_value: The value (or name) of a tag
         :param rev_to_tag: OPTIONAL Number of the revision to tag. If not provided, this will take the revision number
         from the provided file payload.
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
        If not provided, the rev from the file argument will be used.
         :return: A payload containing only the Nexus metadata for this file.
     """
 
-    if previous_rev is None:
-        previous_rev = file["_rev"]
+    if rev is None:
+        rev = file["_rev"]
 
     if rev_to_tag is None:
         rev_to_tag = file["_rev"]
 
-    path = file["_self"] + "/tags?rev=" + str(previous_rev)
+    path = file["_self"] + "/tags?rev=" + str(rev)
 
     data = {
         "tag": tag_value,

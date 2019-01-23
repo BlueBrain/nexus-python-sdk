@@ -96,7 +96,7 @@ def create(org_label, project_label, schema_obj, id=None):
 
 
 
-def update(schema, previous_rev=None):
+def update(schema, rev=None):
     """
         Update a schema. The schema object is most likely the returned value of a
         nexus.schema.fetch(), where some fields where modified, added or removed.
@@ -104,39 +104,39 @@ def update(schema, previous_rev=None):
         complete resource.
 
         :param schema: payload of a previously fetched resource, with the modification to be updated
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the schema argument will be used.
         :return: A payload containing only the Nexus metadata for this updated schema.
     """
 
-    if previous_rev is None:
-        previous_rev = schema["_rev"]
+    if rev is None:
+        rev = schema["_rev"]
 
-    path = schema["_self"] + "?rev=" + str(previous_rev)
+    path = schema["_self"] + "?rev=" + str(rev)
 
     return http_put(path, schema, use_base=False)
 
 
-def deprecate(schema, previous_rev=None):
+def deprecate(schema, rev=None):
     """
        Flag a schema as deprecated. Schema cannot be deleted in Nexus, once one is deprecated, it is no longer
        possible to update it.
 
        :param schema: payload of a previously fetched resource
-       :param previous_rev: OPTIONAL The previous revision you want to update from.
+       :param rev: OPTIONAL The previous revision you want to update from.
        If not provided, the rev from the schema argument will be used.
        :return: A payload containing only the Nexus metadata for this deprecated schema.
     """
 
-    if previous_rev is None:
-        previous_rev = schema["_rev"]
+    if rev is None:
+        rev = schema["_rev"]
 
-    path = schema["_self"] + "?rev=" + str(previous_rev)
+    path = schema["_self"] + "?rev=" + str(rev)
 
     return http_delete(path, use_base=False)
 
 
-def tag(schema, tag_value, rev_to_tag=None, previous_rev=None):
+def tag(schema, tag_value, rev_to_tag=None, rev=None):
     """
         Add a tag to a a specific revision of the schema. Note that a new revision (untagged) will be created
 
@@ -144,18 +144,18 @@ def tag(schema, tag_value, rev_to_tag=None, previous_rev=None):
         :param tag_value: The value (or name) of a tag
         :param rev_to_tag: OPTIONAL Number of the revision to tag. If not provided, this will take the revision number
         from the provided schema payload.
-        :param previous_rev: OPTIONAL The previous revision you want to update from.
+        :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the schema argument will be used.
         :return: A payload containing only the Nexus metadata for this schema.
     """
 
-    if previous_rev is None:
-        previous_rev = schema["_rev"]
+    if rev is None:
+        rev = schema["_rev"]
 
     if rev_to_tag is None:
         rev_to_tag = schema["_rev"]
 
-    path = schema["_self"] + "/tags?rev=" + str(previous_rev)
+    path = schema["_self"] + "/tags?rev=" + str(rev)
 
     data = {
         "tag": tag_value,
