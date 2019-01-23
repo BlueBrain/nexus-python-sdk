@@ -2,7 +2,7 @@ from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
 from nexussdk.utils.http import http_delete
 from urllib.parse import quote_plus as url_encode
-
+"""The Orgnization is made to deal with orgs """
 
 def fetch(org_label, project_label, rev=None):
     """
@@ -143,7 +143,7 @@ def deprecate(project, rev=None):
     :param project: The project payload, most likely retrieved with fetch()
     :param rev: OPTIONAL provide the last version of the project to make sure the user has full knowledge of
     the version being deprecated. If not provided, the revision number from the project payload will be used.
-    :return:
+    :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
     org_label = url_encode(project["_organizationLabel"])

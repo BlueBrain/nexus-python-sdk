@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nexussdk.views</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nexussdk.html"><font color="#ffffff">nexussdk</font></a>.views</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/lurie/Documents/BBP/projects/nexus-python-sdk/nexussdk/views.py">/Users/lurie/Documents/BBP/projects/nexus-python-sdk/nexussdk/views.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-aggregate_es"><strong>aggregate_es</strong></a>(org_label, project_label, esviews, id)</dt><dd><tt>Creates&nbsp;an&nbsp;aggregated&nbsp;view&nbsp;for&nbsp;ElasticSearch.<br>
+&nbsp;<br>
+:param&nbsp;org_label:&nbsp;Label&nbsp;of&nbsp;the&nbsp;organization&nbsp;the&nbsp;view&nbsp;wil&nbsp;belong&nbsp;to<br>
+:param&nbsp;project_label:&nbsp;label&nbsp;of&nbsp;the&nbsp;project&nbsp;the&nbsp;view&nbsp;will&nbsp;belong&nbsp;too<br>
+:param&nbsp;esviews:&nbsp;list&nbsp;of&nbsp;ElasticSearch&nbsp;view&nbsp;payloads,&nbsp;most&nbsp;likely&nbsp;got&nbsp;with&nbsp;.<a href="#-fetch">fetch</a>()<br>
+:param&nbsp;id:&nbsp;id&nbsp;to&nbsp;give&nbsp;to&nbsp;this&nbsp;aggregation&nbsp;id&nbsp;ElasticSearch&nbsp;views<br>
+:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;aggregated&nbsp;view.</tt></dd></dl>
+ <dl><dt><a name="-create_es"><strong>create_es</strong></a>(org_label, project_label, view_data, id=None)</dt><dd><tt>Creates&nbsp;an&nbsp;ElasticSearch&nbsp;view<br>
+&nbsp;<br>
+:param&nbsp;org_label:&nbsp;Label&nbsp;of&nbsp;the&nbsp;organization&nbsp;the&nbsp;view&nbsp;wil&nbsp;belong&nbsp;to<br>
+:param&nbsp;project_label:&nbsp;label&nbsp;of&nbsp;the&nbsp;project&nbsp;the&nbsp;view&nbsp;will&nbsp;belong&nbsp;too<br>
+:param&nbsp;view_data:&nbsp;Mapping&nbsp;data&nbsp;required&nbsp;for&nbsp;ElasticSearch&nbsp;indexing<br>
+:return:&nbsp;The&nbsp;payload&nbsp;representing&nbsp;the&nbsp;view.&nbsp;This&nbsp;payload&nbsp;only&nbsp;contains&nbsp;the&nbsp;Nexus&nbsp;metadata</tt></dd></dl>
+ <dl><dt><a name="-deprecate_es"><strong>deprecate_es</strong></a>(esview, rev=None)</dt><dd><tt>Update&nbsp;a&nbsp;ElasticSearch&nbsp;view.&nbsp;The&nbsp;esview&nbsp;object&nbsp;is&nbsp;most&nbsp;likely&nbsp;the&nbsp;returned&nbsp;value&nbsp;of&nbsp;a<br>
+nexus.views.<a href="#-fetch">fetch</a>(),&nbsp;where&nbsp;some&nbsp;fields&nbsp;where&nbsp;modified,&nbsp;added&nbsp;or&nbsp;removed.<br>
+Note&nbsp;that&nbsp;the&nbsp;returned&nbsp;payload&nbsp;only&nbsp;contains&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;and&nbsp;not&nbsp;the<br>
+complete&nbsp;view.<br>
+&nbsp;<br>
+:param&nbsp;esview:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;view,&nbsp;with&nbsp;the&nbsp;modification&nbsp;to&nbsp;be&nbsp;updated<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;view&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;updated&nbsp;view.</tt></dd></dl>
+ <dl><dt><a name="-fetch"><strong>fetch</strong></a>(org_label, project_label, view_id, rev=None, tag=None)</dt><dd><tt>Fetches&nbsp;a&nbsp;distant&nbsp;view&nbsp;and&nbsp;returns&nbsp;the&nbsp;payload&nbsp;as&nbsp;a&nbsp;dictionary.<br>
+In&nbsp;case&nbsp;of&nbsp;error,&nbsp;an&nbsp;exception&nbsp;is&nbsp;thrown.<br>
+&nbsp;<br>
+:param&nbsp;org_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;organization&nbsp;that&nbsp;the&nbsp;view&nbsp;belongs&nbsp;to<br>
+:param&nbsp;project_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;project&nbsp;that&nbsp;the&nbsp;view&nbsp;belongs&nbsp;to<br>
+:param&nbsp;view_id:&nbsp;id&nbsp;of&nbsp;the&nbsp;view<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;fetches&nbsp;a&nbsp;specific&nbsp;revision&nbsp;of&nbsp;a&nbsp;view&nbsp;(default:&nbsp;None,&nbsp;fetches&nbsp;the&nbsp;last)<br>
+:param&nbsp;tag:&nbsp;OPTIONAL&nbsp;fetches&nbsp;the&nbsp;view&nbsp;version&nbsp;that&nbsp;has&nbsp;a&nbsp;specific&nbsp;tag&nbsp;(default:&nbsp;None)<br>
+:return:&nbsp;Payload&nbsp;of&nbsp;the&nbsp;whole&nbsp;view&nbsp;as&nbsp;a&nbsp;dictionary</tt></dd></dl>
+ <dl><dt><a name="-list"><strong>list</strong></a>(org_label, project_label, pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None)</dt><dd><tt>List&nbsp;the&nbsp;views&nbsp;available&nbsp;for&nbsp;a&nbsp;given&nbsp;organization&nbsp;and&nbsp;project.&nbsp;All&nbsp;views,&nbsp;of&nbsp;all&nbsp;kinds.<br>
+&nbsp;<br>
+:param&nbsp;org_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;organization&nbsp;that&nbsp;the&nbsp;view&nbsp;belongs&nbsp;to<br>
+:param&nbsp;project_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;project&nbsp;that&nbsp;the&nbsp;view&nbsp;belongs&nbsp;to<br>
+:param&nbsp;pagination_from:&nbsp;OPTIONAL&nbsp;The&nbsp;pagination&nbsp;index&nbsp;to&nbsp;start&nbsp;from&nbsp;(default:&nbsp;0)<br>
+:param&nbsp;pagination_size:&nbsp;OPTIONAL&nbsp;The&nbsp;maximum&nbsp;number&nbsp;of&nbsp;elements&nbsp;to&nbsp;returns&nbsp;at&nbsp;once&nbsp;(default:&nbsp;20)<br>
+:param&nbsp;deprecated:&nbsp;OPTIONAL&nbsp;Get&nbsp;only&nbsp;deprecated&nbsp;view&nbsp;if&nbsp;True&nbsp;and&nbsp;get&nbsp;only&nbsp;non-deprecated&nbsp;results&nbsp;if&nbsp;False.<br>
+If&nbsp;not&nbsp;specified&nbsp;(default),&nbsp;return&nbsp;both&nbsp;deprecated&nbsp;and&nbsp;not&nbsp;deprecated&nbsp;view.<br>
+:param&nbsp;full_text_search_query:&nbsp;A&nbsp;string&nbsp;to&nbsp;look&nbsp;for&nbsp;as&nbsp;a&nbsp;full&nbsp;text&nbsp;query<br>
+:return:&nbsp;The&nbsp;raw&nbsp;payload&nbsp;as&nbsp;a&nbsp;dictionary</tt></dd></dl>
+ <dl><dt><a name="-list_keep_only_es"><strong>list_keep_only_es</strong></a>(viewlist)</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;keep&nbsp;only&nbsp;the&nbsp;ElasticSearch&nbsp;views&nbsp;metadata&nbsp;from&nbsp;the&nbsp;result&nbsp;of&nbsp;a&nbsp;.<a href="#-list">list</a>()&nbsp;call<br>
+:param&nbsp;viewlist:&nbsp;the&nbsp;payload&nbsp;returned&nbsp;by&nbsp;.<a href="#-list">list</a>()<br>
+:return:&nbsp;the&nbsp;list&nbsp;of&nbsp;ElasticSearch&nbsp;view&nbsp;metadata&nbsp;(beware:&nbsp;not&nbsp;complete&nbsp;payloads&nbsp;like&nbsp;if&nbsp;it&nbsp;was&nbsp;the&nbsp;result&nbsp;of&nbsp;.<a href="#-fetch">fetch</a>()&nbsp;calls)</tt></dd></dl>
+ <dl><dt><a name="-list_keep_only_sparql"><strong>list_keep_only_sparql</strong></a>(viewlist)</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;keep&nbsp;only&nbsp;the&nbsp;SparQL&nbsp;views&nbsp;metadata&nbsp;from&nbsp;the&nbsp;result&nbsp;of&nbsp;a&nbsp;.<a href="#-list">list</a>()&nbsp;call<br>
+:param&nbsp;viewlist:&nbsp;the&nbsp;payload&nbsp;returned&nbsp;by&nbsp;.<a href="#-list">list</a>()<br>
+:return:&nbsp;the&nbsp;list&nbsp;of&nbsp;SparQL&nbsp;view&nbsp;metadata&nbsp;(beware:&nbsp;not&nbsp;complete&nbsp;payloads&nbsp;like&nbsp;if&nbsp;it&nbsp;was&nbsp;the&nbsp;result&nbsp;of&nbsp;.<a href="#-fetch">fetch</a>()&nbsp;calls)</tt></dd></dl>
+ <dl><dt><a name="-query_es"><strong>query_es</strong></a>(esview, query)</dt><dd><tt>Perform&nbsp;a&nbsp;ElasticSearch&nbsp;query<br>
+&nbsp;<br>
+:param&nbsp;esview:&nbsp;Payload&nbsp;of&nbsp;an&nbsp;ElasticSearch&nbsp;view,&nbsp;most&nbsp;likely&nbsp;got&nbsp;with&nbsp;the&nbsp;.<a href="#-fetch">fetch</a>()&nbsp;function<br>
+:param&nbsp;query:&nbsp;ElasticSearch&nbsp;query&nbsp;as&nbsp;a&nbsp;JSON&nbsp;string&nbsp;or&nbsp;a&nbsp;dictionary<br>
+:return:&nbsp;the&nbsp;result&nbsp;of&nbsp;the&nbsp;query&nbsp;as&nbsp;a&nbsp;dictionary</tt></dd></dl>
+ <dl><dt><a name="-query_sparql"><strong>query_sparql</strong></a>(org_label, project_label, query)</dt><dd><tt>Perform&nbsp;a&nbsp;SparQL&nbsp;query.<br>
+&nbsp;<br>
+:param&nbsp;org_label:&nbsp;Label&nbsp;of&nbsp;the&nbsp;oragnization&nbsp;to&nbsp;perform&nbsp;the&nbsp;query&nbsp;on<br>
+:param&nbsp;project_label:&nbsp;Label&nbsp;of&nbsp;the&nbsp;project&nbsp;to&nbsp;perform&nbsp;the&nbsp;query&nbsp;on<br>
+:param&nbsp;query:&nbsp;Query&nbsp;as&nbsp;a&nbsp;string<br>
+:return:&nbsp;result&nbsp;of&nbsp;the&nbsp;query&nbsp;as&nbsp;a&nbsp;dictionary</tt></dd></dl>
+ <dl><dt><a name="-tag_es"><strong>tag_es</strong></a>(esview, tag_value, rev_to_tag=None, rev=None)</dt><dd><tt>&nbsp;Add&nbsp;a&nbsp;tag&nbsp;to&nbsp;a&nbsp;a&nbsp;specific&nbsp;revision&nbsp;of&nbsp;an&nbsp;ElasticSearch&nbsp;view.&nbsp;Note&nbsp;that&nbsp;a&nbsp;new&nbsp;revision&nbsp;(untagged)&nbsp;will&nbsp;be&nbsp;created<br>
+&nbsp;<br>
+&nbsp;:param&nbsp;esview:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;view&nbsp;(ElasticSearch)<br>
+&nbsp;:param&nbsp;tag_value:&nbsp;The&nbsp;value&nbsp;(or&nbsp;name)&nbsp;of&nbsp;a&nbsp;tag<br>
+&nbsp;:param&nbsp;rev_to_tag:&nbsp;OPTIONAL&nbsp;Number&nbsp;of&nbsp;the&nbsp;revision&nbsp;to&nbsp;tag.&nbsp;If&nbsp;not&nbsp;provided,&nbsp;this&nbsp;will&nbsp;take&nbsp;the&nbsp;revision&nbsp;number<br>
+&nbsp;from&nbsp;the&nbsp;provided&nbsp;resource&nbsp;payload.<br>
+&nbsp;:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;resource&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+&nbsp;:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;view.</tt></dd></dl>
+ <dl><dt><a name="-update_es"><strong>update_es</strong></a>(esview, rev=None)</dt><dd><tt>Update&nbsp;a&nbsp;ElasticSearch&nbsp;view.&nbsp;The&nbsp;esview&nbsp;object&nbsp;is&nbsp;most&nbsp;likely&nbsp;the&nbsp;returned&nbsp;value&nbsp;of&nbsp;a<br>
+nexus.views.<a href="#-fetch">fetch</a>(),&nbsp;where&nbsp;some&nbsp;fields&nbsp;where&nbsp;modified,&nbsp;added&nbsp;or&nbsp;removed.<br>
+Note&nbsp;that&nbsp;the&nbsp;returned&nbsp;payload&nbsp;only&nbsp;contains&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;and&nbsp;not&nbsp;the<br>
+complete&nbsp;view.<br>
+&nbsp;<br>
+:param&nbsp;esview:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;view,&nbsp;with&nbsp;the&nbsp;modification&nbsp;to&nbsp;be&nbsp;updated<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;view&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;updated&nbsp;view.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>ELASTIC_TYPE</strong> = 'ElasticView'<br>
+<strong>SPARQL_TYPE</strong> = 'SparqlView'</td></tr></table>
+</body></html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nexussdk.resources</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nexussdk.html"><font color="#ffffff">nexussdk</font></a>.resources</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/lurie/Documents/BBP/projects/nexus-python-sdk/nexussdk/resources.py">/Users/lurie/Documents/BBP/projects/nexus-python-sdk/nexussdk/resources.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-add_attachement"><strong>add_attachement</strong></a>(resource, filepath, rev=None)</dt><dd><tt>DEPRECATED<br>
+&nbsp;<br>
+Attach&nbsp;a&nbsp;file&nbsp;to&nbsp;an&nbsp;existing&nbsp;resource.&nbsp;A&nbsp;new&nbsp;revision&nbsp;is&nbsp;created.<br>
+&nbsp;<br>
+:param&nbsp;resource:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;resource<br>
+:param&nbsp;filepath:&nbsp;Path&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;upload<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;resource&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;resource.</tt></dd></dl>
+ <dl><dt><a name="-create"><strong>create</strong></a>(org_label, project_label, data, schema_id='resource', resource_id=None)</dt><dd><tt>Create&nbsp;a&nbsp;resource.&nbsp;If&nbsp;resource_id&nbsp;is&nbsp;provided,&nbsp;this&nbsp;given&nbsp;ID&nbsp;will&nbsp;be&nbsp;used.&nbsp;If&nbsp;resource_id&nbsp;not&nbsp;provided,<br>
+an&nbsp;ID&nbsp;will&nbsp;be&nbsp;automatically&nbsp;generated&nbsp;for&nbsp;this&nbsp;new&nbsp;resource.<br>
+&nbsp;<br>
+:param&nbsp;org_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;organization&nbsp;that&nbsp;the&nbsp;resource&nbsp;belongs&nbsp;to<br>
+:param&nbsp;project_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;project&nbsp;that&nbsp;the&nbsp;resource&nbsp;belongs&nbsp;to<br>
+:param&nbsp;schema_id:&nbsp;OPTIONAL&nbsp;The&nbsp;schema&nbsp;to&nbsp;constrain&nbsp;the&nbsp;data.&nbsp;Can&nbsp;be&nbsp;None&nbsp;for&nbsp;non&nbsp;constrained&nbsp;data&nbsp;(default:&nbsp;'resource')<br>
+:param&nbsp;data:&nbsp;dictionary&nbsp;containing&nbsp;the&nbsp;data&nbsp;to&nbsp;store&nbsp;in&nbsp;this&nbsp;new&nbsp;resource<br>
+:param&nbsp;resource_id:&nbsp;OPTIONAL&nbsp;force&nbsp;the&nbsp;use&nbsp;of&nbsp;a&nbsp;specific&nbsp;id&nbsp;when&nbsp;creating&nbsp;the&nbsp;new&nbsp;resource<br>
+:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;updated&nbsp;resource.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;data&nbsp;does&nbsp;not&nbsp;have&nbsp;a&nbsp;'@context'&nbsp;value,&nbsp;a&nbsp;default&nbsp;one&nbsp;is&nbsp;automatically&nbsp;added.</tt></dd></dl>
+ <dl><dt><a name="-delete_attachment"><strong>delete_attachment</strong></a>(resource, basename, rev=None)</dt><dd><tt>DEPRECATED<br>
+&nbsp;<br>
+Delete&nbsp;the&nbsp;attachment&nbsp;of&nbsp;a&nbsp;resource.&nbsp;This&nbsp;creates&nbsp;a&nbsp;new&nbsp;revision.<br>
+&nbsp;<br>
+:param&nbsp;resource:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;resource<br>
+:param&nbsp;basename:&nbsp;The&nbsp;attachment&nbsp;basename&nbsp;(filename&nbsp;with&nbsp;extension&nbsp;but&nbsp;without&nbsp;full&nbsp;path)<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;resource&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;resource.</tt></dd></dl>
+ <dl><dt><a name="-deprecate"><strong>deprecate</strong></a>(resource, rev=None)</dt><dd><tt>Flag&nbsp;a&nbsp;resource&nbsp;as&nbsp;deprecated.&nbsp;Resources&nbsp;cannot&nbsp;be&nbsp;deleted&nbsp;in&nbsp;Nexus,&nbsp;once&nbsp;one&nbsp;is&nbsp;deprecated,&nbsp;it&nbsp;is&nbsp;no&nbsp;longer<br>
+possible&nbsp;to&nbsp;update&nbsp;it.<br>
+&nbsp;<br>
+:param&nbsp;resource:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;resource<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;resource&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;deprecated&nbsp;resource.</tt></dd></dl>
+ <dl><dt><a name="-fetch"><strong>fetch</strong></a>(org_label, project_label, schema_id, resource_id, rev=None, tag=None)</dt><dd><tt>Fetches&nbsp;a&nbsp;distant&nbsp;resource&nbsp;and&nbsp;returns&nbsp;the&nbsp;payload&nbsp;as&nbsp;a&nbsp;dictionary.<br>
+In&nbsp;case&nbsp;of&nbsp;error,&nbsp;an&nbsp;exception&nbsp;is&nbsp;thrown.<br>
+&nbsp;<br>
+:param&nbsp;org_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;organization&nbsp;that&nbsp;the&nbsp;resource&nbsp;belongs&nbsp;to<br>
+:param&nbsp;project_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;project&nbsp;that&nbsp;the&nbsp;resource&nbsp;belongs&nbsp;to<br>
+:param&nbsp;schema_id:&nbsp;id&nbsp;of&nbsp;the&nbsp;schema<br>
+:param&nbsp;resource_id:&nbsp;id&nbsp;of&nbsp;the&nbsp;resource<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;fetches&nbsp;a&nbsp;specific&nbsp;revision&nbsp;of&nbsp;a&nbsp;resource&nbsp;(default:&nbsp;None,&nbsp;fetches&nbsp;the&nbsp;last)<br>
+:param&nbsp;tag:&nbsp;OPTIONAL&nbsp;fetches&nbsp;the&nbsp;resource&nbsp;version&nbsp;that&nbsp;has&nbsp;a&nbsp;specific&nbsp;tag&nbsp;(default:&nbsp;None)<br>
+:return:&nbsp;Payload&nbsp;of&nbsp;the&nbsp;whole&nbsp;resource&nbsp;as&nbsp;a&nbsp;dictionary</tt></dd></dl>
+ <dl><dt><a name="-fetch_attachment"><strong>fetch_attachment</strong></a>(resource, name, rev=None, tag=None, out_filename=None)</dt><dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;DEPRECATED<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Fetch&nbsp;the&nbsp;attachment&nbsp;of&nbsp;a&nbsp;a&nbsp;resource.&nbsp;Two&nbsp;ways&nbsp;are&nbsp;possible:&nbsp;by&nbsp;specifying&nbsp;an&nbsp;output&nbsp;filepath&nbsp;(out_filename),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;the&nbsp;distant&nbsp;file&nbsp;will&nbsp;be&nbsp;downloaded&nbsp;under&nbsp;this&nbsp;name.&nbsp;Or,&nbsp;if&nbsp;out_filename&nbsp;is&nbsp;not&nbsp;specified,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;binary&nbsp;buffer&nbsp;of&nbsp;the&nbsp;distant&nbsp;file&nbsp;is&nbsp;returned&nbsp;by&nbsp;this&nbsp;function.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;the&nbsp;distant&nbsp;file&nbsp;is&nbsp;large,&nbsp;it&nbsp;is&nbsp;advised&nbsp;to&nbsp;write&nbsp;it&nbsp;directly&nbsp;as&nbsp;a&nbsp;file&nbsp;because&nbsp;streaming&nbsp;is&nbsp;handled.&nbsp;Keeping<br>
+&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;large&nbsp;file&nbsp;into&nbsp;memory&nbsp;may&nbsp;not&nbsp;be&nbsp;a&nbsp;good&nbsp;idea.<br>
+&nbsp;<br>
+:param&nbsp;resource:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;resource<br>
+:param&nbsp;name:&nbsp;ID&nbsp;of&nbsp;the&nbsp;resource's&nbsp;attachment<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;resource&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Note&nbsp;that&nbsp;this&nbsp;cannot&nbsp;be&nbsp;given&nbsp;along&nbsp;tag<br>
+:param&nbsp;tag:&nbsp;OPTIONAL&nbsp;tag&nbsp;of&nbsp;a&nbsp;resource.&nbsp;Note&nbsp;that&nbsp;this&nbsp;cannot&nbsp;be&nbsp;given&nbsp;along&nbsp;rev<br>
+:param&nbsp;out_filename:&nbsp;OPTIONAL&nbsp;file&nbsp;path&nbsp;to&nbsp;which&nbsp;write&nbsp;the&nbsp;fetched&nbsp;file.<br>
+:return:&nbsp;If&nbsp;out_filename&nbsp;is&nbsp;provided&nbsp;None&nbsp;is&nbsp;returned.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;out_filename&nbsp;is&nbsp;not&nbsp;provided,&nbsp;the&nbsp;binary&nbsp;buffer&nbsp;is&nbsp;returned&nbsp;as&nbsp;a&nbsp;byte_arr</tt></dd></dl>
+ <dl><dt><a name="-list"><strong>list</strong></a>(org_label, project_label, schema=None, pagination_from=0, pagination_size=20, deprecated=None, full_text_search_query=None)</dt><dd><tt>List&nbsp;the&nbsp;resources&nbsp;available&nbsp;for&nbsp;a&nbsp;given&nbsp;organization&nbsp;and&nbsp;project.<br>
+&nbsp;<br>
+:param&nbsp;org_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;organization&nbsp;that&nbsp;the&nbsp;resource&nbsp;belongs&nbsp;to<br>
+:param&nbsp;project_label:&nbsp;The&nbsp;label&nbsp;of&nbsp;the&nbsp;project&nbsp;that&nbsp;the&nbsp;resource&nbsp;belongs&nbsp;to<br>
+:param&nbsp;schema:&nbsp;OPTIONAL&nbsp;Lists&nbsp;only&nbsp;the&nbsp;resource&nbsp;for&nbsp;a&nbsp;given&nbsp;schema&nbsp;(default:&nbsp;None)<br>
+:param&nbsp;pagination_from:&nbsp;OPTIONAL&nbsp;The&nbsp;pagination&nbsp;index&nbsp;to&nbsp;start&nbsp;from&nbsp;(default:&nbsp;0)<br>
+:param&nbsp;pagination_size:&nbsp;OPTIONAL&nbsp;The&nbsp;maximum&nbsp;number&nbsp;of&nbsp;elements&nbsp;to&nbsp;returns&nbsp;at&nbsp;once&nbsp;(default:&nbsp;20)<br>
+:param&nbsp;deprecated:&nbsp;OPTIONAL&nbsp;Get&nbsp;only&nbsp;deprecated&nbsp;resource&nbsp;if&nbsp;True&nbsp;and&nbsp;get&nbsp;only&nbsp;non-deprecated&nbsp;results&nbsp;if&nbsp;False.<br>
+If&nbsp;not&nbsp;specified&nbsp;(default),&nbsp;return&nbsp;both&nbsp;deprecated&nbsp;and&nbsp;not&nbsp;deprecated&nbsp;resource.<br>
+:param&nbsp;full_text_search_query:&nbsp;A&nbsp;string&nbsp;to&nbsp;look&nbsp;for&nbsp;as&nbsp;a&nbsp;full&nbsp;text&nbsp;query<br>
+:return:&nbsp;The&nbsp;raw&nbsp;payload&nbsp;as&nbsp;a&nbsp;dictionary</tt></dd></dl>
+ <dl><dt><a name="-tag"><strong>tag</strong></a>(resource, tag_value, rev_to_tag=None, rev=None)</dt><dd><tt>&nbsp;Add&nbsp;a&nbsp;tag&nbsp;to&nbsp;a&nbsp;a&nbsp;specific&nbsp;revision&nbsp;of&nbsp;the&nbsp;resource.&nbsp;Note&nbsp;that&nbsp;a&nbsp;new&nbsp;revision&nbsp;(untagged)&nbsp;will&nbsp;be&nbsp;created<br>
+&nbsp;<br>
+&nbsp;:param&nbsp;resource:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;resource<br>
+&nbsp;:param&nbsp;tag_value:&nbsp;The&nbsp;value&nbsp;(or&nbsp;name)&nbsp;of&nbsp;a&nbsp;tag<br>
+&nbsp;:param&nbsp;rev_to_tag:&nbsp;OPTIONAL&nbsp;Number&nbsp;of&nbsp;the&nbsp;revision&nbsp;to&nbsp;tag.&nbsp;If&nbsp;not&nbsp;provided,&nbsp;this&nbsp;will&nbsp;take&nbsp;the&nbsp;revision&nbsp;number<br>
+&nbsp;from&nbsp;the&nbsp;provided&nbsp;resource&nbsp;payload.<br>
+&nbsp;:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;resource&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+&nbsp;:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;resource.</tt></dd></dl>
+ <dl><dt><a name="-tags"><strong>tags</strong></a>(resource)</dt><dd><tt>List&nbsp;all&nbsp;the&nbsp;tags&nbsp;added&nbsp;to&nbsp;this&nbsp;resource,&nbsp;along&nbsp;with&nbsp;their&nbsp;version&nbsp;numbers<br>
+&nbsp;<br>
+:param&nbsp;resource:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;resource<br>
+:return:&nbsp;payload&nbsp;containing&nbsp;the&nbsp;list&nbsp;of&nbsp;tags&nbsp;and&nbsp;versions</tt></dd></dl>
+ <dl><dt><a name="-update"><strong>update</strong></a>(resource, rev=None)</dt><dd><tt>Update&nbsp;a&nbsp;resource.&nbsp;The&nbsp;resource&nbsp;object&nbsp;is&nbsp;most&nbsp;likely&nbsp;the&nbsp;returned&nbsp;value&nbsp;of&nbsp;a<br>
+nexus.resource.<a href="#-fetch">fetch</a>(),&nbsp;where&nbsp;some&nbsp;fields&nbsp;where&nbsp;modified,&nbsp;added&nbsp;or&nbsp;removed.<br>
+Note&nbsp;that&nbsp;the&nbsp;returned&nbsp;payload&nbsp;only&nbsp;contains&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;and&nbsp;not&nbsp;the<br>
+complete&nbsp;resource.<br>
+&nbsp;<br>
+:param&nbsp;resource:&nbsp;payload&nbsp;of&nbsp;a&nbsp;previously&nbsp;fetched&nbsp;resource,&nbsp;with&nbsp;the&nbsp;modification&nbsp;to&nbsp;be&nbsp;updated<br>
+:param&nbsp;rev:&nbsp;OPTIONAL&nbsp;The&nbsp;previous&nbsp;revision&nbsp;you&nbsp;want&nbsp;to&nbsp;update&nbsp;from.<br>
+If&nbsp;not&nbsp;provided,&nbsp;the&nbsp;rev&nbsp;from&nbsp;the&nbsp;resource&nbsp;argument&nbsp;will&nbsp;be&nbsp;used.<br>
+:return:&nbsp;A&nbsp;payload&nbsp;containing&nbsp;only&nbsp;the&nbsp;Nexus&nbsp;metadata&nbsp;for&nbsp;this&nbsp;updated&nbsp;resource.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>DEFAULT_CONTEXT</strong> = {'@context': {'@base': 'http://example.com/', '@vocab': 'http://schema.org/'}}</td></tr></table>
+</body></html>
