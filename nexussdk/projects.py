@@ -29,7 +29,7 @@ def fetch(org_label, project_label, rev=None):
     return http_get(path, use_base=True)
 
 
-def create(org_label, project_label, description=None, api_mappings=None, vocab=None):
+def create(org_label, project_label, description=None, api_mappings=None, vocab=None, base=None):
     """
     Create a new project under an organization.
 
@@ -39,6 +39,7 @@ def create(org_label, project_label, description=None, api_mappings=None, vocab=
     :param api_mappings: OPTIONAL apiMappings
     see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings
     :param vocab: OPTIONAL vocab as a string
+    :param base: OPTIONAL base for the project
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
@@ -56,6 +57,9 @@ def create(org_label, project_label, description=None, api_mappings=None, vocab=
 
     if vocab is not None:
         config["vocab"] = vocab
+
+    if base is not None:
+        config["base"] = base
 
     return http_put(path, use_base=True, body=config)
 

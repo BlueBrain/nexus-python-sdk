@@ -43,7 +43,6 @@ def fetch(org_label, project_label, schema_id, resource_id, rev=None, tag=None):
     project_label = url_encode(project_label)
     schema_id = url_encode(schema_id)
     resource_id = url_encode(resource_id)
-
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
 
     if rev is not None:
@@ -76,7 +75,7 @@ def update(resource, rev=None):
     return http_put(path, resource, use_base=False)
 
 
-def create(org_label, project_label, data, schema_id='resource', resource_id=None):
+def create(org_label, project_label, data, schema_id='_', resource_id=None):
     """
         Create a resource. If resource_id is provided, this given ID will be used. If resource_id not provided,
         an ID will be automatically generated for this new resource.

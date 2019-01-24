@@ -110,25 +110,6 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
         return decode_json_ordered(response.text)
 
 
-# orig
-# def http_post(path, body=None, data_type='default', params=None):
-#     """
-#         Perform a POST request.
-#
-#         :param path: complete URL if use_base si False or just the ending if use_base is True
-#         :param body: OPTIONAL Things to send, can be a dictionary
-#         :param data_type: OPTIONAL can be 'json' or 'text' (default: 'default' = 'json')
-#         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
-#         :return: the dictionary that is equivalent to the json response
-#     """
-#     header = prepare_header(data_type)
-#     full_url = storage.get('environment') + path
-#     body_data = prepare_body(body, data_type)
-#     response = requests.post(full_url, headers=header, data=body_data, params=params)
-#     response.raise_for_status()
-#     return decode_json_ordered(response.text)
-
-
 def http_post(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
     """
         Perform a POST request.
