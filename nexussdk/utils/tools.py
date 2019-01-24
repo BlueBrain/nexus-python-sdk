@@ -1,6 +1,7 @@
 import copy
 import json
 
+
 def copy_this_into_that(this, that, deepcopy=False, force=False):
     """
         Copy the content of a dictionary within another.
@@ -22,4 +23,8 @@ def copy_this_into_that(this, that, deepcopy=False, force=False):
 
 
 def pretty_print(payload):
+    """
+    This helper function display a Python dict in a nice way, using the JSON syntax and an indentation of 2.
+    :param payload: A Python dict
+    """
     print(json.dumps(payload, indent=2))

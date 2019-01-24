@@ -1,3 +1,7 @@
+"""
+A project is a place to store data (files, resources, schemas, etc.). It belongs to an organization.
+"""
+
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
 from nexussdk.utils.http import http_delete
@@ -25,7 +29,7 @@ def fetch(org_label, project_label, rev=None):
     return http_get(path, use_base=True)
 
 
-def create(org_label, project_label, description=None, api_mappings=None, vocab=None):
+def create(org_label, project_label, description=None, api_mappings=None, vocab=None, base=None):
     """
     Create a new project under an organization.
 
@@ -35,6 +39,7 @@ def create(org_label, project_label, description=None, api_mappings=None, vocab=
     :param api_mappings: OPTIONAL apiMappings
     see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings
     :param vocab: OPTIONAL vocab as a string
+    :param base: OPTIONAL base for the project
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
@@ -52,6 +57,9 @@ def create(org_label, project_label, description=None, api_mappings=None, vocab=
 
     if vocab is not None:
         config["vocab"] = vocab
+
+    if base is not None:
+        config["base"] = base
 
     return http_put(path, use_base=True, body=config)
 
@@ -143,7 +151,7 @@ def deprecate(project, rev=None):
     :param project: The project payload, most likely retrieved with fetch()
     :param rev: OPTIONAL provide the last version of the project to make sure the user has full knowledge of
     the version being deprecated. If not provided, the revision number from the project payload will be used.
-    :return:
+    :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
     org_label = url_encode(project["_organizationLabel"])

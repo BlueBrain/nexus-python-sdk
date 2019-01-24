@@ -12,12 +12,12 @@ nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
 
 
 # listing projects
-# payload = nexus.projects.list()
-# nexus.tools.pretty_print(payload)
+payload = nexus.projects.list()
+nexus.tools.pretty_print(payload)
 
 # getting a specific organization
-payload = nexus.projects.fetch("my_org", "third_project")
-nexus.tools.pretty_print(payload)
+# payload = nexus.projects.fetch("my_org", "third_project")
+# nexus.tools.pretty_print(payload)
 
 
 # Updating values of an organization
