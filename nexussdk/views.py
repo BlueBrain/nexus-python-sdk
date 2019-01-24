@@ -114,7 +114,7 @@ def fetch(org_label, project_label, view_id, rev=None, tag=None):
 
 
 def list(org_label, project_label, pagination_from=0, pagination_size=20,
-         deprecated=None, full_text_search_query=None):
+         deprecated=None, type = None, full_text_search_query=None):
     """
         List the views available for a given organization and project. All views, of all kinds.
 
@@ -137,6 +137,10 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
     if deprecated is not None:
         deprecated = "true" if deprecated else "false"
         path = path + "&deprecated=" + deprecated
+
+    if type is not None:
+        type = url_encode(type)
+        path = path + "&type=" + type
 
     if full_text_search_query:
         full_text_search_query = url_encode(full_text_search_query)
@@ -244,27 +248,33 @@ def _filter_list_by_type(list, type):
     return new_list
 
 
-def query_es(esview, query):
+def query_es(org_label, project_label, view_id, query):
     """
         Perform a ElasticSearch query
 
-        :param esview: Payload of an ElasticSearch view, most likely got with the .fetch() function
+        :param org_label: Label of the organization to perform the query on
+        :param project_label: Label of the project to perform the query on
+        :param view_id: id of an ElasticSearch view
         :param query: ElasticSearch query as a JSON string or a dictionary
         :return: the result of the query as a dictionary
     """
-    path = esview["_self"] + "/_search"
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
+    view_id = url_encode(view_id)
+
+    path = "/views/" + org_label + "/" + project_label + "/" + view_id+  "/_search"
 
     if (not isinstance(query, dict)) and isinstance(query, str):
         query = json.loads(query)
 
-    return http_post(path, body=query, use_base=False)
+    return http_post(path, body=query, use_base=True)
 
 
 def query_sparql(org_label, project_label, query):
     """
         Perform a SparQL query.
 
-        :param org_label: Label of the oragnization to perform the query on
+        :param org_label: Label of the organization to perform the query on
         :param project_label: Label of the project to perform the query on
         :param query: Query as a string
         :return: result of the query as a dictionary
