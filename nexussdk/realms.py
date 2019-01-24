@@ -7,16 +7,17 @@ SEGMENT = "realms"
 
 # Create functions.
 
-def create(name: str, description: str, openid_config: str) -> Dict:
+def create(subpath: str, name: str, openid_config: str, logo: str = None) -> Dict:
     """Create a realm.
 
+    :param subpath: Subpath of the realm.
     :param name: Name of the realm.
-    :param description: Description of the realm.
     :param openid_config: URL of the OpenID configuration.
+    :param logo: (optional) URL of a logo.
     :return: The Nexus metadata of the created realm.
     """
-    payload = _payload(description, openid_config)
-    return http_put([SEGMENT, name], payload)
+    payload = _payload(name, openid_config, logo)
+    return http_put([SEGMENT, subpath], payload)
 
 
 def create_(path: str, payload: Dict) -> Dict:
@@ -31,14 +32,14 @@ def create_(path: str, payload: Dict) -> Dict:
 
 # Read functions.
 
-def fetch(name: str, rev: int = None) -> Dict:
+def fetch(subpath: str, rev: int = None) -> Dict:
     """Fetch a realm.
 
-    :param name: Name of the realm.
+    :param subpath: Subpath of the realm.
     :param rev: (optional) Revision number of the realm.
     :return: The Nexus payload of the fetched realm.
     """
-    return http_get([SEGMENT, name], rev=rev)
+    return http_get([SEGMENT, subpath], rev=rev)
 
 
 def fetch_(path: str, rev: int = None) -> Dict:
@@ -70,40 +71,41 @@ def list_(endpoint: str) -> Dict:
 
 # Update functions.
 
-def update(name: str, description: str, openid_config: str, rev: int) -> Dict:
-    """Update a realm.
-    
+def replace(subpath: str, name: str, openid_config: str, rev: int, logo: str = None) -> Dict:
+    """Replace a realm.
+
+    :param subpath: Subpath of the realm.
     :param name: Name of the realm.
-    :param description: Updated description of the realm.
     :param openid_config: Updated URL of the OpenID configuration.
     :param rev: Last revision of the realm.
-    :return: The Nexus metadata of the updated realm.
+    :param logo: (optional) Updated URL of a logo.
+    :return: The Nexus metadata of the realm.
     """
-    payload = _payload(description, openid_config)
-    return http_put([SEGMENT, name], payload, rev=rev)
+    payload = _payload(name, openid_config, logo)
+    return http_put([SEGMENT, subpath], payload, rev=rev)
 
 
-def update_(path: str, payload: Dict, rev: int) -> Dict:
-    """Update a realm (full path version).
+def replace_(path: str, payload: Dict, rev: int) -> Dict:
+    """Replace a realm (full path version).
     
     :param path: Full path of the realm.
     :param payload: Updated payload of the realm.
     :param rev: Last revision of the realm.
-    :return: The Nexus metadata of the updated realm.
+    :return: The Nexus metadata of the realm.
     """
     return http_put(path, payload, rev=rev)
 
 
 # Delete functions.
 
-def deprecate(name: str, rev: int) -> Dict:
+def deprecate(subpath: str, rev: int) -> Dict:
     """Deprecate a realm.
     
-    :param name: Name of the realm.
+    :param subpath: Subpath of the realm.
     :param rev: Last revision of the realm.
     :return: The Nexus metadata of the deprecated realm.
     """
-    return http_delete([SEGMENT, name], rev=rev)
+    return http_delete([SEGMENT, subpath], rev=rev)
 
 
 def deprecate_(path: str, rev: int) -> Dict:
@@ -118,14 +120,18 @@ def deprecate_(path: str, rev: int) -> Dict:
 
 # Internal helpers
 
-def _payload(description: str, openid_config: str) -> Dict:
+def _payload(name: str, openid_config: str, logo: str = None) -> Dict:
     """Create a realm payload.
     
-    :param description: Description of the realm.
+    :param name: Name of the realm.
     :param openid_config: URL of the OpenID configuration.
+    :param logo: (optional) URL of a logo.
     :return: Payload of the realm.
     """
-    return {
-        "name": description,
+    payload = {
+        "name": name,
         "openIdConfig": openid_config,
     }
+    if logo is not None:
+        payload["logo"] = logo
+    return payload
