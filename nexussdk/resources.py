@@ -114,8 +114,8 @@ def create(org_label, project_label, data, schema_id='_', resource_id=None):
         return http_put(path, data, use_base=True)
 
 
-def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
-         deprecated=None, resource_type = None, full_text_search_query=None):
+def list(org_label, project_label, pagination_from=0, pagination_size=20,
+         deprecated=None, type=None, rev=None, schema="_", created_by=None, updated_by=None, resource_id=None):
     """
         List the resources available for a given organization and project.
 
@@ -126,8 +126,11 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
         :param deprecated: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False.
         If not specified (default), return both deprecated and not deprecated resource.
-        :param resource_type: OPTIONAL Lists only the resource for a given type (default: None)
-        :param full_text_search_query: A string to look for as a full text query
+        :param type: OPTIONAL Lists only the resource for a given type (default: None)
+        :param rev: OPTIONAL List only the resource with this particular revision
+        :param created_by: OPTIONAL List only the resources created by a certain user
+        :param updated_by: OPTIONAL List only the resources that were updated by a certain user
+        :param resource_id: OPTIONAL List only the resources with this id. Relevant only when combined with other args
         :return: The raw payload as a dictionary
     """
 
@@ -140,21 +143,19 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         schema = url_encode(schema)
         path = path + "/" + schema
 
-    path = path + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
+    params = {
+        "from": pagination_from,
+        "size": pagination_size,
+        "type": type,
+        "deprecated": deprecated,
+        "rev": rev,
+        "schema": schema,
+        "created_by": created_by,
+        "updated_by": updated_by,
+        "id": resource_id
+    }
 
-    if deprecated is not None:
-        deprecated = "true" if deprecated else "false"
-        path = path + "&deprecated=" + deprecated
-
-    if resource_type is not None:
-        resource_type = url_encode(resource_type)
-        path = path + "&type=" + resource_type
-
-    if full_text_search_query:
-        full_text_search_query = url_encode(full_text_search_query)
-        path = path + "&q=" + full_text_search_query
-
-    return http_get(path, use_base=True)
+    return http_get(path, use_base=True, params=params)
 
 
 def deprecate(resource, rev=None):

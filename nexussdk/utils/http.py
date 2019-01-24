@@ -101,7 +101,13 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
     """
     header = prepare_header(data_type, accept)
     full_url = _full_url(path, use_base)
-    response = requests.get(full_url, headers=header, stream=stream, params=kwargs)
+
+    params = kwargs.pop("params", None)
+    if params:
+        response = requests.get(full_url, headers=header, stream=stream, params=params, **kwargs)
+    else:
+        response = requests.get(full_url, headers=header, stream=stream, **kwargs)
+
     response.raise_for_status()
 
     if get_raw_response:
