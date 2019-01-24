@@ -115,7 +115,7 @@ def create(org_label, project_label, data, schema_id='_', resource_id=None):
 
 
 def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
-         deprecated=None, full_text_search_query=None):
+         deprecated=None, resource_type = None, full_text_search_query=None):
     """
         List the resources available for a given organization and project.
 
@@ -126,6 +126,7 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
         :param deprecated: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False.
         If not specified (default), return both deprecated and not deprecated resource.
+        :param resource_type: OPTIONAL Lists only the resource for a given type (default: None)
         :param full_text_search_query: A string to look for as a full text query
         :return: The raw payload as a dictionary
     """
@@ -144,6 +145,10 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
     if deprecated is not None:
         deprecated = "true" if deprecated else "false"
         path = path + "&deprecated=" + deprecated
+
+    if resource_type is not None:
+        resource_type = url_encode(resource_type)
+        path = path + "&type=" + resource_type
 
     if full_text_search_query:
         full_text_search_query = url_encode(full_text_search_query)
