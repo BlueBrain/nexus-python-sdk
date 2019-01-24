@@ -114,7 +114,7 @@ def fetch(org_label, project_label, view_id, rev=None, tag=None):
 
 
 def list(org_label, project_label, pagination_from=0, pagination_size=20,
-         deprecated=None, type = None, full_text_search_query=None):
+         deprecated=None, view_type = None, full_text_search_query=None):
     """
         List the views available for a given organization and project. All views, of all kinds.
 
@@ -124,6 +124,7 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
         :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
         :param deprecated: OPTIONAL Get only deprecated view if True and get only non-deprecated results if False.
         If not specified (default), return both deprecated and not deprecated view.
+        :param view_type: OPTIONAL The view type
         :param full_text_search_query: A string to look for as a full text query
         :return: The raw payload as a dictionary
     """
@@ -138,9 +139,9 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
         deprecated = "true" if deprecated else "false"
         path = path + "&deprecated=" + deprecated
 
-    if type is not None:
-        type = url_encode(type)
-        path = path + "&type=" + type
+    if view_type is not None:
+        view_type = url_encode(view_type)
+        path = path + "&type=" + view_type
 
     if full_text_search_query:
         full_text_search_query = url_encode(full_text_search_query)
