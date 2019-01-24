@@ -257,7 +257,7 @@ def _filter_list_by_type(list, type):
     return new_list
 
 
-def query_es(org_label, project_label, view_id, query):
+def query_es(org_label, project_label, query, view_id="documents"):
     """
         Perform a ElasticSearch query
 
@@ -271,7 +271,7 @@ def query_es(org_label, project_label, view_id, query):
     project_label = url_encode(project_label)
     view_id = url_encode(view_id)
 
-    path = "/views/" + org_label + "/" + project_label + "/" + view_id+  "/_search"
+    path = "/views/" + org_label + "/" + project_label + "/" + view_id+ "/_search"
 
     if (not isinstance(query, dict)) and isinstance(query, str):
         query = json.loads(query)

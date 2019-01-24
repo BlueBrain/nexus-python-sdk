@@ -352,6 +352,7 @@ Create a new project under an organization.
 - *argument* **api_mappings**: OPTIONAL apiMappings
 see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings
 - *argument* **vocab**: OPTIONAL vocab as a string
+- *argument* **base**: OPTIONAL base for the project
 - *returned*: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
 
 
@@ -540,6 +541,7 @@ List the resources available for a given organization and project.
 - *argument* **pagination_size**: OPTIONAL The maximum number of elements to returns at once (default: 20)
 - *argument* **deprecated**: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False.
 If not specified (default), return both deprecated and not deprecated resource.
+- *argument* **resource_type**: OPTIONAL Lists only the resource for a given type (default: None)
 - *argument* **full_text_search_query**: A string to look for as a full text query
 - *returned*: The raw payload as a dictionary
 
@@ -714,6 +716,7 @@ List the views available for a given organization and project. All views, of all
 - *argument* **pagination_size**: OPTIONAL The maximum number of elements to returns at once (default: 20)
 - *argument* **deprecated**: OPTIONAL Get only deprecated view if True and get only non-deprecated results if False.
 If not specified (default), return both deprecated and not deprecated view.
+- *argument* **view_type**: OPTIONAL The view type
 - *argument* **full_text_search_query**: A string to look for as a full text query
 - *returned*: The raw payload as a dictionary
 
@@ -733,7 +736,9 @@ Helper function to keep only the SparQL views metadata from the result of a .lis
 ## views: query_es
 Perform a ElasticSearch query
 
-- *argument* **esview**: Payload of an ElasticSearch view, most likely got with the .fetch() function
+- *argument* **org_label**: Label of the organization to perform the query on
+- *argument* **project_label**: Label of the project to perform the query on
+- *argument* **view_id**: id of an ElasticSearch view
 - *argument* **query**: ElasticSearch query as a JSON string or a dictionary
 - *returned*: the result of the query as a dictionary
 
@@ -741,7 +746,7 @@ Perform a ElasticSearch query
 ## views: query_sparql
 Perform a SparQL query.
 
-- *argument* **org_label**: Label of the oragnization to perform the query on
+- *argument* **org_label**: Label of the organization to perform the query on
 - *argument* **project_label**: Label of the project to perform the query on
 - *argument* **query**: Query as a string
 - *returned*: result of the query as a dictionary
