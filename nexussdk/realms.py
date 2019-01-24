@@ -87,7 +87,7 @@ def replace(subpath: str, name: str, openid_config: str, rev: int, logo: str = N
 
 def replace_(path: str, payload: Dict, rev: int) -> Dict:
     """Replace a realm (full path version).
-    
+
     :param path: Full path of the realm.
     :param payload: Updated payload of the realm.
     :param rev: Last revision of the realm.
@@ -100,7 +100,7 @@ def replace_(path: str, payload: Dict, rev: int) -> Dict:
 
 def deprecate(subpath: str, rev: int) -> Dict:
     """Deprecate a realm.
-    
+
     :param subpath: Subpath of the realm.
     :param rev: Last revision of the realm.
     :return: The Nexus metadata of the deprecated realm.
@@ -110,7 +110,7 @@ def deprecate(subpath: str, rev: int) -> Dict:
 
 def deprecate_(path: str, rev: int) -> Dict:
     """Deprecate a realm (full path version).
-    
+
     :param path: Full path of the realm.
     :param rev: Last revision of the realm.
     :return: The Nexus metadata of the deprecated realm.
@@ -122,7 +122,7 @@ def deprecate_(path: str, rev: int) -> Dict:
 
 def _payload(name: str, openid_config: str, logo: str = None) -> Dict:
     """Create a realm payload.
-    
+
     :param name: Name of the realm.
     :param openid_config: URL of the OpenID configuration.
     :param logo: (optional) URL of a logo.
