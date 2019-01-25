@@ -1,0 +1,853 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Identity &amp; Access Management &#8212; Nexus Python SDK v0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Knowledge Graph" href="kg-reference.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="identity-access-management">
+<h1>Identity &amp; Access Management<a class="headerlink" href="#identity-access-management" title="Permalink to this headline">¶</a></h1>
+<p>Table of Contents:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#main-interface"><span class="std std-ref">Main Interface</span></a></li>
+<li><a class="reference internal" href="#lower-interface"><span class="std std-ref">Lower-Level Interface</span></a></li>
+</ul>
+<div class="section" id="main-interface">
+<span id="id1"></span><h2>Main Interface<a class="headerlink" href="#main-interface" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#main-realms"><span class="std std-ref">Realms</span></a></li>
+<li><a class="reference internal" href="#main-permissions"><span class="std std-ref">Permissions</span></a></li>
+<li><a class="reference internal" href="#main-identities"><span class="std std-ref">Identities</span></a></li>
+<li><a class="reference internal" href="#main-acls"><span class="std std-ref">Access Control Lists</span></a></li>
+</ul>
+<div class="section" id="module-nexussdk.realms">
+<span id="realms"></span><span id="main-realms"></span><h3>Realms<a class="headerlink" href="#module-nexussdk.realms" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a Python interface for operations on Realms.
+It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
+<a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/iam/iam-realms-api.html">https://bluebrain.github.io/nexus/docs/api/iam/iam-realms-api.html</a></p>
+<dl class="function">
+<dt id="nexussdk.realms.create">
+<code class="descclassname">nexussdk.realms.</code><code class="descname">create</code><span class="sig-paren">(</span><em>subpath: str</em>, <em>name: str</em>, <em>openid_config: str</em>, <em>logo: str = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.realms.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a realm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath of the realm.</li>
+<li><strong>name</strong> – Name of the realm.</li>
+<li><strong>openid_config</strong> – URL of the OpenID configuration.</li>
+<li><strong>logo</strong> – (optional) URL of a logo.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the created realm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.realms.fetch">
+<code class="descclassname">nexussdk.realms.</code><code class="descname">fetch</code><span class="sig-paren">(</span><em>subpath: str</em>, <em>rev: int = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.realms.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch a realm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath of the realm.</li>
+<li><strong>rev</strong> – (optional) Revision number of the realm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus payload of the fetched realm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.realms.list">
+<code class="descclassname">nexussdk.realms.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.realms.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>List realms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A Nexus results list with the Nexus payloads of the realms.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.realms.deprecate">
+<code class="descclassname">nexussdk.realms.</code><code class="descname">deprecate</code><span class="sig-paren">(</span><em>subpath: str</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.realms.deprecate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecate a realm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath of the realm.</li>
+<li><strong>rev</strong> – Last revision of the realm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the deprecated realm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nexussdk.permissions">
+<span id="permissions"></span><span id="main-permissions"></span><h3>Permissions<a class="headerlink" href="#module-nexussdk.permissions" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a Python interface for operations on Permissions.
+It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
+<a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/iam/iam-permissions-api.html">https://bluebrain.github.io/nexus/docs/api/iam/iam-permissions-api.html</a></p>
+<dl class="function">
+<dt id="nexussdk.permissions.fetch">
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">fetch</code><span class="sig-paren">(</span><em>rev: int = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.permissions.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the permissions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rev</strong> – (optional) Revision number of the permissions.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A Nexus payload with the permissions.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.permissions.replace">
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">replace</code><span class="sig-paren">(</span><em>permissions: List[str], rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.permissions.replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the user-defined permissions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>permissions</strong> – List of user-defined permissions.</li>
+<li><strong>rev</strong> – Last revision of the permissions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the permissions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.permissions.append">
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">append</code><span class="sig-paren">(</span><em>permissions: List[str], rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.permissions.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append user-defined permissions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>permissions</strong> – List of user-defined permissions.</li>
+<li><strong>rev</strong> – Last revision of the permissions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the permissions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.permissions.subtract">
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">subtract</code><span class="sig-paren">(</span><em>permissions: List[str], rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.permissions.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtract user-defined permissions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>permissions</strong> – List of user-defined permissions.</li>
+<li><strong>rev</strong> – Last revision of the permissions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the permissions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.permissions.delete">
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">delete</code><span class="sig-paren">(</span><em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.permissions.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete user-defined permissions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rev</strong> – Last revision of the permissions.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The Nexus metadata of the permissions.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nexussdk.identities">
+<span id="identities"></span><span id="main-identities"></span><h3>Identities<a class="headerlink" href="#module-nexussdk.identities" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a Python interface for operations on Identities.
+It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
+<a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/iam/iam-identities.html">https://bluebrain.github.io/nexus/docs/api/iam/iam-identities.html</a></p>
+<dl class="function">
+<dt id="nexussdk.identities.fetch">
+<code class="descclassname">nexussdk.identities.</code><code class="descname">fetch</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.identities.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the identities.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list with the Nexus payloads of the identities.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nexussdk.acls">
+<span id="access-control-lists"></span><span id="main-acls"></span><h3>Access Control Lists<a class="headerlink" href="#module-nexussdk.acls" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a Python interface for operations on Access Control Lists.
+It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
+<a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/iam/iam-acls-api.html">https://bluebrain.github.io/nexus/docs/api/iam/iam-acls-api.html</a></p>
+<dl class="function">
+<dt id="nexussdk.acls.fetch">
+<code class="descclassname">nexussdk.acls.</code><code class="descname">fetch</code><span class="sig-paren">(</span><em>subpath: str</em>, <em>rev: int = None</em>, <em>self: bool = True</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.acls.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the ACLs on a subpath.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath on which fetching the ACLs.</li>
+<li><strong>rev</strong> – (optional) Revision number of the ACLs.</li>
+<li><strong>self</strong> – (optional) If ‘True’, only the ACLs containing the identities
+found in the authentication token are returned. If ‘False’, all the
+ACLs on the current subpath are returned.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A Nexus results list with the Nexus payloads of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.acls.list">
+<code class="descclassname">nexussdk.acls.</code><code class="descname">list</code><span class="sig-paren">(</span><em>subpath: str</em>, <em>ancestors: bool = False</em>, <em>self: bool = True</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.acls.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>List ACLs on a subpath.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath on which listing the ACLs.</li>
+<li><strong>ancestors</strong> – (optional) If ‘True’, the ACLs on the parent path of the
+subpath are returned. If ‘False’, only the ACLs on the current subpath
+are returned.</li>
+<li><strong>self</strong> – (optional) If ‘True’, only the ACLs containing the identities
+found in the authentication token are returned. If ‘False’, all the
+ACLs on the current subpath are returned.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A Nexus results list with the Nexus payloads of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.acls.replace">
+<code class="descclassname">nexussdk.acls.</code><code class="descname">replace</code><span class="sig-paren">(</span><em>subpath: str, permissions: List[List[str]], identities: List[Dict], rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.acls.replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace ACLs on a subpath. <code class="docutils literal notranslate"><span class="pre">permissions</span></code> and <code class="docutils literal notranslate"><span class="pre">identities</span></code> have the same order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath on which replacing the ACLs.</li>
+<li><strong>permissions</strong> – List of list of permissions.</li>
+<li><strong>identities</strong> – List of identities for which to replace permissions.</li>
+<li><strong>rev</strong> – Last revision of the ACLs.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.acls.append">
+<code class="descclassname">nexussdk.acls.</code><code class="descname">append</code><span class="sig-paren">(</span><em>subpath: str, permissions: List[List[str]], identities: List[Dict], rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.acls.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append ACLs on a subpath. <code class="docutils literal notranslate"><span class="pre">permissions</span></code> and <code class="docutils literal notranslate"><span class="pre">identities</span></code> have the same order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath on which appending ACLs.</li>
+<li><strong>permissions</strong> – List of list of permissions.</li>
+<li><strong>identities</strong> – List of identities for which to append the permissions.</li>
+<li><strong>rev</strong> – Last revision of the ACLs.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.acls.subtract">
+<code class="descclassname">nexussdk.acls.</code><code class="descname">subtract</code><span class="sig-paren">(</span><em>subpath: str, permissions: List[List[str]], identities: List[Dict], rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.acls.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtract ACLs on a subpath. <code class="docutils literal notranslate"><span class="pre">permissions</span></code> and <code class="docutils literal notranslate"><span class="pre">identities</span></code> have the same order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath on which subtracting ACLs.</li>
+<li><strong>permissions</strong> – List of list of permissions.</li>
+<li><strong>identities</strong> – List of identities for which to remove the permissions.</li>
+<li><strong>rev</strong> – Last revision of the ACLs.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.acls.delete">
+<code class="descclassname">nexussdk.acls.</code><code class="descname">delete</code><span class="sig-paren">(</span><em>subpath: str</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.acls.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete ACLs on a subpath.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath on which deleting ACLs.</li>
+<li><strong>rev</strong> – Last revision of the ACLs.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="lower-level-interface">
+<span id="lower-interface"></span><h2>Lower-Level Interface<a class="headerlink" href="#lower-level-interface" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#lower-realms"><span class="std std-ref">Realms</span></a></li>
+<li><a class="reference internal" href="#lower-permissions"><span class="std std-ref">Permissions</span></a></li>
+<li><a class="reference internal" href="#lower-identities"><span class="std std-ref">Identities</span></a></li>
+<li><a class="reference internal" href="#lower-acls"><span class="std std-ref">Access Control Lists</span></a></li>
+</ul>
+<div class="section" id="lower-realms">
+<span id="id2"></span><h3>Realms<a class="headerlink" href="#lower-realms" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a Python interface for operations on Realms.
+It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
+<a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/iam/iam-realms-api.html">https://bluebrain.github.io/nexus/docs/api/iam/iam-realms-api.html</a></p>
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.realms.</code><code class="descname">create_</code><span class="sig-paren">(</span><em>path: str</em>, <em>payload: Dict</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Create a realm (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path of the realm.</li>
+<li><strong>payload</strong> – Payload of the realm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the created realm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.realms.</code><code class="descname">fetch_</code><span class="sig-paren">(</span><em>path: str</em>, <em>rev: int = None</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Fetch a realm (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path of the realm.</li>
+<li><strong>rev</strong> – (optional) Revision number of the realm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus payload of the fetched realm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.realms.</code><code class="descname">list_</code><span class="sig-paren">(</span><em>endpoint: str</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>List realms (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>endpoint</strong> – Endpoint for realms.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A Nexus results list with the Nexus payloads of the realms.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.realms.</code><code class="descname">deprecate_</code><span class="sig-paren">(</span><em>path: str</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Deprecate a realm (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path of the realm.</li>
+<li><strong>rev</strong> – Last revision of the realm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the deprecated realm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="lower-permissions">
+<span id="id3"></span><h3>Permissions<a class="headerlink" href="#lower-permissions" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a Python interface for operations on Permissions.
+It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
+<a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/iam/iam-permissions-api.html">https://bluebrain.github.io/nexus/docs/api/iam/iam-permissions-api.html</a></p>
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">fetch_</code><span class="sig-paren">(</span><em>endpoint: str</em>, <em>rev: int = None</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Fetch the permissions (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> – Endpoint for permissions.</li>
+<li><strong>rev</strong> – (optional) Revision number of the permissions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A Nexus payload with the permissions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">replace_</code><span class="sig-paren">(</span><em>endpoint: str</em>, <em>payload: Dict</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Replace the user-defined permissions (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> – Endpoint for permissions.</li>
+<li><strong>payload</strong> – Payload of user-defined permissions.</li>
+<li><strong>rev</strong> – Last revision of the permissions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the permissions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">append_</code><span class="sig-paren">(</span><em>endpoint: str</em>, <em>payload: Dict</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Append user-defined permissions (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> – Endpoint for permissions.</li>
+<li><strong>payload</strong> – Payload of user-defined permissions to append.</li>
+<li><strong>rev</strong> – Last revision of the permissions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the permissions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">subtract_</code><span class="sig-paren">(</span><em>endpoint: str</em>, <em>payload: Dict</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Subtract user-defined permissions (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> – Endpoint for permissions.</li>
+<li><strong>payload</strong> – Payload of user-defined permissions to subtract.</li>
+<li><strong>rev</strong> – Last revision of the permissions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the permissions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.permissions.</code><code class="descname">delete_</code><span class="sig-paren">(</span><em>endpoint: str</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Delete user-defined permissions (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> – Endpoint for permissions.</li>
+<li><strong>rev</strong> – Last revision of the permissions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the permissions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="lower-identities">
+<span id="id4"></span><h3>Identities<a class="headerlink" href="#lower-identities" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a Python interface for operations on Identities.
+It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
+<a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/iam/iam-identities.html">https://bluebrain.github.io/nexus/docs/api/iam/iam-identities.html</a></p>
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.identities.</code><code class="descname">fetch_</code><span class="sig-paren">(</span><em>endpoint: str</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Fetch the identities (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list with the Nexus payloads of the identities.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="lower-acls">
+<span id="id5"></span><h3>Access Control Lists<a class="headerlink" href="#lower-acls" title="Permalink to this headline">¶</a></h3>
+<p>This module provides a Python interface for operations on Access Control Lists.
+It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
+<a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/iam/iam-acls-api.html">https://bluebrain.github.io/nexus/docs/api/iam/iam-acls-api.html</a></p>
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.acls.</code><code class="descname">fetch_</code><span class="sig-paren">(</span><em>path: str</em>, <em>rev: int = None</em>, <em>self: bool = True</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Fetch the ACLs on a full path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path on which fetching the ACLs.</li>
+<li><strong>rev</strong> – (optional) Revision number of the ACLs.</li>
+<li><strong>self</strong> – (optional) If ‘True’, only the ACLs containing the identities
+found in the authentication token are returned. If ‘False’, all the
+ACLs on the current subpath are returned.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A Nexus results list with the Nexus payloads of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.acls.</code><code class="descname">list_</code><span class="sig-paren">(</span><em>path: str</em>, <em>ancestors: bool = False</em>, <em>self: bool = True</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>List ACLs on a full path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path on which listing the ACLs.</li>
+<li><strong>ancestors</strong> – (optional) If ‘True’, the ACLs on the parent path of the
+subpath are returned. If ‘False’, only the ACLs on the current subpath
+are returned.</li>
+<li><strong>self</strong> – (optional) If ‘True’, only the ACLs containing the identities
+found in the authentication token are returned. If ‘False’, all the
+ACLs on the current subpath are returned.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A Nexus results list with the Nexus payloads of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.acls.</code><code class="descname">replace_</code><span class="sig-paren">(</span><em>path: str</em>, <em>payload: Dict</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Replace ACLs on a full path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path on which replacing the ACLs.</li>
+<li><strong>payload</strong> – Payload of the ACLs.</li>
+<li><strong>rev</strong> – Last revision of the ACLs.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.acls.</code><code class="descname">append_</code><span class="sig-paren">(</span><em>path: str</em>, <em>payload: Dict</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Append ACLs on a full path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path on which appending ACLs.</li>
+<li><strong>payload</strong> – Payload of the ACLs to append.</li>
+<li><strong>rev</strong> – Last revision of the ACLs.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.acls.</code><code class="descname">subtract_</code><span class="sig-paren">(</span><em>path: str</em>, <em>payload: Dict</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Subtract ACLs on a full path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path on which subtracting ACLs.</li>
+<li><strong>payload</strong> – Payload of the ACLs to subtract.</li>
+<li><strong>rev</strong> – Last revision of the ACLs.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.acls.</code><code class="descname">delete_</code><span class="sig-paren">(</span><em>path: str</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Delete ACLs on a full path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path on which deleting ACLs.</li>
+<li><strong>rev</strong> – Last revision of the ACLs.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the ACLs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Nexus Python SDK</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="api-reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="admin-reference.html">Admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kg-reference.html">Knowledge Graph</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Identity &amp; Access Management</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api-reference.html">API Reference</a><ul>
+      <li>Previous: <a href="kg-reference.html" title="previous chapter">Knowledge Graph</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Blue Brain Project.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/iam-reference.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
