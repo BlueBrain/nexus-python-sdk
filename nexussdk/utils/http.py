@@ -110,7 +110,6 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
     else:
         response = requests.get(full_url, headers=header, stream=stream, params=kwargs)
     response.raise_for_status()
-    response.raise_for_status()
 
     if get_raw_response:
         return response
