@@ -74,25 +74,25 @@ def update(resource, rev=None):
     return http_put(path, resource, use_base=False)
 
 
-def create(org_label, project_label, data, schema_id='_', resource_id=None):
+def create(org_label, project_label, data, schema_id="_", resource_id=None):
     """
         Create a resource. If resource_id is provided, this given ID will be used. If resource_id not provided,
         an ID will be automatically generated for this new resource.
 
         :param org_label: The label of the organization that the resource belongs to
         :param project_label: The label of the project that the resource belongs to
-        :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: 'resource')
+        :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: "resource)
         :param data: dictionary containing the data to store in this new resource
         :param resource_id: OPTIONAL force the use of a specific id when creating the new resource
         :return: A payload containing only the Nexus metadata for this updated resource.
 
-        If the data does not have a '@context' value, a default one is automatically added.
+        If the data does not have a "@context" value, a default one is automatically added.
     """
 
     # if no schema is provided, we can create a resource with a non-constraining
-    # default schema called 'resource'
+    # default schema called "resource"
     if schema_id is None:
-        schema_id = 'resource'
+        schema_id = "resource"
 
     # the element composing the query URL need to be URL-encoded
     org_label = url_encode(org_label)
@@ -101,7 +101,7 @@ def create(org_label, project_label, data, schema_id='_', resource_id=None):
 
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id
 
-    # If the data does not have a '@context' field, we should had a default one
+    # If the data does not have a "@context" field, we should had a default one
     if "@context" not in data:
         copy_this_into_that(DEFAULT_CONTEXT, data)
 

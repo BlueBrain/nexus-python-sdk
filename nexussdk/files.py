@@ -54,7 +54,7 @@ def fetch(org_label, project_label, file_id, rev=None, tag=None, out_filepath=No
             out_filepath = os.path.join(out_filepath, response_metadata["_filename"])
 
         # we write the result of the request into a file
-        with open(out_filepath, 'wb') as f:
+        with open(out_filepath, "wb") as f:
             for chunk in response_binary.iter_content():
                 f.write(chunk)
 
@@ -79,9 +79,9 @@ def update(file, filepath, rev=None):
 
     path = file["_self"] + "?rev=" + str(rev)
 
-    file_obj = {'file': open(filepath, "rb")}
+    file_obj = {"file": open(filepath, "rb")}
 
-    return http_put(path, body=file_obj, use_base=False, data_type='file')
+    return http_put(path, body=file_obj, use_base=False, data_type="file")
 
 
 def create(org_label, project_label, filepath, file_id=None):
@@ -101,14 +101,14 @@ def create(org_label, project_label, filepath, file_id=None):
 
     path = "/files/" + org_label + "/" + project_label
 
-    file_obj = {'file': open(filepath, "rb")}
+    file_obj = {"file": open(filepath, "rb")}
 
     if file_id is None:
-        return http_post(path, body=file_obj, data_type='file', use_base=True)
+        return http_post(path, body=file_obj, data_type="file", use_base=True)
     else:
         file_id = url_encode(file_id)
         path = path + "/" + file_id
-        return http_put(path, use_base=True, body=file_obj, data_type='file')
+        return http_put(path, use_base=True, body=file_obj, data_type="file")
 
 
 def list(org_label, project_label, pagination_from=0, pagination_size=20,

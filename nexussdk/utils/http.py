@@ -10,24 +10,24 @@ decode_json_ordered = json.JSONDecoder(object_pairs_hook=collections.OrderedDict
 
 # defines some parts of the header, to combine together
 header_parts = {
-    'common': {'mode': 'cors'},
-    'json': {'Content-Type': 'application/json'},
-    'text': {'sendAs': 'text', 'Content-Type': 'text/plain'},
-    'sparql': {'Content-Type': 'application/sparql-query'},
+    "common": {"mode": "cors"},
+    "json": {"Content-Type": "application/json"},
+    "text": {"sendAs": "text", "Content-Type": "text/plain"},
+    "sparql": {"Content-Type": "application/sparql-query"},
 
 }
 
 # so that a get request can decide to retrieve JSON or binary
 header_accept = {
-    'json': 'application/ld+json, application/json',
-    'all': '*/*'
+    "json": "application/ld+json, application/json",
+    "all": "*/*"
 }
 
-default_type = 'json'
-header_parts['default'] = header_parts[default_type]
+default_type = "json"
+header_parts["default"] = header_parts[default_type]
 
 
-def prepare_header(type='default', accept='json'):
+def prepare_header(type="default", accept="json"):
     """
         Prepare the header of the HTTP request by fetching the token from the config
         and few other things.
@@ -39,19 +39,19 @@ def prepare_header(type='default', accept='json'):
 
     # if posting a file, the request module deals with the content-type
     if type == "file":
-        header = {**header_parts['common']}
+        header = {**header_parts["common"]}
     else:
-        header = {**header_parts['common'], **header_parts[type]}
+        header = {**header_parts["common"], **header_parts[type]}
 
     if accept in header_accept:
         header["Accept"] = header_accept[accept]
 
-    if storage.has('token'):
-        header['Authorization'] = 'Bearer ' + storage.get('token')
+    if storage.has("token"):
+        header["Authorization"] = "Bearer " + storage.get("token")
     return header
 
 
-def prepare_body(data, type='default'):
+def prepare_body(data, type="default"):
     """
         Prepare the body of the HTTP request
 
@@ -59,11 +59,11 @@ def prepare_body(data, type='default'):
         :param type:
         :return:
     """
-    if type == 'default':
+    if type == "default":
         type = default_type
     body = None
 
-    if type == 'json':
+    if type == "json":
         body = json.dumps(data, ensure_ascii=True)
     else:
         body = data
@@ -75,19 +75,19 @@ def prepare_body(data, type='default'):
 
 
 def print_request_response(r):
-    print('status: ', r.status_code)
-    print('encoding: ', r.encoding)
-    print('url: ', r.url)
-    # print('json: ', r.json())
-    # print('text: ', r.text)
-    print('headers: ')
+    print("status: ", r.status_code)
+    print("encoding: ", r.encoding)
+    print("url: ", r.url)
+    # print("json: ", r.json())
+    # print("text: ", r.text)
+    print("headers: ")
     print(r.headers)
-    print('cookies:', r.cookies)
-    print('history: ', r.history)
+    print("cookies:", r.cookies)
+    print("history: ", r.history)
 
 
 def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, use_base=False,
-             data_type='default', accept='json', **kwargs):
+             data_type="default", accept="json", **kwargs):
     """
         Wrapper to perform a GET request.
 
@@ -119,13 +119,13 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
         return decode_json_ordered(response.text)
 
 
-def http_post(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
+def http_post(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
     """
         Perform a POST request.
 
         :param path: complete URL if use_base si False or just the ending if use_base is True
         :param body: OPTIONAL Things to send, can be a dictionary
-        :param data_type: OPTIONAL can be 'json' or 'text' (default: 'default' = 'json')
+        :param data_type: OPTIONAL can be "json" or "text" (default: "default" = "json")
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :return: the dictionary that is equivalent to the json response
     """
@@ -137,7 +137,7 @@ def http_post(path: Union[str, List[str]], body=None, data_type='default', use_b
 
     response = None
 
-    if data_type != 'file':
+    if data_type != "file":
         body_data = prepare_body(body, data_type)
         response = requests.post(full_url, headers=header, data=body_data, params=kwargs)
     else:
@@ -147,13 +147,13 @@ def http_post(path: Union[str, List[str]], body=None, data_type='default', use_b
     return decode_json_ordered(response.text)
 
 
-def http_put(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
+def http_put(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
     """
         Performs a PUT request
 
         :param path: complete URL if use_base si False or just the ending if use_base is True
         :param body: OPTIONAL Things to send, can be a dictionary or a buffer
-        :param data_type: OPTIONAL can be 'json' or 'text'or 'file' (default: 'default' = 'json')
+        :param data_type: OPTIONAL can be "json" or "text" or "file" (default: "default" = "json")
         :param use_base: OPTIONAL if True, the Nexus env provided by nexus.config.set_environment will
         be prepended to path. (default: False)
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
@@ -163,7 +163,7 @@ def http_put(path: Union[str, List[str]], body=None, data_type='default', use_ba
     full_url = _full_url(path, use_base)
     response = None
 
-    if data_type != 'file':
+    if data_type != "file":
         body_data = prepare_body(body, data_type)
         response = requests.put(full_url, headers=header, data=body_data, params=kwargs)
     else:
@@ -173,13 +173,13 @@ def http_put(path: Union[str, List[str]], body=None, data_type='default', use_ba
     return decode_json_ordered(response.text)
 
 
-def http_patch(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
+def http_patch(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
     """
         Performs a PATCH request
 
         :param path: complete URL if use_base si False or just the ending if use_base is True
         :param body: OPTIONAL Things to send, can be a dictionary
-        :param data_type: OPTIONAL can be 'json' or 'text' (default: 'default' = 'json')
+        :param data_type: OPTIONAL can be "json" or "text" (default: "default" = "json")
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :param use_base: OPTIONAL if True, the Nexus env provided by nexus.config.set_environment will
         be prepended to path. (default: False)
@@ -193,13 +193,13 @@ def http_patch(path: Union[str, List[str]], body=None, data_type='default', use_
     return decode_json_ordered(response.text)
 
 
-def http_delete(path: Union[str, List[str]], body=None, data_type='default', use_base=False, **kwargs):
+def http_delete(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
     """
         Performs a DELETE request
 
         :param path: complete URL if use_base si False or just the ending if use_base is True
         :param body: OPTIONAL Things to send, can be a dictionary
-        :param data_type: OPTIONAL can be 'json' or 'text' (default: 'default' = 'json')
+        :param data_type: OPTIONAL can be "json" or "text" (default: "default" = "json")
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :param use_base: OPTIONAL if True, the Nexus env provided by nexus.config.set_environment will
         be prepended to path. (default: False)
@@ -227,12 +227,12 @@ def is_response_valid(response):
 def _full_url(path: Union[str, List[str]], use_base: bool) -> str:
     # 'use_base' is temporary for compatibility with previous code sections.
     if use_base:
-        return storage.get('environment') + path
+        return storage.get("environment") + path
 
     if isinstance(path, str):
         return path
     elif isinstance(path, list):
-        base = storage.get('environment')
+        base = storage.get("environment")
         path.insert(0, base)
         return "/".join(path)
     else:
