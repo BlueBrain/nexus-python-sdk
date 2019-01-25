@@ -27,6 +27,8 @@ nexus.config.set_token(TOKEN)
 nexus.permissions.fetch()
 ````
 
+More examples in the folder [notebooks](./notebooks) and [tests](./tests).
+
 ### Installation
 
 ```bash
