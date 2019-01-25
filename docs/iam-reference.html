@@ -112,6 +112,30 @@ It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
 </dd></dl>
 
 <dl class="function">
+<dt id="nexussdk.realms.replace">
+<code class="descclassname">nexussdk.realms.</code><code class="descname">replace</code><span class="sig-paren">(</span><em>subpath: str</em>, <em>name: str</em>, <em>openid_config: str</em>, <em>rev: int</em>, <em>logo: str = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.realms.replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace a realm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subpath</strong> – Subpath of the realm.</li>
+<li><strong>name</strong> – Name of the realm.</li>
+<li><strong>openid_config</strong> – Updated URL of the OpenID configuration.</li>
+<li><strong>rev</strong> – Last revision of the realm.</li>
+<li><strong>logo</strong> – (optional) Updated URL of a logo.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the realm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="nexussdk.realms.deprecate">
 <code class="descclassname">nexussdk.realms.</code><code class="descname">deprecate</code><span class="sig-paren">(</span><em>subpath: str</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.realms.deprecate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecate a realm.</p>
@@ -467,6 +491,28 @@ It is part of the Identity &amp; Access Management API of Blue Brain Nexus v1.
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>endpoint</strong> – Endpoint for realms.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A Nexus results list with the Nexus payloads of the realms.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">nexussdk.realms.</code><code class="descname">replace_</code><span class="sig-paren">(</span><em>path: str</em>, <em>payload: Dict</em>, <em>rev: int</em><span class="sig-paren">)</span> &#x2192; Dict</dt>
+<dd><p>Replace a realm (full path version).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – Full path of the realm.</li>
+<li><strong>payload</strong> – Updated payload of the realm.</li>
+<li><strong>rev</strong> – Last revision of the realm.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Nexus metadata of the realm.</p>
+</td>
 </tr>
 </tbody>
 </table>

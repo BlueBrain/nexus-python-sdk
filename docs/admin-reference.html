@@ -75,16 +75,18 @@ A deprecated organization can not be modified/updated.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>org_label</strong> – The label of the organization to deprecate</li>
-<li><strong>rev</strong> – The previous revision number. To be provided to make sure the user is well aware of the details</li>
+<li><strong>rev</strong> – The previous revision number. To be provided to make sure the user is well aware of the details
+of the last revision of this organisation.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>of the last revision of this organisation.
-:return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization</p>
 </dd></dl>
 
 <dl class="function">
@@ -138,16 +140,18 @@ List all the organizations.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>org</strong> – Organization payload as a dictionary. This is most likely the returned value of <cite>organisation.get(…)</cite></li>
-<li><strong>rev</strong> – OPTIONAL The last revision number, to make sure the developer is aware of the latest status of</li>
+<li><strong>rev</strong> – OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
+this organization. If not provided, the <cite>_rev</cite> number from the <cite>org</cite> argument will be used.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>this organization. If not provided, the <cite>_rev</cite> number from the <cite>org</cite> argument will be used.
-:return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization</p>
 </dd></dl>
 
 </div>
@@ -162,20 +166,22 @@ List all the organizations.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>org_label</strong> – The label of the organization to create the project in</li>
 <li><strong>project_label</strong> – The label of the project to add</li>
 <li><strong>description</strong> – OPTIONAL a description for this project</li>
-<li><strong>api_mappings</strong> – OPTIONAL apiMappings</li>
+<li><strong>api_mappings</strong> – OPTIONAL apiMappings
+see <a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings">https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings</a></li>
+<li><strong>vocab</strong> – OPTIONAL vocab as a string</li>
+<li><strong>base</strong> – OPTIONAL base for the project</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>see <a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings">https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings</a>
-:param vocab: OPTIONAL vocab as a string
-:param base: OPTIONAL base for the project
-:return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
 </dd></dl>
 
 <dl class="function">
@@ -188,16 +194,18 @@ A deprecated project cannot be modified/updated.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>project</strong> – The project payload, most likely retrieved with fetch()</li>
-<li><strong>rev</strong> – OPTIONAL provide the last version of the project to make sure the user has full knowledge of</li>
+<li><strong>rev</strong> – OPTIONAL provide the last version of the project to make sure the user has full knowledge of
+the version being deprecated. If not provided, the revision number from the project payload will be used.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>the version being deprecated. If not provided, the revision number from the project payload will be used.
-:return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
 </dd></dl>
 
 <dl class="function">
@@ -210,17 +218,19 @@ A deprecated project cannot be modified/updated.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>org_label</strong> – The label of the organization the project to deprecate belongs to</li>
 <li><strong>project_label</strong> – The label of the project to deprecate</li>
-<li><strong>rev</strong> – The previous revision number. Provided to make sure the user is well aware of the details</li>
+<li><strong>rev</strong> – The previous revision number. Provided to make sure the user is well aware of the details
+of the last revision of this project.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>of the last revision of this project.
-:return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
 </dd></dl>
 
 <dl class="function">
@@ -255,20 +265,22 @@ organization. If not provided, all the projects from all organizations will be l
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>org_label</strong> – OPTIONAL get only the list of project for this given organization</li>
 <li><strong>pagination_from</strong> – OPTIONAL Index of the list to start from (default: 0)</li>
 <li><strong>pagination_size</strong> – OPTIONAL Size of the list (default: 20)</li>
-<li><strong>deprecated</strong> – OPTIONAL Lists only the deprecated if True,</li>
+<li><strong>deprecated</strong> – OPTIONAL Lists only the deprecated if True,
+lists only the non-deprecated if False,
+lists everything if not provided or None (default: None)</li>
+<li><strong>full_text_search_query</strong> – OPTIONAL List only the projects that match this query</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata and the list of projects</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>lists only the non-deprecated if False,
-lists everything if not provided or None (default: None)
-:param full_text_search_query: OPTIONAL List only the projects that match this query
-:return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata and the list of projects</p>
 </dd></dl>
 
 <dl class="function">
@@ -281,16 +293,18 @@ according to the update to perform, and finally, use this modified payload as th
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>project</strong> – Project payload as a dictionary. This is most likely the returned value of <cite>project.fetch(…)</cite></li>
-<li><strong>rev</strong> – OPTIONAL The last revision number, to make sure the developer is aware of the latest status of</li>
+<li><strong>rev</strong> – OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
+this project. If not provided, the <cite>_rev</cite> number from the <cite>project</cite> argument will be used.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>this project. If not provided, the <cite>_rev</cite> number from the <cite>project</cite> argument will be used.
-:return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
 </dd></dl>
 
 </div>
