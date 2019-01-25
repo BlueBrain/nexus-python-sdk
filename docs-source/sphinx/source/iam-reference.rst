@@ -22,7 +22,7 @@ Realms
 ^^^^^^
 
 .. automodule:: nexussdk.realms
-  :members: create, fetch, list, update, deprecate
+  :members: create, fetch, list, replace, deprecate
 
 .. _main-permissions:
 
@@ -64,7 +64,7 @@ Realms
 ^^^^^^
 
 .. automodule:: nexussdk.realms
-  :members: create_, fetch_, list_, update_, deprecate_
+  :members: create_, fetch_, list_, replace_, deprecate_
   :noindex:
 
 .. _lower-permissions:
