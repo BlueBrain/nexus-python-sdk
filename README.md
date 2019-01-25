@@ -1,7 +1,6 @@
 [Status](#status) |
 [Getting Started](#getting-started) |
 [Upgrade](#upgrade) |
-[Documentation](#documentation) |
 [Releases](#releases)
 
 # Nexus Python SDK
@@ -28,6 +27,8 @@ nexus.permissions.fetch()
 ````
 
 More examples in the folder [notebooks](./notebooks) and [tests](./tests).
+
+Documentation: https://bluebrain.github.io/nexus-python-sdk/.
 
 ### Installation
 
@@ -57,10 +58,6 @@ pip install --editable nexus-python-sdk
 ```bash
 pip install --upgrade nexus-sdk
 ```
-
-## Documentation
-
-- [API documentation](./docs-source/md/doc.md)
 
 ## Releases
 
