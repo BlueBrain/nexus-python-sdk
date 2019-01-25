@@ -4,7 +4,6 @@ strings, arrays, boolean and complex objects made of those primitive types. In a
 Resources belong to projects and their access rights are defined at the project level.
 """
 
-import os
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
 from nexussdk.utils.http import http_post
@@ -21,15 +20,15 @@ DEFAULT_CONTEXT = {
 }
 
 
-def fetch(org_label, project_label, schema_id, resource_id, rev=None, tag=None):
+def fetch(org_label, project_label, resource_id, schema_id="_", rev=None, tag=None):
     """
         Fetches a distant resource and returns the payload as a dictionary.
         In case of error, an exception is thrown.
 
         :param org_label: The label of the organization that the resource belongs to
         :param project_label: The label of the project that the resource belongs to
-        :param schema_id: id of the schema
         :param resource_id: id of the resource
+        :param schema_id: OPTIONAL id of the schema (default: "_" means whatever)
         :param rev: OPTIONAL fetches a specific revision of a resource (default: None, fetches the last)
         :param tag: OPTIONAL fetches the resource version that has a specific tag (default: None)
         :return: Payload of the whole resource as a dictionary

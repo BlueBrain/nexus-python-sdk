@@ -16,8 +16,6 @@ from nexussdk import realms
 
 # Views
 from nexussdk import views
-#from . import sparqlview
-
 
 from nexussdk.utils import tools
 
