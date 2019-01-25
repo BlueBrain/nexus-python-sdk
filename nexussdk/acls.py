@@ -1,3 +1,9 @@
+"""
+This module provides a Python interface for operations on Access Control Lists.
+It is part of the Identity & Access Management API of Blue Brain Nexus v1.
+https://bluebrain.github.io/nexus/docs/api/iam/iam-acls-api.html
+"""
+
 from typing import Dict, List
 
 from nexussdk.utils.http import http_delete, http_get, http_patch, http_put

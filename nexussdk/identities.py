@@ -1,3 +1,8 @@
+"""
+This module provides a Python interface for operations on Identities.
+It is part of the Identity & Access Management API of Blue Brain Nexus v1.
+"""
+
 from typing import Dict
 
 from nexussdk.utils.http import http_get
