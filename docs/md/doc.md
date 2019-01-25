@@ -77,7 +77,9 @@ Documentation of Nexus Python SDK
 
 
 # acls
-(no documentation provided)
+This module provides a Python interface for operations on Access Control Lists.
+It is part of the Identity & Access Management API of Blue Brain Nexus v1.
+https://bluebrain.github.io/nexus/docs/api/iam/iam-acls-api.html
 ## acls: append
 Append ACLs on a subpath. ``permissions`` and ``identities`` have the same order.
 
@@ -249,7 +251,8 @@ If not provided, the rev from the file argument will be used.
 
 
 # identities
-(no documentation provided)
+This module provides a Python interface for operations on Identities.
+It is part of the Identity & Access Management API of Blue Brain Nexus v1.
 ## identities: fetch
 Fetch the identities.
 
@@ -304,7 +307,9 @@ this organization. If not provided, the `_rev` number from the `org` argument wi
 
 
 # permissions
-(no documentation provided)
+This module provides a Python interface for operations on Permissions.
+It is part of the Identity & Access Management API of Blue Brain Nexus v1.
+https://bluebrain.github.io/nexus/docs/api/iam/iam-permissions-api.html
 ## permissions: append
 Append user-defined permissions.
 
@@ -405,7 +410,9 @@ this project. If not provided, the `_rev` number from the `project` argument wil
 
 
 # realms
-(no documentation provided)
+This module provides a Python interface for operations on Realms.
+It is part of the Identity & Access Management API of Blue Brain Nexus v1.
+https://bluebrain.github.io/nexus/docs/api/iam/iam-realms-api.html
 ## realms: create
 Create a realm.
 
@@ -459,12 +466,12 @@ an ID will be automatically generated for this new resource.
 
 - *argument* **org_label**: The label of the organization that the resource belongs to
 - *argument* **project_label**: The label of the project that the resource belongs to
-- *argument* **schema_id**: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: 'resource')
+- *argument* **schema_id**: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: "resource)
 - *argument* **data**: dictionary containing the data to store in this new resource
 - *argument* **resource_id**: OPTIONAL force the use of a specific id when creating the new resource
 - *returned*: A payload containing only the Nexus metadata for this updated resource.
 
-If the data does not have a '@context' value, a default one is automatically added.
+If the data does not have a "@context" value, a default one is automatically added.
 
 
 ## resources: deprecate
@@ -483,8 +490,8 @@ In case of error, an exception is thrown.
 
 - *argument* **org_label**: The label of the organization that the resource belongs to
 - *argument* **project_label**: The label of the project that the resource belongs to
-- *argument* **schema_id**: id of the schema
 - *argument* **resource_id**: id of the resource
+- *argument* **schema_id**: OPTIONAL id of the schema (default: "_" means whatever)
 - *argument* **rev**: OPTIONAL fetches a specific revision of a resource (default: None, fetches the last)
 - *argument* **tag**: OPTIONAL fetches the resource version that has a specific tag (default: None)
 - *returned*: Payload of the whole resource as a dictionary

@@ -114,7 +114,7 @@ def create(org_label, project_label, data, schema_id="_", resource_id=None):
 
 
 def list(org_label, project_label, pagination_from=0, pagination_size=20,
-         deprecated=None, type=None, rev=None, schema="_", created_by=None, updated_by=None, resource_id=None):
+         deprecated=None, type=None, rev=None, schema=None, created_by=None, updated_by=None, resource_id=None):
     """
         List the resources available for a given organization and project.
 
@@ -138,9 +138,9 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
 
     path = "/resources/" + org_label + "/" + project_label
 
-    if schema:
-        schema = url_encode(schema)
-        path = path + "/" + schema
+    # if schema:
+    #     schema = url_encode(schema)
+    #     path = path + "/" + schema
 
     params = {
         "from": pagination_from,
