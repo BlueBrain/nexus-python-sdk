@@ -1,0 +1,390 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Admin &#8212; Nexus Python SDK v0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Knowledge Graph" href="kg-reference.html" />
+    <link rel="prev" title="API Reference" href="api-reference.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="admin">
+<h1>Admin<a class="headerlink" href="#admin" title="Permalink to this headline">¶</a></h1>
+<p>Table of Contents:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#organizations"><span class="std std-ref">Organizations</span></a></li>
+<li><a class="reference internal" href="#projects"><span class="std std-ref">Projects</span></a></li>
+</ul>
+<div class="section" id="organizations">
+<span id="id1"></span><h2>Organizations<a class="headerlink" href="#organizations" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-nexussdk.organizations"></span><p>Organizations can represent a lab, a company or even a team of collaborators. They are used to store projects.</p>
+<dl class="function">
+<dt id="nexussdk.organizations.create">
+<code class="descclassname">nexussdk.organizations.</code><code class="descname">create</code><span class="sig-paren">(</span><em>org_label</em>, <em>description=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.organizations.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new organization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>org_label</strong> – The label of the organization. Does not allow spaces or special characters</li>
+<li><strong>description</strong> – OPTIONAL The description of the organization</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.organizations.deprecate">
+<code class="descclassname">nexussdk.organizations.</code><code class="descname">deprecate</code><span class="sig-paren">(</span><em>org_label</em>, <em>rev</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.organizations.deprecate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecate an organization. Nexus does not allow deleting organizations so deprecating is the way to flag them as
+not usable anymore.
+A deprecated organization can not be modified/updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>org_label</strong> – The label of the organization to deprecate</li>
+<li><strong>rev</strong> – The previous revision number. To be provided to make sure the user is well aware of the details
+of the last revision of this organisation.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.organizations.fetch">
+<code class="descclassname">nexussdk.organizations.</code><code class="descname">fetch</code><span class="sig-paren">(</span><em>org_label</em>, <em>rev=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.organizations.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch an organization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>org_label</strong> – The label of the organization</li>
+<li><strong>rev</strong> – OPTIONAL The specific revision of the wanted organization. If not provided, will get the last</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">All the details of this organization, as a dictionary</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.organizations.list">
+<code class="descclassname">nexussdk.organizations.</code><code class="descname">list</code><span class="sig-paren">(</span><em>pagination_from=0</em>, <em>pagination_size=20</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.organizations.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOT WORKING
+List all the organizations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pagination_from</strong> – OPTIONAL Index of the list to start from (default: 0)</li>
+<li><strong>pagination_size</strong> – OPTIONAL Size of the list (default: 20)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.organizations.update">
+<code class="descclassname">nexussdk.organizations.</code><code class="descname">update</code><span class="sig-paren">(</span><em>org</em>, <em>rev=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.organizations.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update an organization. Only the field “name” can be updated (and “description” in the future).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>org</strong> – Organization payload as a dictionary. This is most likely the returned value of <cite>organisation.get(…)</cite></li>
+<li><strong>rev</strong> – OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
+this organization. If not provided, the <cite>_rev</cite> number from the <cite>org</cite> argument will be used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="projects">
+<span id="id2"></span><h2>Projects<a class="headerlink" href="#projects" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-nexussdk.projects"></span><p>A project is a place to store data (files, resources, schemas, etc.). It belongs to an organization.</p>
+<dl class="function">
+<dt id="nexussdk.projects.create">
+<code class="descclassname">nexussdk.projects.</code><code class="descname">create</code><span class="sig-paren">(</span><em>org_label</em>, <em>project_label</em>, <em>description=None</em>, <em>api_mappings=None</em>, <em>vocab=None</em>, <em>base=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.projects.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new project under an organization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>org_label</strong> – The label of the organization to create the project in</li>
+<li><strong>project_label</strong> – The label of the project to add</li>
+<li><strong>description</strong> – OPTIONAL a description for this project</li>
+<li><strong>api_mappings</strong> – OPTIONAL apiMappings
+see <a class="reference external" href="https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings">https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings</a></li>
+<li><strong>vocab</strong> – OPTIONAL vocab as a string</li>
+<li><strong>base</strong> – OPTIONAL base for the project</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.projects.deprecate">
+<code class="descclassname">nexussdk.projects.</code><code class="descname">deprecate</code><span class="sig-paren">(</span><em>project</em>, <em>rev=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.projects.deprecate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecate a project. Nexus does not allow deleting projects so deprecating is the way to flag them as
+not usable anymore.
+A deprecated project cannot be modified/updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>project</strong> – The project payload, most likely retrieved with fetch()</li>
+<li><strong>rev</strong> – OPTIONAL provide the last version of the project to make sure the user has full knowledge of
+the version being deprecated. If not provided, the revision number from the project payload will be used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.projects.deprecate_2">
+<code class="descclassname">nexussdk.projects.</code><code class="descname">deprecate_2</code><span class="sig-paren">(</span><em>org_label</em>, <em>project_label</em>, <em>rev</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.projects.deprecate_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecate a project. Nexus does not allow deleting projects so deprecating is the way to flag them as
+not usable anymore.
+A deprecated project cannot be modified/updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>org_label</strong> – The label of the organization the project to deprecate belongs to</li>
+<li><strong>project_label</strong> – The label of the project to deprecate</li>
+<li><strong>rev</strong> – The previous revision number. Provided to make sure the user is well aware of the details
+of the last revision of this project.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.projects.fetch">
+<code class="descclassname">nexussdk.projects.</code><code class="descname">fetch</code><span class="sig-paren">(</span><em>org_label</em>, <em>project_label</em>, <em>rev=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.projects.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch a project and all its details.
+Note: This does not give the list of resources. To get that, use the <cite>resource</cite> package.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>org_label</strong> – The label of the organization that contains the project to be fetched</li>
+<li><strong>project_label</strong> – label of a the project to fetch</li>
+<li><strong>rev</strong> – OPTIONAL The specific revision of the wanted project. If not provided, will get the last.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">All the details of this project, as a dictionary</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.projects.list">
+<code class="descclassname">nexussdk.projects.</code><code class="descname">list</code><span class="sig-paren">(</span><em>org_label=None</em>, <em>pagination_from=0</em>, <em>pagination_size=20</em>, <em>deprecated=None</em>, <em>full_text_search_query=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.projects.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all the projects. If the arguments org_label is provided, this will list only the projects of this given
+organization. If not provided, all the projects from all organizations will be listed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>org_label</strong> – OPTIONAL get only the list of project for this given organization</li>
+<li><strong>pagination_from</strong> – OPTIONAL Index of the list to start from (default: 0)</li>
+<li><strong>pagination_size</strong> – OPTIONAL Size of the list (default: 20)</li>
+<li><strong>deprecated</strong> – OPTIONAL Lists only the deprecated if True,
+lists only the non-deprecated if False,
+lists everything if not provided or None (default: None)</li>
+<li><strong>full_text_search_query</strong> – OPTIONAL List only the projects that match this query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata and the list of projects</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="nexussdk.projects.update">
+<code class="descclassname">nexussdk.projects.</code><code class="descname">update</code><span class="sig-paren">(</span><em>project</em>, <em>rev=None</em><span class="sig-paren">)</span><a class="headerlink" href="#nexussdk.projects.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a project. The data to update on a project are mostly related to the api mapping. To do so, you must
+get the project information as a payload, most likely using <cite>project.fetch(…)</cite>, then, modify this payload
+according to the update to perform, and finally, use this modified payload as the <cite>project</cite> argument of this method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>project</strong> – Project payload as a dictionary. This is most likely the returned value of <cite>project.fetch(…)</cite></li>
+<li><strong>rev</strong> – OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
+this project. If not provided, the <cite>_rev</cite> number from the <cite>project</cite> argument will be used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Nexus Python SDK</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="api-reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kg-reference.html">Knowledge Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="iam-reference.html">Identity &amp; Access Management</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="api-reference.html">API Reference</a><ul>
+      <li>Previous: <a href="api-reference.html" title="previous chapter">API Reference</a></li>
+      <li>Next: <a href="kg-reference.html" title="next chapter">Knowledge Graph</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Blue Brain Project.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/admin-reference.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

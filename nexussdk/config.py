@@ -26,6 +26,7 @@ def set_environment(env):
     """
     Define the base URL of the Nexus environment. This URL should be of the form `https://my-nexus-env.com/v1`
     Note that it should not finish with a slash.
+
     :param env: The base URL for the environment
     """
     storage.set("environment", env)

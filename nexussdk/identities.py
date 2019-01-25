@@ -1,6 +1,7 @@
 """
 This module provides a Python interface for operations on Identities.
 It is part of the Identity & Access Management API of Blue Brain Nexus v1.
+https://bluebrain.github.io/nexus/docs/api/iam/iam-identities.html
 """
 
 from typing import Dict
