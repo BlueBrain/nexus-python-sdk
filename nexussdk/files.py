@@ -112,7 +112,7 @@ def create(org_label, project_label, filepath, file_id=None):
 
 
 def list(org_label, project_label, pagination_from=0, pagination_size=20,
-         deprecated=None, full_text_search_query=None):
+         deprecated=None, type=None, rev=None, schema=None, created_by=None, updated_by=None, file_id=None):
     """
         List the files available for a given organization and project.
 
@@ -122,24 +122,33 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
         :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
         :param deprecated: OPTIONAL Get only deprecated file if True and get only non-deprecated results if False.
         If not specified (default), return both deprecated and not deprecated file.
-        :param full_text_search_query: A string to look for as a full text query
-        :return: The raw payload as a dictionary
+        :param type: OPTIONAL Lists only the file for a given type (default: None)
+        :param rev: OPTIONAL List only the resource with this particular revision
+        :param schema: OPTIONAL list only the views with a certain schema
+        :param created_by: OPTIONAL List only the file created by a certain user
+        :param updated_by: OPTIONAL List only the file that were updated by a certain user
+        :param file_id: OPTIONAL List only the file with this id. Relevant only when combined with other args
+        :return: The raw list payload as a dictionary
     """
 
     org_label = url_encode(org_label)
     project_label = url_encode(project_label)
 
-    path = "/files/" + org_label + "/" + project_label + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
+    path = "/files/" + org_label + "/" + project_label
 
-    if deprecated is not None:
-        deprecated = "true" if deprecated else "false"
-        path = path + "&deprecated=" + deprecated
+    params = {
+        "from": pagination_from,
+        "size": pagination_size,
+        "type": type,
+        "deprecated": deprecated,
+        "rev": rev,
+        "schema": schema,
+        "created_by": created_by,
+        "updated_by": updated_by,
+        "id": file_id
+    }
 
-    if full_text_search_query:
-        full_text_search_query = url_encode(full_text_search_query)
-        path = path + "&q=" + full_text_search_query
-
-    return http_get(path, use_base=True)
+    return http_get(path, use_base=True, params=params)
 
 
 def deprecate(file, rev=None):

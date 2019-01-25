@@ -44,14 +44,11 @@ Documentation of Nexus Python SDK
 	- [realms: deprecate](#realms-deprecate)
 	- [realms: fetch](#realms-fetch)
 	- [realms: list](#realms-list)
-	- [realms: update](#realms-update)
+	- [realms: replace](#realms-replace)
 - [resources](#resources)
-	- [resources: add_attachement](#resources-add_attachement)
 	- [resources: create](#resources-create)
-	- [resources: delete_attachment](#resources-delete_attachment)
 	- [resources: deprecate](#resources-deprecate)
 	- [resources: fetch](#resources-fetch)
-	- [resources: fetch_attachment](#resources-fetch_attachment)
 	- [resources: list](#resources-list)
 	- [resources: tag](#resources-tag)
 	- [resources: tags](#resources-tags)
@@ -82,11 +79,11 @@ Documentation of Nexus Python SDK
 # acls
 (no documentation provided)
 ## acls: append
-Append ACLs on a subpath.
+Append ACLs on a subpath. ``permissions`` and ``identities`` have the same order.
 
 - *argument* **subpath**: Subpath on which appending ACLs.
-- *argument* **permissions**: List of permissions.
-- *argument* **identity**: Payload of the identity for which to append the permissions.
+- *argument* **permissions**: List of list of permissions.
+- *argument* **identities**: List of identities for which to append the permissions.
 - *argument* **rev**: Last revision of the ACLs.
 - *returned*: The Nexus metadata of the ACLs.
 
@@ -105,8 +102,8 @@ Fetch the ACLs on a subpath.
 - *argument* **subpath**: Subpath on which fetching the ACLs.
 - *argument* **rev**: (optional) Revision number of the ACLs.
 - *argument* **self**: (optional) If 'True', only the ACLs containing the identities
-found in the authentication token are returned. If 'False', all the ACLs
-on the current subpath are returned.
+found in the authentication token are returned. If 'False', all the
+ACLs on the current subpath are returned.
 - *returned*: A Nexus results list with the Nexus payloads of the ACLs.
 
 
@@ -115,30 +112,30 @@ List ACLs on a subpath.
 
 - *argument* **subpath**: Subpath on which listing the ACLs.
 - *argument* **ancestors**: (optional) If 'True', the ACLs on the parent path of the
-subpath are returned. If 'False', only the ACLs on the current subpath are
-returned.
+subpath are returned. If 'False', only the ACLs on the current subpath
+are returned.
 - *argument* **self**: (optional) If 'True', only the ACLs containing the identities
-found in the authentication token are returned. If 'False', all the ACLs
-on the current subpath are returned.
+found in the authentication token are returned. If 'False', all the
+ACLs on the current subpath are returned.
 - *returned*: A Nexus results list with the Nexus payloads of the ACLs.
 
 
 ## acls: replace
-Replace ACLs on a subpath.
+Replace ACLs on a subpath. ``permissions`` and ``identities`` have the same order.
 
 - *argument* **subpath**: Subpath on which replacing the ACLs.
-- *argument* **permissions**: List of permissions.
-- *argument* **identity**: Payload of the identity for which to replace permissions.
+- *argument* **permissions**: List of list of permissions.
+- *argument* **identities**: List of identities for which to replace permissions.
 - *argument* **rev**: Last revision of the ACLs.
 - *returned*: The Nexus metadata of the ACLs.
 
 
 ## acls: subtract
-Subtract ACLs on a subpath.
+Subtract ACLs on a subpath. ``permissions`` and ``identities`` have the same order.
 
 - *argument* **subpath**: Subpath on which subtracting ACLs.
-- *argument* **permissions**: List of permissions.
-- *argument* **identity**: Payload of the identity for which to remove the permissions.
+- *argument* **permissions**: List of list of permissions.
+- *argument* **identities**: List of identities for which to remove the permissions.
 - *argument* **rev**: Last revision of the ACLs.
 - *returned*: The Nexus metadata of the ACLs.
 
@@ -211,8 +208,13 @@ List the files available for a given organization and project.
 - *argument* **pagination_size**: OPTIONAL The maximum number of elements to returns at once (default: 20)
 - *argument* **deprecated**: OPTIONAL Get only deprecated file if True and get only non-deprecated results if False.
 If not specified (default), return both deprecated and not deprecated file.
-- *argument* **full_text_search_query**: A string to look for as a full text query
-- *returned*: The raw payload as a dictionary
+- *argument* **type**: OPTIONAL Lists only the file for a given type (default: None)
+- *argument* **rev**: OPTIONAL List only the resource with this particular revision
+- *argument* **schema**: OPTIONAL list only the views with a certain schema
+- *argument* **created_by**: OPTIONAL List only the file created by a certain user
+- *argument* **updated_by**: OPTIONAL List only the file that were updated by a certain user
+- *argument* **file_id**: OPTIONAL List only the file with this id. Relevant only when combined with other args
+- *returned*: The raw list payload as a dictionary
 
 
 ## files: tag
@@ -407,16 +409,17 @@ this project. If not provided, the `_rev` number from the `project` argument wil
 ## realms: create
 Create a realm.
 
+- *argument* **subpath**: Subpath of the realm.
 - *argument* **name**: Name of the realm.
-- *argument* **description**: Description of the realm.
 - *argument* **openid_config**: URL of the OpenID configuration.
+- *argument* **logo**: (optional) URL of a logo.
 - *returned*: The Nexus metadata of the created realm.
 
 
 ## realms: deprecate
 Deprecate a realm.
 
-- *argument* **name**: Name of the realm.
+- *argument* **subpath**: Subpath of the realm.
 - *argument* **rev**: Last revision of the realm.
 - *returned*: The Nexus metadata of the deprecated realm.
 
@@ -424,7 +427,7 @@ Deprecate a realm.
 ## realms: fetch
 Fetch a realm.
 
-- *argument* **name**: Name of the realm.
+- *argument* **subpath**: Subpath of the realm.
 - *argument* **rev**: (optional) Revision number of the realm.
 - *returned*: The Nexus payload of the fetched realm.
 
@@ -435,32 +438,21 @@ List realms.
 - *returned*: A Nexus results list with the Nexus payloads of the realms.
 
 
-## realms: update
-Update a realm.
+## realms: replace
+Replace a realm.
 
+- *argument* **subpath**: Subpath of the realm.
 - *argument* **name**: Name of the realm.
-- *argument* **description**: Updated description of the realm.
 - *argument* **openid_config**: Updated URL of the OpenID configuration.
 - *argument* **rev**: Last revision of the realm.
-- *returned*: The Nexus metadata of the updated realm.
+- *argument* **logo**: (optional) Updated URL of a logo.
+- *returned*: The Nexus metadata of the realm.
 
 
 # resources
 A resource represents a set of organized data represented with JSON. Hence, a resource can handle data such as numbers,
 strings, arrays, boolean and complex objects made of those primitive types. In addition, Nexus adds some metadata.
 Resources belong to projects and their access rights are defined at the project level.
-## resources: add_attachement
-DEPRECATED
-
-Attach a file to an existing resource. A new revision is created.
-
-- *argument* **resource**: payload of a previously fetched resource
-- *argument* **filepath**: Path of the file to upload
-- *argument* **rev**: OPTIONAL The previous revision you want to update from.
-If not provided, the rev from the resource argument will be used.
-- *returned*: A payload containing only the Nexus metadata for this resource.
-
-
 ## resources: create
 Create a resource. If resource_id is provided, this given ID will be used. If resource_id not provided,
 an ID will be automatically generated for this new resource.
@@ -473,18 +465,6 @@ an ID will be automatically generated for this new resource.
 - *returned*: A payload containing only the Nexus metadata for this updated resource.
 
 If the data does not have a '@context' value, a default one is automatically added.
-
-
-## resources: delete_attachment
-DEPRECATED
-
-Delete the attachment of a resource. This creates a new revision.
-
-- *argument* **resource**: payload of a previously fetched resource
-- *argument* **basename**: The attachment basename (filename with extension but without full path)
-- *argument* **rev**: OPTIONAL The previous revision you want to update from.
-If not provided, the rev from the resource argument will be used.
-- *returned*: A payload containing only the Nexus metadata for this resource.
 
 
 ## resources: deprecate
@@ -510,27 +490,6 @@ In case of error, an exception is thrown.
 - *returned*: Payload of the whole resource as a dictionary
 
 
-## resources: fetch_attachment
-DEPRECATED
-
-Fetch the attachment of a a resource. Two ways are possible: by specifying an output filepath (out_filename),
-then the distant file will be downloaded under this name. Or, if out_filename is not specified,
-the binary buffer of the distant file is returned by this function.
-
-If the distant file is large, it is advised to write it directly as a file because streaming is handled. Keeping
-a large file into memory may not be a good idea.
-
-- *argument* **resource**: payload of a previously fetched resource
-- *argument* **name**: ID of the resource's attachment
-- *argument* **rev**: OPTIONAL The previous revision you want to update from.
-If not provided, the rev from the resource argument will be used.
-Note that this cannot be given along tag
-- *argument* **tag**: OPTIONAL tag of a resource. Note that this cannot be given along rev
-- *argument* **out_filename**: OPTIONAL file path to which write the fetched file.
-- *returned*: If out_filename is provided None is returned.
-If out_filename is not provided, the binary buffer is returned as a byte_arr
-
-
 ## resources: list
 List the resources available for a given organization and project.
 
@@ -541,8 +500,11 @@ List the resources available for a given organization and project.
 - *argument* **pagination_size**: OPTIONAL The maximum number of elements to returns at once (default: 20)
 - *argument* **deprecated**: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False.
 If not specified (default), return both deprecated and not deprecated resource.
-- *argument* **resource_type**: OPTIONAL Lists only the resource for a given type (default: None)
-- *argument* **full_text_search_query**: A string to look for as a full text query
+- *argument* **type**: OPTIONAL Lists only the resource for a given type (default: None)
+- *argument* **rev**: OPTIONAL List only the resource with this particular revision
+- *argument* **created_by**: OPTIONAL List only the resources created by a certain user
+- *argument* **updated_by**: OPTIONAL List only the resources that were updated by a certain user
+- *argument* **resource_id**: OPTIONAL List only the resources with this id. Relevant only when combined with other args
 - *returned*: The raw payload as a dictionary
 
 
@@ -716,8 +678,12 @@ List the views available for a given organization and project. All views, of all
 - *argument* **pagination_size**: OPTIONAL The maximum number of elements to returns at once (default: 20)
 - *argument* **deprecated**: OPTIONAL Get only deprecated view if True and get only non-deprecated results if False.
 If not specified (default), return both deprecated and not deprecated view.
-- *argument* **view_type**: OPTIONAL The view type
-- *argument* **full_text_search_query**: A string to look for as a full text query
+- *argument* **type**: OPTIONAL The view type
+- *argument* **rev**: OPTIONAL Revision to list
+- *argument* **schema**: OPTIONAL list only the views with a certain schema
+- *argument* **created_by**: OPTIONAL List only the views created by a certain user
+- *argument* **updated_by**: OPTIONAL List only the views that were updated by a certain user
+- *argument* **view_id**: OPTIONAL List only the view with this id. Relevant only when combined with other args
 - *returned*: The raw payload as a dictionary
 
 

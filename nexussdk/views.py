@@ -122,7 +122,7 @@ def fetch(org_label, project_label, view_id, rev=None, tag=None):
 
 
 def list(org_label, project_label, pagination_from=0, pagination_size=20,
-         deprecated=None, view_type = None, full_text_search_query=None):
+         deprecated=None, type=None, rev=None, schema=None, created_by=None, updated_by=None, view_id=None):
     """
         List the views available for a given organization and project. All views, of all kinds.
 
@@ -132,30 +132,32 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
         :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
         :param deprecated: OPTIONAL Get only deprecated view if True and get only non-deprecated results if False.
         If not specified (default), return both deprecated and not deprecated view.
-        :param view_type: OPTIONAL The view type
-        :param full_text_search_query: A string to look for as a full text query
+        :param type: OPTIONAL The view type
+        :param rev: OPTIONAL Revision to list
+        :param schema: OPTIONAL list only the views with a certain schema
+        :param created_by: OPTIONAL List only the views created by a certain user
+        :param updated_by: OPTIONAL List only the views that were updated by a certain user
+        :param view_id: OPTIONAL List only the view with this id. Relevant only when combined with other args
         :return: The raw payload as a dictionary
     """
-
     org_label = url_encode(org_label)
     project_label = url_encode(project_label)
 
-    path = "/views/" + org_label + "/" + project_label + "?from=" \
-           + str(pagination_from) + "&size=" + str(pagination_size)
+    path = "/views/" + org_label + "/" + project_label
 
-    if deprecated is not None:
-        deprecated = "true" if deprecated else "false"
-        path = path + "&deprecated=" + deprecated
+    params = {
+        "from": pagination_from,
+        "size": pagination_size,
+        "type": type,
+        "deprecated": deprecated,
+        "rev": rev,
+        "schema": schema,
+        "created_by": created_by,
+        "updated_by": updated_by,
+        "id": view_id
+    }
 
-    if view_type is not None:
-        view_type = url_encode(view_type)
-        path = path + "&type=" + view_type
-
-    if full_text_search_query:
-        full_text_search_query = url_encode(full_text_search_query)
-        path = path + "&q=" + full_text_search_query
-
-    return http_get(path, use_base=True)
+    return http_get(path, use_base=True, params=params)
 
 
 def tag_es(esview, tag_value, rev_to_tag=None, rev=None):

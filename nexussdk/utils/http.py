@@ -33,6 +33,8 @@ def prepare_header(type='default', accept='json'):
         and few other things.
 
         :param type: string. Must be one of the keys in the above declared dict header_parts
+        :param accept: OPTIONAL if "json", the aswer will be JSON, if "all" it will be something else if the
+        requesct can send something else (ie. binary)
     """
 
     # if posting a file, the request module deals with the content-type
@@ -84,7 +86,8 @@ def print_request_response(r):
     print('history: ', r.history)
 
 
-def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, use_base=False, data_type='default', accept='json', **kwargs):
+def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, use_base=False,
+             data_type='default', accept='json', **kwargs):
     """
         Wrapper to perform a GET request.
 
@@ -101,7 +104,13 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
     """
     header = prepare_header(data_type, accept)
     full_url = _full_url(path, use_base)
-    response = requests.get(full_url, headers=header, stream=stream, params=kwargs)
+
+    params = kwargs.pop("params", None)
+    if params:
+        response = requests.get(full_url, headers=header, stream=stream, params=params, **kwargs)
+    else:
+        response = requests.get(full_url, headers=header, stream=stream, params=kwargs)
+
     response.raise_for_status()
 
     if get_raw_response:
@@ -215,7 +224,6 @@ def is_response_valid(response):
 
 
 # Internal helpers
-
 def _full_url(path: Union[str, List[str]], use_base: bool) -> str:
     # 'use_base' is temporary for compatibility with previous code sections.
     if use_base:

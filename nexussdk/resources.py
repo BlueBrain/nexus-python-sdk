@@ -114,8 +114,8 @@ def create(org_label, project_label, data, schema_id='_', resource_id=None):
         return http_put(path, data, use_base=True)
 
 
-def list(org_label, project_label, schema=None, pagination_from=0, pagination_size=20,
-         deprecated=None, resource_type = None, full_text_search_query=None):
+def list(org_label, project_label, pagination_from=0, pagination_size=20,
+         deprecated=None, type=None, rev=None, schema="_", created_by=None, updated_by=None, resource_id=None):
     """
         List the resources available for a given organization and project.
 
@@ -126,8 +126,11 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
         :param deprecated: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False.
         If not specified (default), return both deprecated and not deprecated resource.
-        :param resource_type: OPTIONAL Lists only the resource for a given type (default: None)
-        :param full_text_search_query: A string to look for as a full text query
+        :param type: OPTIONAL Lists only the resource for a given type (default: None)
+        :param rev: OPTIONAL List only the resource with this particular revision
+        :param created_by: OPTIONAL List only the resources created by a certain user
+        :param updated_by: OPTIONAL List only the resources that were updated by a certain user
+        :param resource_id: OPTIONAL List only the resources with this id. Relevant only when combined with other args
         :return: The raw payload as a dictionary
     """
 
@@ -140,21 +143,19 @@ def list(org_label, project_label, schema=None, pagination_from=0, pagination_si
         schema = url_encode(schema)
         path = path + "/" + schema
 
-    path = path + "?from=" + str(pagination_from) + "&size=" + str(pagination_size)
+    params = {
+        "from": pagination_from,
+        "size": pagination_size,
+        "type": type,
+        "deprecated": deprecated,
+        "rev": rev,
+        "schema": schema,
+        "created_by": created_by,
+        "updated_by": updated_by,
+        "id": resource_id
+    }
 
-    if deprecated is not None:
-        deprecated = "true" if deprecated else "false"
-        path = path + "&deprecated=" + deprecated
-
-    if resource_type is not None:
-        resource_type = url_encode(resource_type)
-        path = path + "&type=" + resource_type
-
-    if full_text_search_query:
-        full_text_search_query = url_encode(full_text_search_query)
-        path = path + "&q=" + full_text_search_query
-
-    return http_get(path, use_base=True)
+    return http_get(path, use_base=True, params=params)
 
 
 def deprecate(resource, rev=None):
@@ -215,97 +216,3 @@ def tags(resource):
 
     path = resource["_self"] + "/tags"
     return http_get(path, use_base=False)
-
-
-def add_attachement(resource, filepath, rev=None):
-    """
-        DEPRECATED
-
-        Attach a file to an existing resource. A new revision is created.
-
-        :param resource: payload of a previously fetched resource
-        :param filepath: Path of the file to upload
-        :param rev: OPTIONAL The previous revision you want to update from.
-        If not provided, the rev from the resource argument will be used.
-        :return: A payload containing only the Nexus metadata for this resource.
-    """
-
-    if rev is None:
-        rev = resource["_rev"]
-
-    file_basename = url_encode(os.path.basename(filepath))
-    path = resource["_self"] + "/attachments/" + file_basename + "?rev=" + str(rev)
-    file_obj = {'file': open(filepath, "rb")}
-    return http_put(path, use_base=False, body=file_obj, data_type='file')
-
-
-def delete_attachment(resource, basename, rev=None):
-    """
-        DEPRECATED
-
-        Delete the attachment of a resource. This creates a new revision.
-
-        :param resource: payload of a previously fetched resource
-        :param basename: The attachment basename (filename with extension but without full path)
-        :param rev: OPTIONAL The previous revision you want to update from.
-        If not provided, the rev from the resource argument will be used.
-        :return: A payload containing only the Nexus metadata for this resource.
-    """
-
-    if rev is None:
-        rev = resource["_rev"]
-
-    path = resource["_self"] + "/attachments/" + basename + "?rev=" + str(rev)
-    return http_delete(path, use_base=False)
-
-
-def fetch_attachment(resource, name, rev=None, tag=None, out_filename=None):
-    """
-        DEPRECATED
-
-        Fetch the attachment of a a resource. Two ways are possible: by specifying an output filepath (out_filename),
-        then the distant file will be downloaded under this name. Or, if out_filename is not specified,
-        the binary buffer of the distant file is returned by this function.
-
-        If the distant file is large, it is advised to write it directly as a file because streaming is handled. Keeping
-        a large file into memory may not be a good idea.
-
-    :param resource: payload of a previously fetched resource
-    :param name: ID of the resource's attachment
-    :param rev: OPTIONAL The previous revision you want to update from.
-        If not provided, the rev from the resource argument will be used.
-        Note that this cannot be given along tag
-    :param tag: OPTIONAL tag of a resource. Note that this cannot be given along rev
-    :param out_filename: OPTIONAL file path to which write the fetched file.
-    :return: If out_filename is provided None is returned.
-        If out_filename is not provided, the binary buffer is returned as a byte_arr
-    """
-
-    if (rev is not None) and (tag is not None):
-        raise Exception("The arguments rev and tag are mutually exclusive and should not be used together.")
-
-    path = resource["_self"] + "/attachments/" + name
-
-    if rev is not None:
-        path = path + "?rev=" + str(rev)
-
-    if tag is not None:
-        path = path + "?tag=" + str(tag)
-
-    response = http_get(path, use_base=False, get_raw_response=True, stream=True)
-
-    if out_filename is not None:
-        # we write the result of the request into a file
-        with open(out_filename, 'wb') as f:
-            for chunk in response.iter_content():
-                f.write(chunk)
-        return None
-
-    else:
-        # we concat all the chunks to make a larger bytearray containing the response
-        byte_arr = bytearray(0)
-
-        for chunk in response.iter_content():
-            byte_arr = byte_arr + chunk
-
-        return byte_arr
