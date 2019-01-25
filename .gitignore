@@ -119,3 +119,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Configuration files for the notebooks
+notebooks/DEPLOYMENT
+notebooks/OPENID_CONFIG
+notebooks/TOKEN
