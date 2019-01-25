@@ -60,7 +60,7 @@ pip install --upgrade nexus-sdk
 
 ## Documentation
 
-- [API documentation](./docs/md/doc.md)
+- [API documentation](./docs-source/md/doc.md)
 
 ## Releases
 
