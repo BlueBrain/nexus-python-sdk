@@ -55,15 +55,15 @@ def fetch(org_label, project_label, resource_id, schema_id="_", rev=None, tag=No
 
 def update(resource, rev=None):
     """
-        Update a resource. The resource object is most likely the returned value of a
-        nexus.resource.fetch(), where some fields where modified, added or removed.
-        Note that the returned payload only contains the Nexus metadata and not the
-        complete resource.
+    Update a resource. The resource object is most likely the returned value of a
+    nexus.resource.fetch(), where some fields where modified, added or removed.
+    Note that the returned payload only contains the Nexus metadata and not the
+    complete resource.
 
-        :param resource: payload of a previously fetched resource, with the modification to be updated
-        :param rev: OPTIONAL The previous revision you want to update from.
+    :param resource: payload of a previously fetched resource, with the modification to be updated
+    :param rev: OPTIONAL The previous revision you want to update from.
         If not provided, the rev from the resource argument will be used.
-        :return: A payload containing only the Nexus metadata for this updated resource.
+    :return: A payload containing only the Nexus metadata for this updated resource.
     """
 
     if rev is None:
@@ -116,21 +116,21 @@ def create(org_label, project_label, data, schema_id="_", resource_id=None):
 def list(org_label, project_label, pagination_from=0, pagination_size=20,
          deprecated=None, type=None, rev=None, schema=None, created_by=None, updated_by=None, resource_id=None):
     """
-        List the resources available for a given organization and project.
+    List the resources available for a given organization and project.
 
-        :param org_label: The label of the organization that the resource belongs to
-        :param project_label: The label of the project that the resource belongs to
-        :param schema: OPTIONAL Lists only the resource for a given schema (default: None)
-        :param pagination_from: OPTIONAL The pagination index to start from (default: 0)
-        :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
-        :param deprecated: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False.
+    :param org_label: The label of the organization that the resource belongs to
+    :param project_label: The label of the project that the resource belongs to
+    :param schema: OPTIONAL Lists only the resource for a given schema (default: None)
+    :param pagination_from: OPTIONAL The pagination index to start from (default: 0)
+    :param pagination_size: OPTIONAL The maximum number of elements to returns at once (default: 20)
+    :param deprecated: OPTIONAL Get only deprecated resource if True and get only non-deprecated results if False.
         If not specified (default), return both deprecated and not deprecated resource.
-        :param type: OPTIONAL Lists only the resource for a given type (default: None)
-        :param rev: OPTIONAL List only the resource with this particular revision
-        :param created_by: OPTIONAL List only the resources created by a certain user
-        :param updated_by: OPTIONAL List only the resources that were updated by a certain user
-        :param resource_id: OPTIONAL List only the resources with this id. Relevant only when combined with other args
-        :return: The raw payload as a dictionary
+    :param type: OPTIONAL Lists only the resource for a given type (default: None)
+    :param rev: OPTIONAL List only the resource with this particular revision
+    :param created_by: OPTIONAL List only the resources created by a certain user
+    :param updated_by: OPTIONAL List only the resources that were updated by a certain user
+    :param resource_id: OPTIONAL List only the resources with this id. Relevant only when combined with other args
+    :return: The raw payload as a dictionary
     """
 
     org_label = url_encode(org_label)
@@ -159,13 +159,13 @@ def list(org_label, project_label, pagination_from=0, pagination_size=20,
 
 def deprecate(resource, rev=None):
     """
-       Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
-       possible to update it.
+    Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
+    possible to update it.
 
-       :param resource: payload of a previously fetched resource
-       :param rev: OPTIONAL The previous revision you want to update from.
-       If not provided, the rev from the resource argument will be used.
-       :return: A payload containing only the Nexus metadata for this deprecated resource.
+    :param resource: payload of a previously fetched resource
+    :param rev: OPTIONAL The previous revision you want to update from.
+        If not provided, the rev from the resource argument will be used.
+    :return: A payload containing only the Nexus metadata for this deprecated resource.
     """
 
     if rev is None:
@@ -178,15 +178,15 @@ def deprecate(resource, rev=None):
 
 def tag(resource, tag_value, rev_to_tag=None, rev=None):
     """
-        Add a tag to a a specific revision of the resource. Note that a new revision (untagged) will be created
+    Add a tag to a a specific revision of the resource. Note that a new revision (untagged) will be created
 
-        :param resource: payload of a previously fetched resource
-        :param tag_value: The value (or name) of a tag
-        :param rev_to_tag: OPTIONAL Number of the revision to tag. If not provided, this will take the revision number
+    :param resource: payload of a previously fetched resource
+    :param tag_value: The value (or name) of a tag
+    :param rev_to_tag: OPTIONAL Number of the revision to tag. If not provided, this will take the revision number
         from the provided resource payload.
-        :param rev: OPTIONAL The previous revision you want to update from.
-       If not provided, the rev from the resource argument will be used.
-        :return: A payload containing only the Nexus metadata for this resource.
+    :param rev: OPTIONAL The previous revision you want to update from.
+        If not provided, the rev from the resource argument will be used.
+    :return: A payload containing only the Nexus metadata for this resource.
     """
 
     if rev is None:
@@ -207,10 +207,10 @@ def tag(resource, tag_value, rev_to_tag=None, rev=None):
 
 def tags(resource):
     """
-        List all the tags added to this resource, along with their version numbers
+    List all the tags added to this resource, along with their version numbers
 
-        :param resource: payload of a previously fetched resource
-        :return: payload containing the list of tags and versions
+    :param resource: payload of a previously fetched resource
+    :return: payload containing the list of tags and versions
     """
 
     path = resource["_self"] + "/tags"

@@ -52,7 +52,7 @@ def update(org, rev=None):
 
     :param org: Organization payload as a dictionary. This is most likely the returned value of `organisation.get(...)`
     :param rev: OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
-    this organization. If not provided, the `_rev` number from the `org` argument will be used.
+        this organization. If not provided, the `_rev` number from the `org` argument will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
     org_label = url_encode(org["_label"])
@@ -88,7 +88,7 @@ def deprecate(org_label, rev):
 
     :param org_label: The label of the organization to deprecate
     :param rev: The previous revision number. To be provided to make sure the user is well aware of the details
-    of the last revision of this organisation.
+        of the last revision of this organisation.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the organization
     """
     org_label = url_encode(org_label)

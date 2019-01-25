@@ -37,7 +37,7 @@ def create(org_label, project_label, description=None, api_mappings=None, vocab=
     :param project_label: The label of the project to add
     :param description: OPTIONAL a description for this project
     :param api_mappings: OPTIONAL apiMappings
-    see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings
+        see https://bluebrain.github.io/nexus/docs/api/admin/admin-projects-api.html#api-mappings
     :param vocab: OPTIONAL vocab as a string
     :param base: OPTIONAL base for the project
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
@@ -72,7 +72,7 @@ def update(project, rev=None):
 
     :param project: Project payload as a dictionary. This is most likely the returned value of `project.fetch(...)`
     :param rev: OPTIONAL The last revision number, to make sure the developer is aware of the latest status of
-    this project. If not provided, the `_rev` number from the `project` argument will be used.
+        this project. If not provided, the `_rev` number from the `project` argument will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
@@ -96,8 +96,8 @@ def list(org_label=None, pagination_from=0, pagination_size=20, deprecated=None,
     :param pagination_from: OPTIONAL Index of the list to start from (default: 0)
     :param pagination_size: OPTIONAL Size of the list (default: 20)
     :param deprecated: OPTIONAL Lists only the deprecated if True,
-    lists only the non-deprecated if False,
-    lists everything if not provided or None (default: None)
+        lists only the non-deprecated if False,
+        lists everything if not provided or None (default: None)
     :param full_text_search_query: OPTIONAL List only the projects that match this query
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata and the list of projects
     """
@@ -130,7 +130,7 @@ def deprecate_2(org_label, project_label, rev):
     :param org_label: The label of the organization the project to deprecate belongs to
     :param project_label: The label of the project to deprecate
     :param rev: The previous revision number. Provided to make sure the user is well aware of the details
-    of the last revision of this project.
+        of the last revision of this project.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
@@ -150,7 +150,7 @@ def deprecate(project, rev=None):
 
     :param project: The project payload, most likely retrieved with fetch()
     :param rev: OPTIONAL provide the last version of the project to make sure the user has full knowledge of
-    the version being deprecated. If not provided, the revision number from the project payload will be used.
+        the version being deprecated. If not provided, the revision number from the project payload will be used.
     :return: The payload from the Nexus API as a dictionary. This contains the Nexus metadata of the project
     """
 
