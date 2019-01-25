@@ -121,7 +121,7 @@ def _payload(permissions: List[str], operation: str = None) -> Dict:
     """Create a user-defined permissions payload.
 
     :param permissions: List of user-defined permissions.
-    :param operation: (optional) Corresponding operation: 'Append' or 'Subtract'.
+    :param operation: (optional) Corresponding operation: "Append" or "Subtract".
     :return: Payload of user-defined permissions.
     """
     payload = {

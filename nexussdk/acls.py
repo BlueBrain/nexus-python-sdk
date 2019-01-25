@@ -166,7 +166,7 @@ def _payload(permissions: List[List[str]], identities: List[Dict], operation: st
 
     :param permissions: List of list of permissions.
     :param identities: List of identities to which the permissions apply.
-    :param operation: (optional) Corresponding operation: 'Append' or 'Subtract'.
+    :param operation: (optional) Corresponding operation: "Append" or "Subtract".
     :return: Payload of the ACLs.
     """
     payload = {
