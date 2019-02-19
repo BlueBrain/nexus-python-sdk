@@ -11,14 +11,6 @@ from nexussdk.utils.http import http_delete
 from nexussdk.utils.tools import copy_this_into_that
 from urllib.parse import quote_plus as url_encode
 
-# This context is the default one when none is provided at the creation of a resource
-DEFAULT_CONTEXT = {
-    "@context": {
-        "@base": "http://example.com/",
-        "@vocab": "http://schema.org/"
-    }
-}
-
 
 def fetch(org_label, project_label, resource_id, schema_id="_", rev=None, tag=None):
     """
@@ -100,10 +92,6 @@ def create(org_label, project_label, data, schema_id="_", resource_id=None):
     schema_id = url_encode(schema_id)
 
     path = "/resources/" + org_label + "/" + project_label + "/" + schema_id
-
-    # If the data does not have a "@context" field, we should had a default one
-    if "@context" not in data:
-        copy_this_into_that(DEFAULT_CONTEXT, data)
 
     if resource_id is None:
         return http_post(path, data, use_base=True)
