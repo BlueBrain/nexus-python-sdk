@@ -26,6 +26,7 @@ setup(
     ],
     extras_require={
         "test": ["pytest", "pytest-cov"],
+        "doc": ["sphinx"],
     },
     data_files=[("", ["LICENSE.txt"])],
     classifiers=[
