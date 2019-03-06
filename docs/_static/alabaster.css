@@ -3,8 +3,8 @@
 /* -- page layout ----------------------------------------------------------- */
 
 body {
-    font-family: Georgia, serif;
-    font-size: 17px;
+    font-family: Roboto;
+    font-size: 16px;
     background-color: #fff;
     color: #000;
     margin: 0;
@@ -38,7 +38,7 @@ hr {
 
 div.body {
     background-color: #fff;
-    color: #3E4349;
+    color: #000000;
     padding: 0 30px 0 30px;
 }
 
@@ -70,7 +70,7 @@ div.relations {
 
 
 div.sphinxsidebar a {
-    color: #444;
+    color: #000000;
     text-decoration: none;
     border-bottom: 1px dotted #999;
 }
@@ -93,7 +93,7 @@ div.sphinxsidebarwrapper h1.logo {
     margin-top: -10px;
     text-align: center;
     margin-bottom: 5px;
-    text-align: left;
+    text-align: middle;
 }
 
 div.sphinxsidebarwrapper h1.logo-name {
@@ -107,8 +107,8 @@ div.sphinxsidebarwrapper p.blurb {
 
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
-    font-family: Georgia, serif;
-    color: #444;
+    font-family: Roboto;
+    color: #000000;
     font-size: 24px;
     font-weight: normal;
     margin: 0 0 5px 0;
@@ -120,7 +120,7 @@ div.sphinxsidebar h4 {
 }
 
 div.sphinxsidebar h3 a {
-    color: #444;
+    color: #000000;
 }
 
 div.sphinxsidebar p.logo a,
@@ -131,7 +131,7 @@ div.sphinxsidebar h3 a:hover {
 }
 
 div.sphinxsidebar p {
-    color: #555;
+    color: #000000;
     margin: 10px 0;
 }
 
@@ -151,7 +151,7 @@ div.sphinxsidebar ul li.toctree-l2 > a {
 
 div.sphinxsidebar input {
     border: 1px solid #CCC;
-    font-family: Georgia, serif;
+    font-family: Roboto;
     font-size: 1em;
 }
 
@@ -182,12 +182,12 @@ div.sphinxsidebar h3.donation {
 /* -- body styles ----------------------------------------------------------- */
 
 a {
-    color: #004B6B;
+    color: #03a9f4;
     text-decoration: underline;
 }
 
 a:hover {
-    color: #6D4100;
+    color: #00b8d4;
     text-decoration: underline;
 }
 
@@ -197,7 +197,7 @@ div.body h3,
 div.body h4,
 div.body h5,
 div.body h6 {
-    font-family: Georgia, serif;
+    font-family: Roboto;
     font-weight: normal;
     margin: 30px 0px 10px 0px;
     padding: 0;
@@ -211,14 +211,14 @@ div.body h5 { font-size: 100%; }
 div.body h6 { font-size: 100%; }
 
 a.headerlink {
-    color: #DDD;
+    color: #ececec;
     padding: 0 4px;
     text-decoration: none;
 }
 
 a.headerlink:hover {
-    color: #444;
-    background: #EAEAEA;
+    color: #03a9f4;
+    background: #ffffff;
 }
 
 div.body p, div.body dd, div.body li {
@@ -238,7 +238,7 @@ div.admonition tt.xref, div.admonition code.xref, div.admonition a tt {
 }
 
 div.admonition p.admonition-title {
-    font-family: Georgia, serif;
+    font-family: Roboto;
     font-weight: normal;
     font-size: 24px;
     margin: 0 0 10px 0;
@@ -327,8 +327,8 @@ p.admonition-title:after {
 }
 
 pre, tt, code {
-    font-family: 'Consolas', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
-    font-size: 0.9em;
+    font-family: Roboto Mono;
+    font-size: 13.6px;
 }
 
 .hll {
@@ -439,7 +439,7 @@ ul, ol {
 }
 
 pre {
-    background: #EEE;
+    background: #ececec;
     padding: 7px 30px;
     margin: 15px 0px;
     line-height: 1.3em;
@@ -467,7 +467,7 @@ tt.xref, code.xref, a tt {
 
 a.reference {
     text-decoration: none;
-    border-bottom: 1px dotted #004B6B;
+    border-bottom: 1px dotted #03a9f4;
 }
 
 /* Don't put an underline on images */
@@ -476,18 +476,18 @@ a.image-reference, a.image-reference:hover {
 }
 
 a.reference:hover {
-    border-bottom: 1px solid #6D4100;
+    border-bottom: 1px solid #00b8d4;
 }
 
 a.footnote-reference {
     text-decoration: none;
     font-size: 0.7em;
     vertical-align: top;
-    border-bottom: 1px dotted #004B6B;
+    border-bottom: 1px dotted #03a9f4;
 }
 
 a.footnote-reference:hover {
-    border-bottom: 1px solid #6D4100;
+    border-bottom: 1px solid #00b8d4;
 }
 
 a:hover tt, a:hover code {
@@ -663,12 +663,12 @@ table.docutils.citation, table.docutils.citation td, table.docutils.citation th 
 }
 
 .related.top {
-    border-bottom: 1px solid #EEE;
+    border-bottom: 1px solid #2d2f38;
     margin-bottom: 20px;
 }
 
 .related.bottom {
-    border-top: 1px solid #EEE;
+    border-top: 1px solid #2d2f38;
 }
 
 .related ul {
