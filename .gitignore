@@ -124,3 +124,5 @@ dmypy.json
 notebooks/DEPLOYMENT
 notebooks/OPENID_CONFIG
 notebooks/TOKEN
+notebooks/IDENTITY
+notebooks/IDENTITY2

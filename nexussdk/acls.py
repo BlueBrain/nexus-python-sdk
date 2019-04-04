@@ -72,7 +72,9 @@ def list_(path: str, ancestors: bool = False, self: bool = True) -> Dict:
 # Update functions.
 
 def replace(subpath: str, permissions: List[List[str]], identities: List[Dict], rev: int) -> Dict:
-    """Replace ACLs on a subpath. ``permissions`` and ``identities`` have the same order.
+    """Replace ACLs on a subpath.
+
+    ``permissions`` and ``identities`` have the same order.
 
     :param subpath: Subpath on which replacing the ACLs.
     :param permissions: List of list of permissions.
@@ -96,7 +98,9 @@ def replace_(path: str, payload: Dict, rev: int) -> Dict:
 
 
 def append(subpath: str, permissions: List[List[str]], identities: List[Dict], rev: int) -> Dict:
-    """Append ACLs on a subpath. ``permissions`` and ``identities`` have the same order.
+    """Append ACLs on a subpath.
+
+    ``permissions`` and ``identities`` have the same order.
 
     :param subpath: Subpath on which appending ACLs.
     :param permissions: List of list of permissions.
@@ -120,7 +124,9 @@ def append_(path: str, payload: Dict, rev: int) -> Dict:
 
 
 def subtract(subpath: str, permissions: List[List[str]], identities: List[Dict], rev: int) -> Dict:
-    """Subtract ACLs on a subpath. ``permissions`` and ``identities`` have the same order.
+    """Subtract ACLs on a subpath.
+
+    `permissions`` and ``identities`` have the same order.
 
     :param subpath: Subpath on which subtracting ACLs.
     :param permissions: List of list of permissions.
@@ -168,7 +174,9 @@ def delete_(path: str, rev: int) -> Dict:
 # Internal helpers
 
 def _payload(permissions: List[List[str]], identities: List[Dict], operation: str = None) -> Dict:
-    """Create an ACLs payload. ``permissions`` and ``identities`` have the same order.
+    """Create an ACLs payload.
+
+    ``permissions`` and ``identities`` have the same order.
 
     :param permissions: List of list of permissions.
     :param identities: List of identities to which the permissions apply.

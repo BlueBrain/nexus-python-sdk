@@ -7,6 +7,7 @@ from nexussdk import projects
 from nexussdk import resources
 from nexussdk import schemas
 from nexussdk import files
+from nexussdk import resolvers
 
 # IAM
 from nexussdk import acls
