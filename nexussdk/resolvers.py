@@ -34,14 +34,21 @@ def create(org_label: str, project_label: str, projects: List[str], identities: 
     return http_post([SEGMENT, org_label, project_label], payload)
 
 
-def create_(path: str, payload: Dict) -> Dict:
+def create_(path: str, payload: Dict, id: str = None) -> Dict:
     """Create a resolver (path version).
 
     :param path: Full path of the project the resolver belongs to, URL encoded.
     :param payload: Payload of the resolver.
+    :param id: (optional) User-defined ID of the resolver, given as an IRI
+        which is not URL encoded.
     :return: The Nexus metadata of the created resolver.
     """
-    return http_post(path, payload)
+    if id is None:
+        return http_post(path, payload)
+    else:
+        encoded_id = encode_url(id)
+        p = "{}/{}".format(path, encoded_id)
+        return http_put(p, payload)
 
 
 # Read functions.
