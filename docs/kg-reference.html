@@ -206,13 +206,15 @@ given as IRIs.</p></li>
 
 <dl class="function">
 <dt id="nexussdk.resolvers.create_">
-<code class="descclassname">nexussdk.resolvers.</code><code class="descname">create_</code><span class="sig-paren">(</span><em>path: str</em>, <em>payload: Dict</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.resolvers.create_" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nexussdk.resolvers.</code><code class="descname">create_</code><span class="sig-paren">(</span><em>path: str</em>, <em>payload: Dict</em>, <em>id: str = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="headerlink" href="#nexussdk.resolvers.create_" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a resolver (path version).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>path</strong> – Full path of the project the resolver belongs to, URL encoded.</p></li>
 <li><p><strong>payload</strong> – Payload of the resolver.</p></li>
+<li><p><strong>id</strong> – (optional) User-defined ID of the resolver, given as an IRI
+which is not URL encoded.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1056,7 +1058,7 @@ If not provided, the rev from the resource argument will be used.</p></li>
       &copy;2019,  EPFL | The Blue Brain Project.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
