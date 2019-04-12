@@ -1,7 +1,8 @@
 """
 A view is a way to access Nexus data and to perform queries. A view belongs to a specific project.
-By default, an ElasticSearch view and a SparQL view are provided.
-More ElasticSearch views can be created manually, hence providing a custom indexing and custom research capabilities.
+By default, an ElasticSearch view and a SPARQL view are provided.
+More ElasticSearch and SPARQL views can be created manually, hence providing a custom indexing and custom research capabilities.
+For more details see `Nexus KG views documentation <https://bluebrainnexus.io/docs/api/kg/kg-views-api.html>`_.
 """
 
 import json
