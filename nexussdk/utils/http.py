@@ -27,24 +27,30 @@ default_type = "json"
 header_parts["default"] = header_parts[default_type]
 
 
-def prepare_header(type="default", accept="json"):
+def prepare_header(type="default", accept="json", content_type= None):
     """
         Prepare the header of the HTTP request by fetching the token from the config
         and few other things.
 
         :param type: string. Must be one of the keys in the above declared dict header_parts
-        :param accept: OPTIONAL if "json", the aswer will be JSON, if "all" it will be something else if the
-        requesct can send something else (ie. binary)
+        :param accept: OPTIONAL if "json", the answer will be JSON, if "all" it will be something else if the
+        request can send something else (ie. binary)
+        :param content_type: OPTIONAL allow to enforce a specific content-type. This is useful for files (e.g. 'image/png')
+
     """
 
-    # if posting a file, the request module deals with the content-type
+    # if posting a file, the request module deals with the content-type if none is provided
     if type == "file":
         header = {**header_parts["common"]}
+
     else:
         header = {**header_parts["common"], **header_parts[type]}
 
     if accept in header_accept:
         header["Accept"] = header_accept[accept]
+
+    if content_type is not None:
+        header["Content-Type"] = content_type
 
     if storage.has("token"):
         header["Authorization"] = "Bearer " + storage.get("token")
@@ -117,17 +123,18 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
         return decode_json_ordered(response.text)
 
 
-def http_post(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
+def http_post(path: Union[str, List[str]], body=None, data_type="default", use_base=False, content_type = None, **kwargs):
     """
         Perform a POST request.
 
         :param path: complete URL if use_base si False or just the ending if use_base is True
         :param body: OPTIONAL Things to send, can be a dictionary
         :param data_type: OPTIONAL can be "json" or "text" (default: "default" = "json")
+        :param content_type: OPTIONAL allow to enforce a specific content-type. This is useful for files (e.g. 'image/png')
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :return: the dictionary that is equivalent to the json response
     """
-    header = prepare_header(data_type)
+    header = prepare_header(type= data_type,content_type=content_type)
     full_url = _full_url(path, use_base)
 
     # body_data = prepare_body(body, data_type)
@@ -145,7 +152,7 @@ def http_post(path: Union[str, List[str]], body=None, data_type="default", use_b
     return decode_json_ordered(response.text)
 
 
-def http_put(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
+def http_put(path: Union[str, List[str]], body=None, data_type="default", use_base=False, content_type = None, **kwargs):
     """
         Performs a PUT request
 
@@ -154,10 +161,12 @@ def http_put(path: Union[str, List[str]], body=None, data_type="default", use_ba
         :param data_type: OPTIONAL can be "json" or "text" or "file" (default: "default" = "json")
         :param use_base: OPTIONAL if True, the Nexus env provided by nexus.config.set_environment will
         be prepended to path. (default: False)
+        :param content_type: OPTIONAL allow to enforce a specific content-type. This is useful for files (e.g. 'image/png')
+
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :return: the dictionary that is equivalent to the json response
     """
-    header = prepare_header(data_type)
+    header = prepare_header(type=data_type,content_type=content_type)
     full_url = _full_url(path, use_base)
     response = None
 
