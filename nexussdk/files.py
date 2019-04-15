@@ -84,7 +84,7 @@ def update(file, filepath, rev=None):
     return http_put(path, body=file_obj, use_base=False, data_type="file")
 
 
-def create(org_label, project_label, filepath, file_id=None):
+def create(org_label, project_label, filepath, file_id=None, content_type = None):
     """
     This is the POST method, when the user does not provide a file ID.
 
@@ -92,6 +92,7 @@ def create(org_label, project_label, filepath, file_id=None):
     :param project_label: The label of the project that the file belongs to
     :param filepath: path of the file to upload
     :param file_id: OPTIONAL Will use this id to identify the file if provided. If not provided, an ID will be generated
+    :param content_type: OPTIONAL allow to enforce a specific content-type. This is useful for files (e.g. 'image/png')
     :return: A payload containing only the Nexus metadata for this updated file.
     """
 
@@ -104,11 +105,11 @@ def create(org_label, project_label, filepath, file_id=None):
     file_obj = {"file": open(filepath, "rb")}
 
     if file_id is None:
-        return http_post(path, body=file_obj, data_type="file", use_base=True)
+        return http_post(path, body=file_obj, data_type="file", use_base=True,content_type=content_type)
     else:
         file_id = url_encode(file_id)
         path = path + "/" + file_id
-        return http_put(path, use_base=True, body=file_obj, data_type="file")
+        return http_put(path, use_base=True, body=file_obj, data_type="file", content_type=content_type)
 
 
 def list(org_label, project_label, pagination_from=0, pagination_size=20,
