@@ -4,9 +4,9 @@ It is part of the Identity & Access Management API of Blue Brain Nexus v1.
 https://bluebrain.github.io/nexus/docs/api/iam/iam-acls-api.html
 """
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 
-from nexussdk.utils.http import http_delete, http_get, http_patch, http_put
+from nexussdk.utils.http import http_delete, http_get, http_patch, http_put, sse_request
 
 SEGMENT = "acls"
 
@@ -194,3 +194,14 @@ def _payload(permissions: List[List[str]], identities: List[Dict], operation: st
     if operation is not None:
         payload["@type"] = operation
     return payload
+
+
+def events(last_id: Optional[str] = None):
+    """
+    Fetches ACL related events.
+
+    :param last_id: ID of the last processed event, if provided, only events after
+            the event with the provided ID will be returned.
+    :return: iterator of ACL events
+    """
+    return sse_request("/acls/events", last_id)

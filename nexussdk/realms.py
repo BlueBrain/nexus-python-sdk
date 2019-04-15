@@ -4,9 +4,9 @@ It is part of the Identity & Access Management API of Blue Brain Nexus v1.
 https://bluebrain.github.io/nexus/docs/api/iam/iam-realms-api.html
 """
 
-from typing import Dict
+from typing import Dict, Optional
 
-from nexussdk.utils.http import http_delete, http_get, http_put
+from nexussdk.utils.http import http_delete, http_get, http_put, sse_request
 
 SEGMENT = "realms"
 
@@ -141,3 +141,14 @@ def _payload(name: str, openid_config: str, logo: str = None) -> Dict:
     if logo is not None:
         payload["logo"] = logo
     return payload
+
+
+def events(last_id: Optional[str] = None):
+    """
+    Fetches realm related events.
+
+    :param last_id: ID of the last processed event, if provided, only events after
+            the event with the provided ID will be returned.
+    :return: iterator of realm events
+    """
+    return sse_request("/projects/events", last_id)
