@@ -8,8 +8,10 @@ from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
 from nexussdk.utils.http import http_post
 from nexussdk.utils.http import http_delete
+from nexussdk.utils.http import sse_request
 from nexussdk.utils.tools import copy_this_into_that
 from urllib.parse import quote_plus as url_encode
+from typing import Optional
 
 
 def fetch(org_label, project_label, resource_id, schema_id="_", rev=None, tag=None):
@@ -203,3 +205,27 @@ def tags(resource):
 
     path = resource["_self"] + "/tags"
     return http_get(path, use_base=False)
+
+
+def events(last_id: Optional[str] = None):
+    """
+    Fetches resource related events.
+
+    :param last_id: ID of the last processed event, if provided, only events after
+            the event with the provided ID will be returned.
+    :return: iterator of resource events
+    """
+    return sse_request("/resources/events", last_id)
+
+
+def project_events(org_label: str, project_label: str, last_id: Optional[str] = None):
+    """
+    Fetches resource related events for a project.
+
+    :param org_label: organization label
+    :param project_label: project label
+    :param last_id: ID of the last processed event, if provided, only events after
+            the event with the provided ID will be returned.
+    :return: iterator of resource events for the given project
+    """
+    return sse_request("/resources/" + org_label + "/" + project_label + "/events", last_id)
