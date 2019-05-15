@@ -2,8 +2,6 @@ import os
 
 from setuptools import find_packages, setup
 
-VERSION = "0.2.1"
-
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file.
@@ -12,7 +10,8 @@ with open(os.path.join(HERE, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="nexus-sdk",
-    version=VERSION,
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
     description="Python SDK for Blue Brain Nexus v1.",
     long_description=long_description,
     long_description_content_type="text/markdown",
