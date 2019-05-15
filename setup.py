@@ -23,6 +23,7 @@ setup(
     python_requires=">=3.5",
     install_requires=[
         "requests",
+        "sseclient"
     ],
     extras_require={
         "test": ["pytest", "pytest-cov"],

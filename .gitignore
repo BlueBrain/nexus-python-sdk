@@ -126,3 +126,8 @@ notebooks/OPENID_CONFIG
 notebooks/TOKEN
 notebooks/IDENTITY
 notebooks/IDENTITY2
+notebooks/EXTERNAL_DISK_ENDPOINT
+notebooks/EXTERNAL_DISK_CREDENTIALS
+notebooks/S3_ENDPOINT
+notebooks/S3_ACCESS_KEY
+notebooks/S3_SECRET_KEY

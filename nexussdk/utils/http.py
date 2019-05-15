@@ -1,12 +1,12 @@
 import json
 import collections
 import requests
-from typing import List, Union
+from sseclient import SSEClient
+from typing import List, Union, Optional
 from nexussdk.utils.store import storage
 
 # to make sure the output response dictionary are always ordered like the response's json
 decode_json_ordered = json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode
-
 
 # defines some parts of the header, to combine together
 header_parts = {
@@ -218,6 +218,18 @@ def http_delete(path: Union[str, List[str]], body=None, data_type="default", use
     response = requests.delete(full_url, headers=header, data=body_data, params=kwargs)
     response.raise_for_status()
     return decode_json_ordered(response.text)
+
+
+def sse_request(path: str, last_id: Optional[str], ):
+    """
+        Performs a GET requests to an SSE endpoint.
+
+        :param path: path of the request
+        :param last_id: ID of the last processed event, if provided, only events after
+                the event with the provided ID will be returned.
+        :return: iterator of SSE events
+    """
+    return SSEClient(_full_url(path, True), last_id, headers=prepare_header())
 
 
 def is_response_valid(response):

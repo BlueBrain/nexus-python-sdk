@@ -6,6 +6,7 @@ Table of Contents:
 * :ref:`schemas`
 * :ref:`resolvers`
 * :ref:`views`
+* :ref:`storages`
 * :ref:`files`
 * :ref:`resources`
 
@@ -31,6 +32,14 @@ Views
 -----
 
 .. automodule:: nexussdk.views
+  :members:
+
+.. _storages:
+
+Storages
+--------
+
+.. automodule:: nexussdk.storages
   :members:
 
 .. _files:

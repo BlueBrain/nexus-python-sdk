@@ -5,7 +5,9 @@ Organizations can represent a lab, a company or even a team of collaborators. Th
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
 from nexussdk.utils.http import http_delete
+from nexussdk.utils.http import sse_request
 from urllib.parse import quote_plus as url_encode
+from typing import Optional
 
 
 def fetch(org_label, rev=None):
@@ -95,3 +97,14 @@ def deprecate(org_label, rev):
     path = "/orgs/" + org_label + "?rev=" + str(rev)
 
     return http_delete(path, use_base=True)
+
+
+def events(last_id: Optional[str] = None):
+    """
+    Fetches organization related events.
+
+    :param last_id: ID of the last processed event, if provided, only events after
+            the event with the provided ID will be returned.
+    :return: iterator of organization events
+    """
+    return sse_request("/orgs/events", last_id)

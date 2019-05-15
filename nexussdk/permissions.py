@@ -4,9 +4,9 @@ It is part of the Identity & Access Management API of Blue Brain Nexus v1.
 https://bluebrain.github.io/nexus/docs/api/iam/iam-permissions-api.html
 """
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 
-from nexussdk.utils.http import http_delete, http_get, http_patch, http_put
+from nexussdk.utils.http import http_delete, http_get, http_patch, http_put, sse_request
 
 SEGMENT = "permissions"
 
@@ -136,3 +136,14 @@ def _payload(permissions: List[str], operation: str = None) -> Dict:
     if operation is not None:
         payload["@type"] = operation
     return payload
+
+
+def events(last_id: Optional[str] = None):
+    """
+    Fetches permissions related events.
+
+    :param last_id: ID of the last processed event, if provided, only events after
+            the event with the provided ID will be returned.
+    :return: iterator of permission events
+    """
+    return sse_request("/permissions/events", last_id)

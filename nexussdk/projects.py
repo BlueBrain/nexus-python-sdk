@@ -5,7 +5,9 @@ A project is a place to store data (files, resources, schemas, etc.). It belongs
 from nexussdk.utils.http import http_get
 from nexussdk.utils.http import http_put
 from nexussdk.utils.http import http_delete
+from nexussdk.utils.http import sse_request
 from urllib.parse import quote_plus as url_encode
+from typing import Optional
 
 
 def fetch(org_label, project_label, rev=None):
@@ -163,3 +165,14 @@ def deprecate(project, rev=None):
     path = "/projects/" + org_label + "/" + project_label + "?rev=" + str(rev)
 
     return http_delete(path, use_base=True)
+
+
+def events(last_id: Optional[str] = None):
+    """
+    Fetches project related events.
+
+    :param last_id: ID of the last processed event, if provided, only events after
+            the event with the provided ID will be returned.
+    :return: iterator of project events
+    """
+    return sse_request("/projects/events", last_id)
