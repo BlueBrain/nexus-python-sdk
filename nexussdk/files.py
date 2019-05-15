@@ -10,6 +10,8 @@ from nexussdk.utils.http import http_post
 from nexussdk.utils.http import http_delete
 from urllib.parse import quote_plus as url_encode
 
+SEGMENT = "files"
+
 
 def fetch(org_label, project_label, file_id, rev=None, tag=None, out_filepath=None):
     """
@@ -46,7 +48,8 @@ def fetch(org_label, project_label, file_id, rev=None, tag=None, out_filepath=No
     if tag is not None:
         path = path + "?tag=" + str(tag)
 
-    response_metadata = http_get(path, use_base=True, data_type="json", accept="json", get_raw_response=False, stream=False)
+    response_metadata = http_get(path, use_base=True, data_type="json", accept="json", get_raw_response=False,
+                                 stream=False)
     response_binary = http_get(path, use_base=True, get_raw_response=True, accept="all", stream=True)
 
     if out_filepath is not None:
@@ -84,7 +87,7 @@ def update(file, filepath, rev=None):
     return http_put(path, body=file_obj, use_base=False, data_type="file")
 
 
-def create(org_label, project_label, filepath, file_id=None, content_type = None):
+def create(org_label, project_label, filepath, file_id=None, content_type=None):
     """
     This is the POST method, when the user does not provide a file ID.
 
@@ -105,11 +108,51 @@ def create(org_label, project_label, filepath, file_id=None, content_type = None
     file_obj = {"file": open(filepath, "rb")}
 
     if file_id is None:
-        return http_post(path, body=file_obj, data_type="file", use_base=True,content_type=content_type)
+        return http_post(path, body=file_obj, data_type="file", use_base=True, content_type=content_type)
     else:
         file_id = url_encode(file_id)
         path = path + "/" + file_id
         return http_put(path, use_base=True, body=file_obj, data_type="file", content_type=content_type)
+
+
+def create_link(org_label, project_label, filename, filepath, media_type, storage_id=None, file_id=None):
+    """
+    POST method when the user does not provide a file ID, PUT otherwise
+
+    :param org_label: The label of the organization that the file belongs to
+    :param project_label: The label of the project that the file belongs to
+    :param filename: The filename that will be exposed in the resource metadata
+    :param filepath: The path (relative to its storage root) of the file to link
+    :param media_type: The linked file's media type
+    :param storage_id: OPTIONAL The id of the storage backend where the file is located.
+                       If not provided, the project's default storage is used.
+    :param file_id: OPTIONAL Will use this id to identify the file if provided.
+                    If not provided, an ID will be generated
+    :return: A payload containing only the Nexus metadata for this linked file.
+    """
+
+    # the element composing the query URL need to be URL-encoded
+    org_label = url_encode(org_label)
+    project_label = url_encode(project_label)
+
+    payload = {
+        "filename": filename,
+        "path": filepath,
+        "mediaType": media_type
+    }
+
+    request_path = [SEGMENT, org_label, project_label]
+
+    if file_id is not None:
+        request_path.append(url_encode(file_id))
+
+    if storage_id is not None:
+        request_path[2] += "?storage=" + url_encode(storage_id)
+
+    if file_id is None:
+        return http_post(request_path, body=payload)
+    else:
+        return http_put(request_path, body=payload)
 
 
 def list(org_label, project_label, pagination_from=0, pagination_size=20,

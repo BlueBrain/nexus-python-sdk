@@ -27,7 +27,7 @@ default_type = "json"
 header_parts["default"] = header_parts[default_type]
 
 
-def prepare_header(type="default", accept="json", content_type= None):
+def prepare_header(type="default", accept="json", content_type=None):
     """
         Prepare the header of the HTTP request by fetching the token from the config
         and few other things.
@@ -123,7 +123,7 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
         return decode_json_ordered(response.text)
 
 
-def http_post(path: Union[str, List[str]], body=None, data_type="default", use_base=False, content_type = None, **kwargs):
+def http_post(path: Union[str, List[str]], body=None, data_type="default", use_base=False, content_type=None, **kwargs):
     """
         Perform a POST request.
 
@@ -134,7 +134,7 @@ def http_post(path: Union[str, List[str]], body=None, data_type="default", use_b
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :return: the dictionary that is equivalent to the json response
     """
-    header = prepare_header(type= data_type,content_type=content_type)
+    header = prepare_header(type=data_type, content_type=content_type)
     full_url = _full_url(path, use_base)
 
     # body_data = prepare_body(body, data_type)
@@ -152,7 +152,7 @@ def http_post(path: Union[str, List[str]], body=None, data_type="default", use_b
     return decode_json_ordered(response.text)
 
 
-def http_put(path: Union[str, List[str]], body=None, data_type="default", use_base=False, content_type = None, **kwargs):
+def http_put(path: Union[str, List[str]], body=None, data_type="default", use_base=False, content_type=None, **kwargs):
     """
         Performs a PUT request
 
@@ -166,7 +166,7 @@ def http_put(path: Union[str, List[str]], body=None, data_type="default", use_ba
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :return: the dictionary that is equivalent to the json response
     """
-    header = prepare_header(type=data_type,content_type=content_type)
+    header = prepare_header(type=data_type, content_type=content_type)
     full_url = _full_url(path, use_base)
     response = None
 
