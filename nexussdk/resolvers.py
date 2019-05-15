@@ -1,7 +1,7 @@
 """
 This module provides a Python interface for operations on Resolvers.
 It is part of the Knowledge Graph API of Blue Brain Nexus v1.
-https://bluebrainnexus.io/docs/api/kg/kg-resolvers-api.html
+https://bluebrainnexus.io/docs/api/1.1/kg/kg-resolvers-api.html
 """
 
 from typing import Dict, List, Optional
