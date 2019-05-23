@@ -14,7 +14,7 @@ header_parts = {
     "json": {"Content-Type": "application/json"},
     "text": {"sendAs": "text", "Content-Type": "text/plain"},
     "sparql": {"Content-Type": "application/sparql-query"},
-
+    "file": {},
 }
 
 # so that a get request can decide to retrieve JSON or binary
@@ -27,30 +27,21 @@ default_type = "json"
 header_parts["default"] = header_parts[default_type]
 
 
-def prepare_header(type="default", accept="json", content_type=None):
+def prepare_header(type="default", accept="json"):
     """
         Prepare the header of the HTTP request by fetching the token from the config
         and few other things.
 
         :param type: string. Must be one of the keys in the above declared dict header_parts
         :param accept: OPTIONAL if "json", the answer will be JSON, if "all" it will be something else if the
-        request can send something else (ie. binary)
-        :param content_type: OPTIONAL allow to enforce a specific content-type. This is useful for files (e.g. 'image/png')
+                       request can send something else (e.g. binary)
 
     """
 
-    # if posting a file, the request module deals with the content-type if none is provided
-    if type == "file":
-        header = {**header_parts["common"]}
-
-    else:
-        header = {**header_parts["common"], **header_parts[type]}
+    header = {**header_parts["common"], **header_parts[type]}
 
     if accept in header_accept:
         header["Accept"] = header_accept[accept]
-
-    if content_type is not None:
-        header["Content-Type"] = content_type
 
     if storage.has("token"):
         header["Authorization"] = "Bearer " + storage.get("token")
@@ -123,18 +114,17 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
         return decode_json_ordered(response.text)
 
 
-def http_post(path: Union[str, List[str]], body=None, data_type="default", use_base=False, content_type=None, **kwargs):
+def http_post(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
     """
         Perform a POST request.
 
         :param path: complete URL if use_base si False or just the ending if use_base is True
         :param body: OPTIONAL Things to send, can be a dictionary
         :param data_type: OPTIONAL can be "json" or "text" (default: "default" = "json")
-        :param content_type: OPTIONAL allow to enforce a specific content-type. This is useful for files (e.g. 'image/png')
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :return: the dictionary that is equivalent to the json response
     """
-    header = prepare_header(type=data_type, content_type=content_type)
+    header = prepare_header(type=data_type)
     full_url = _full_url(path, use_base)
 
     # body_data = prepare_body(body, data_type)
@@ -152,7 +142,7 @@ def http_post(path: Union[str, List[str]], body=None, data_type="default", use_b
     return decode_json_ordered(response.text)
 
 
-def http_put(path: Union[str, List[str]], body=None, data_type="default", use_base=False, content_type=None, **kwargs):
+def http_put(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
     """
         Performs a PUT request
 
@@ -161,12 +151,11 @@ def http_put(path: Union[str, List[str]], body=None, data_type="default", use_ba
         :param data_type: OPTIONAL can be "json" or "text" or "file" (default: "default" = "json")
         :param use_base: OPTIONAL if True, the Nexus env provided by nexus.config.set_environment will
         be prepended to path. (default: False)
-        :param content_type: OPTIONAL allow to enforce a specific content-type. This is useful for files (e.g. 'image/png')
 
         :param params: OPTIONAL provide some URL parameters (?foo=bar&hello=world) as a dictionary
         :return: the dictionary that is equivalent to the json response
     """
-    header = prepare_header(type=data_type, content_type=content_type)
+    header = prepare_header(type=data_type)
     full_url = _full_url(path, use_base)
     response = None
 
@@ -251,8 +240,7 @@ def _full_url(path: Union[str, List[str]], use_base: bool) -> str:
     if isinstance(path, str):
         return path
     elif isinstance(path, list):
-        base = storage.get("environment")
-        path.insert(0, base)
-        return "/".join(path)
+        url = [storage.get("environment")] + path
+        return "/".join(url)
     else:
         raise TypeError("Expecting a string or a list!")
