@@ -21,6 +21,7 @@ setup(
     packages=find_packages(),
     python_requires=">=3.5",
     install_requires=[
+        "python-magic",
         "requests",
         "sseclient"
     ],
