@@ -40,9 +40,11 @@ def create_(org_label: str, project_label: str, payload: Dict, view_id: Optional
 
 def create_es(org_label: str, project_label: str, mapping: Dict, view_id: Optional[str] = None,
               resource_schemas: Optional[Set[str]] = None,
+              resource_types: Optional[Set[str]] = None,
               tag: Optional[str] = None,
               source_as_text: Optional[bool] = None,
               include_metadata: bool = False,
+              include_deprecated: bool = False
               ) -> Dict:
     """ Create an ElasticSearch view.
 
@@ -52,23 +54,29 @@ def create_es(org_label: str, project_label: str, mapping: Dict, view_id: Option
         (see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html for more details).
     :param view_id: (optional) User-defined ID of the view, given as an IRI
         which is not URL encoded.
-    :param resource_schemas: (optional) IDs of the schemas to which will be used to filter the resources
-        which will be indexed in the view.
+    :param resource_schemas: (optional) IDs of the schemas which will be used to filter the resources
+        indexed in the view.
+    :param resource_types: (optional) IDs of the types which will be used to filter the resources
+        indexed in the view.
     :param tag: (optional) tag to use for filtering the resources which will be indexed in the view.
     :param source_as_text: (optional) whether to include original JSON source of the resources in the view. If True,
         the resource’s payload will be stored in the ElasticSearch document
         as a single escaped string value of the key _original_source.
     :param include_metadata: whether to include Nexus metadata in the index
+    :param include_deprecated: whether to include deprecated resources in the index
     :return: The Nexus metadata of the created view.
     """
     payload = {
         "@type": ["View", ELASTIC_TYPE],
         "mapping": mapping,
-        "includeMetadata": include_metadata
+        "includeMetadata": include_metadata,
+        "includeDeprecated": include_deprecated
     }
 
     if resource_schemas:
         payload["resourceSchemas"] = resource_schemas
+    if resource_types:
+        payload["resourceTypes"] = resource_types
     if tag is not None:
         payload["resourceTag"] = tag
     if source_as_text is not None:
@@ -272,7 +280,7 @@ def _filter_list_by_type(list, type):
     new_list = []
 
     for el in list["_results"]:
-        if ELASTIC_TYPE in el["@type"]:
+        if type in el["@type"]:
             new_list.append(el)
 
     return new_list
@@ -303,8 +311,10 @@ def query_es(org_label: str, project_label: str, query: Union[str, Dict],
 
 def create_sparql(org_label: str, project_label: str, view_id: Optional[str] = None,
                   resource_schemas: Optional[Set[str]] = None,
+                  resource_types: Optional[Set[str]] = None,
                   tag: Optional[str] = None,
                   include_metadata=False,
+                  include_deprecated=False
                   ) -> Dict:
     """Create a Sparql view.
 
@@ -312,20 +322,26 @@ def create_sparql(org_label: str, project_label: str, view_id: Optional[str] = N
     :param project_label: Label of the project the view belongs to.
     :param view_id: (optional) User-defined ID of the view, given as an IRI
         which is not URL encoded.
-    :param resource_schemas: (optional) IDs of the schemas to which will be used to filter the resources
-        which will be indexed in the view.
+    :param resource_schemas: (optional) IDs of the schemas which will be used to filter the resources
+        indexed in the view.
+    :param resource_types: (optional) IDs of the types which will be used to filter the resources
+        indexed in the view.
     :param tag: (optional) tag to use for filtering the resources which will be indexed in the view.
     :param include_metadata: whether to include Nexus metadata in the index
+    :param include_deprecated: whether to include deprecated resources in the index
     :return: The Nexus metadata of the created view.
     """
     payload = {
         "@type": ["View", SPARQL_TYPE],
-        "includeMetadata": include_metadata
+        "includeMetadata": include_metadata,
+        "includeDeprecated": include_deprecated
     }
     if view_id is not None:
         payload["@id"] = view_id
     if resource_schemas:
         payload["resourceSchemas"] = resource_schemas
+    if resource_types:
+        payload["resourceTypes"] = resource_types
     if tag is not None:
         payload["resourceTag"] = tag
 
@@ -381,3 +397,15 @@ def query_sparql(org_label: str, project_label: str, query: str, view_id: str = 
     path = "/views/" + org_label + "/" + project_label + "/" + url_encode(view_id) + "/sparql"
 
     return http_post(path, body=query, data_type="sparql", use_base=True)
+
+
+def stats(org_label: str, project_label: str, view_id: str) -> Dict:
+    """
+    Fetch indexing statistics for a view.
+
+    :param org_label: Label of the organization the view belongs to.
+    :param project_label: Label of the project the view belongs to.
+    :param view_id: ID of the view.
+    :return: the view's indexing statistics.
+    """
+    return http_get(["views", org_label, project_label, url_encode(view_id), "statistics"])
