@@ -100,3 +100,38 @@ make html
 ```bash
 cp -R build/html/ ../../docs/
 ```
+
+### Releasing
+
+**Setup**
+
+```bash
+pip install --upgrade pip setuptools wheel twine
+```
+
+**Tagging**
+
+```bash
+git checkout master
+git pull upstream master
+git tag -a v<x>.<y>.<z> HEAD
+git push upstream v<x>.<y>.<z>
+```
+
+**Building**
+
+```bash
+python setup.py sdist bdist_wheel
+```
+
+**Upload**
+
+```bash
+twine upload dist/*
+```
+
+**Cleaning**
+
+```bash
+rm -R build dist *.egg-info
+```
