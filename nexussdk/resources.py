@@ -229,3 +229,15 @@ def project_events(org_label: str, project_label: str, last_id: Optional[str] = 
     :return: iterator of resource events for the given project
     """
     return sse_request("/resources/" + org_label + "/" + project_label + "/events", last_id)
+
+
+def org_events(org_label: str, last_id: Optional[str] = None):
+    """
+    Fetches resource related events for a organization.
+
+    :param org_label: organization label
+    :param last_id: ID of the last processed event, if provided, only events after
+            the event with the provided ID will be returned.
+    :return: iterator of resource events for the given organization
+    """
+    return sse_request("/resources/" + org_label + "/events", last_id)
