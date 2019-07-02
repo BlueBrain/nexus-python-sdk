@@ -41,7 +41,7 @@ def update_(org_label: str, project_label: str, payload: Dict, storage_id: str, 
     :param rev: last known revision of the storage
     :return: The Nexus metadata of the updated storage.
     """
-    return http_put([SEGMENT, org_label, project_label, url_encode(storage_id)], body=payload, use_base=True, rev=rev)
+    return http_put([SEGMENT, org_label, project_label, url_encode(storage_id)], body=payload, rev=rev)
 
 
 def create_disk_storage(org_label: str, project_label: str, volume: str,
