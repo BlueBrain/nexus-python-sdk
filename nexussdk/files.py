@@ -7,7 +7,7 @@ import os
 from typing import Dict, Optional
 from urllib.parse import quote_plus as url_encode
 
-import magic
+import puremagic
 
 from nexussdk.utils.http import http_delete
 from nexussdk.utils.http import http_get
@@ -403,7 +403,6 @@ def tags(file: Dict) -> Dict:
 
 def _content_type(filepath: str, content_type: Optional[str]) -> str:
     if content_type is None:
-        mime = magic.Magic(mime=True)
-        return mime.from_file(filepath)
+        return puremagic.from_file(filepath, True)
     else:
         return content_type
