@@ -56,7 +56,7 @@ def fetch(org_label: str, project_label: str, file_id: str, rev: Optional[int] =
 
         # we write the result of the request into a file
         with open(out_filepath, "wb") as f:
-            for chunk in response_binary.iter_content():
+            for chunk in response_binary.iter_content(chunk_size=4096):
                 f.write(chunk)
 
     return response_metadata
