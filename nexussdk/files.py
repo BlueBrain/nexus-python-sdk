@@ -15,6 +15,7 @@ from nexussdk.utils.http import http_post
 from nexussdk.utils.http import http_put
 
 SEGMENT = "files"
+DEFAULT_MIME = "application/octet-stream"
 
 
 def fetch(org_label: str, project_label: str, file_id: str, rev: Optional[int] = None, tag: Optional[str] = None,
@@ -403,6 +404,12 @@ def tags(file: Dict) -> Dict:
 
 def _content_type(filepath: str, content_type: Optional[str]) -> str:
     if content_type is None:
-        return puremagic.from_file(filepath, True)
+        try:
+            guessed_content_type = puremagic.from_file(filepath, True)
+        except puremagic.main.PureError as e:
+            print(e)
+            print("using the default content type instead:", DEFAULT_MIME)
+            guessed_content_type = DEFAULT_MIME
+        return guessed_content_type
     else:
         return content_type
