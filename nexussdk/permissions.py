@@ -6,144 +6,137 @@ https://bluebrain.github.io/nexus/docs/api/iam/iam-permissions-api.html
 
 from typing import Dict, List, Optional
 
-from nexussdk.utils.http import http_delete, http_get, http_patch, http_put, sse_request
-
-SEGMENT = "permissions"
+from nexussdk.utils.http import Http
 
 
-# Read functions.
+class Permissions:
+    segment = "permissions"
 
-def fetch(rev: int = None) -> Dict:
-    """Fetch the permissions.
+    def __init__(self, http: Http):
+        self._http = http
 
-    :param rev: (optional) Revision number of the permissions.
-    :return: A Nexus payload with the permissions.
-    """
-    return http_get([SEGMENT], rev=rev)
+    # Read functions.
 
+    def fetch(self, rev: int = None) -> Dict:
+        """Fetch the permissions.
+    
+        :param rev: (optional) Revision number of the permissions.
+        :return: A Nexus payload with the permissions.
+        """
+        return self._http.get([Permissions.segment], rev=rev)
 
-def fetch_(endpoint: str, rev: int = None) -> Dict:
-    """Fetch the permissions (full path version).
+    def fetch_(self, endpoint: str, rev: int = None) -> Dict:
+        """Fetch the permissions (full path version).
+    
+        :param endpoint: Endpoint for permissions.
+        :param rev: (optional) Revision number of the permissions.
+        :return: A Nexus payload with the permissions.
+        """
+        return self._http.get(endpoint, rev=rev)
 
-    :param endpoint: Endpoint for permissions.
-    :param rev: (optional) Revision number of the permissions.
-    :return: A Nexus payload with the permissions.
-    """
-    return http_get(endpoint, rev=rev)
+    # Update functions.
 
+    def replace(self, permissions: List[str], rev: int) -> Dict:
+        """Replace the user-defined permissions.
+    
+        :param permissions: List of user-defined permissions.
+        :param rev: Last revision of the permissions.
+        :return: The Nexus metadata of the permissions.
+        """
+        payload = self._payload(permissions)
+        return self._http.put([Permissions.segment], payload, rev=rev)
 
-# Update functions.
+    def replace_(self, endpoint: str, payload: Dict, rev: int) -> Dict:
+        """Replace the user-defined permissions (full path version).
+    
+        :param endpoint: Endpoint for permissions.
+        :param payload: Payload of user-defined permissions.
+        :param rev: Last revision of the permissions.
+        :return: The Nexus metadata of the permissions.
+        """
+        return self._http.put(endpoint, payload, rev=rev)
 
-def replace(permissions: List[str], rev: int) -> Dict:
-    """Replace the user-defined permissions.
+    def append(self, permissions: List[str], rev: int) -> Dict:
+        """Append user-defined permissions.
+    
+        :param permissions: List of user-defined permissions.
+        :param rev: Last revision of the permissions.
+        :return: The Nexus metadata of the permissions.
+        """
+        payload = self._payload(permissions, "Append")
+        return self._http.patch([Permissions.segment], payload, rev=rev)
 
-    :param permissions: List of user-defined permissions.
-    :param rev: Last revision of the permissions.
-    :return: The Nexus metadata of the permissions.
-    """
-    payload = _payload(permissions)
-    return http_put([SEGMENT], payload, rev=rev)
+    def append_(self, endpoint: str, payload: Dict, rev: int) -> Dict:
+        """Append user-defined permissions (full path version).
+    
+        :param endpoint: Endpoint for permissions.
+        :param payload: Payload of user-defined permissions to append.
+        :param rev: Last revision of the permissions.
+        :return: The Nexus metadata of the permissions.
+        """
+        return self._http.patch(endpoint, payload, rev=rev)
 
+    def subtract(self, permissions: List[str], rev: int) -> Dict:
+        """Subtract user-defined permissions.
+    
+        :param permissions: List of user-defined permissions.
+        :param rev: Last revision of the permissions.
+        :return: The Nexus metadata of the permissions.
+        """
+        payload = self._payload(permissions, "Subtract")
+        return self._http.patch([Permissions.segment], payload, rev=rev)
 
-def replace_(endpoint: str, payload: Dict, rev: int) -> Dict:
-    """Replace the user-defined permissions (full path version).
+    def subtract_(self, endpoint: str, payload: Dict, rev: int) -> Dict:
+        """Subtract user-defined permissions (full path version).
+    
+        :param endpoint: Endpoint for permissions.
+        :param payload: Payload of user-defined permissions to subtract.
+        :param rev: Last revision of the permissions.
+        :return: The Nexus metadata of the permissions.
+        """
+        return self._http.patch(endpoint, payload, rev=rev)
 
-    :param endpoint: Endpoint for permissions.
-    :param payload: Payload of user-defined permissions.
-    :param rev: Last revision of the permissions.
-    :return: The Nexus metadata of the permissions.
-    """
-    return http_put(endpoint, payload, rev=rev)
+    # Delete functions.
 
+    def delete(self, rev: int) -> Dict:
+        """Delete user-defined permissions.
+    
+        :param rev: Last revision of the permissions.
+        :return: The Nexus metadata of the permissions.
+        """
+        return self._http.delete([Permissions.segment], rev=rev)
 
-def append(permissions: List[str], rev: int) -> Dict:
-    """Append user-defined permissions.
+    def delete_(self, endpoint: str, rev: int) -> Dict:
+        """Delete user-defined permissions (full path version).
+    
+        :param endpoint: Endpoint for permissions.
+        :param rev: Last revision of the permissions.
+        :return: The Nexus metadata of the permissions.
+        """
+        return self._http.delete(endpoint, rev=rev)
 
-    :param permissions: List of user-defined permissions.
-    :param rev: Last revision of the permissions.
-    :return: The Nexus metadata of the permissions.
-    """
-    payload = _payload(permissions, "Append")
-    return http_patch([SEGMENT], payload, rev=rev)
+    # Internal helpers
 
+    def _payload(self, permissions: List[str], operation: str = None) -> Dict:
+        """Create a user-defined permissions payload.
+    
+        :param permissions: List of user-defined permissions.
+        :param operation: (optional) Corresponding operation: "Append" or "Subtract".
+        :return: Payload of user-defined permissions.
+        """
+        payload = {
+            "permissions": permissions,
+        }
+        if operation is not None:
+            payload["@type"] = operation
+        return payload
 
-def append_(endpoint: str, payload: Dict, rev: int) -> Dict:
-    """Append user-defined permissions (full path version).
-
-    :param endpoint: Endpoint for permissions.
-    :param payload: Payload of user-defined permissions to append.
-    :param rev: Last revision of the permissions.
-    :return: The Nexus metadata of the permissions.
-    """
-    return http_patch(endpoint, payload, rev=rev)
-
-
-def subtract(permissions: List[str], rev: int) -> Dict:
-    """Subtract user-defined permissions.
-
-    :param permissions: List of user-defined permissions.
-    :param rev: Last revision of the permissions.
-    :return: The Nexus metadata of the permissions.
-    """
-    payload = _payload(permissions, "Subtract")
-    return http_patch([SEGMENT], payload, rev=rev)
-
-
-def subtract_(endpoint: str, payload: Dict, rev: int) -> Dict:
-    """Subtract user-defined permissions (full path version).
-
-    :param endpoint: Endpoint for permissions.
-    :param payload: Payload of user-defined permissions to subtract.
-    :param rev: Last revision of the permissions.
-    :return: The Nexus metadata of the permissions.
-    """
-    return http_patch(endpoint, payload, rev=rev)
-
-
-# Delete functions.
-
-def delete(rev: int) -> Dict:
-    """Delete user-defined permissions.
-
-    :param rev: Last revision of the permissions.
-    :return: The Nexus metadata of the permissions.
-    """
-    return http_delete([SEGMENT], rev=rev)
-
-
-def delete_(endpoint: str, rev: int) -> Dict:
-    """Delete user-defined permissions (full path version).
-
-    :param endpoint: Endpoint for permissions.
-    :param rev: Last revision of the permissions.
-    :return: The Nexus metadata of the permissions.
-    """
-    return http_delete(endpoint, rev=rev)
-
-
-# Internal helpers
-
-def _payload(permissions: List[str], operation: str = None) -> Dict:
-    """Create a user-defined permissions payload.
-
-    :param permissions: List of user-defined permissions.
-    :param operation: (optional) Corresponding operation: "Append" or "Subtract".
-    :return: Payload of user-defined permissions.
-    """
-    payload = {
-        "permissions": permissions,
-    }
-    if operation is not None:
-        payload["@type"] = operation
-    return payload
-
-
-def events(last_id: Optional[str] = None):
-    """
-    Fetches permissions related events.
-
-    :param last_id: ID of the last processed event, if provided, only events after
-            the event with the provided ID will be returned.
-    :return: iterator of permission events
-    """
-    return sse_request("/permissions/events", last_id)
+    def events(self, last_id: Optional[str] = None):
+        """
+        Fetches permissions related events.
+    
+        :param last_id: ID of the last processed event, if provided, only events after
+                the event with the provided ID will be returned.
+        :return: iterator of permission events
+        """
+        return self._http.sse_request("/permissions/events", last_id)

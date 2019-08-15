@@ -33,8 +33,8 @@ def pretty_print(payload):
 
 
 def listing_params(pagination_from: Optional[int], pagination_size: Optional[int],
-                    deprecated: Optional[bool], type: Optional[str], created_by: Optional[str],
-                    updated_by: Optional[str], rev: Optional[int]):
+                   deprecated: Optional[bool], type: Optional[str], created_by: Optional[str],
+                   updated_by: Optional[str], rev: Optional[int]):
     """Create a dictionary of the parameters configuring listings.
 
     Some parameter names are using Python reserved ones. They cannot therefore
