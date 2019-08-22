@@ -7,11 +7,12 @@ from sseclient import SSEClient
 
 
 class Http:
+    default_type = "json"
+
     # defines some parts of the header, to combine together
     header_parts = {
         "common": {"mode": "cors"},
         "json": {"Content-Type": "application/json"},
-        "default": {"Content-Type": "application/json"},
         "text": {"sendAs": "text", "Content-Type": "text/plain"},
         "sparql": {"Content-Type": "application/sparql-query"},
         "file": {},
@@ -28,7 +29,7 @@ class Http:
         self.token = token
 
     def get(this, path: Union[str, List[str]], stream=False, get_raw_response=False, use_base=False,
-            data_type="default", accept="json", **kwargs):
+            data_type=default_type, accept="json", **kwargs):
         """
             Wrapper to perform a GET request.
 
@@ -57,7 +58,7 @@ class Http:
         else:
             return this._decode_json_ordered(response.text)
 
-    def post(self, path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
+    def post(self, path: Union[str, List[str]], body=None, data_type=default_type, use_base=False, **kwargs):
         """
             Perform a POST request.
 
@@ -84,7 +85,7 @@ class Http:
         response.raise_for_status()
         return self._decode_json_ordered(response.text)
 
-    def put(self, path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
+    def put(self, path: Union[str, List[str]], body=None, data_type=default_type, use_base=False, **kwargs):
         """
             Performs a PUT request
 
@@ -110,7 +111,7 @@ class Http:
         response.raise_for_status()
         return self._decode_json_ordered(response.text)
 
-    def patch(self, path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
+    def patch(self, path: Union[str, List[str]], body=None, data_type=default_type, use_base=False, **kwargs):
         """
             Performs a PATCH request
 
@@ -129,7 +130,7 @@ class Http:
         response.raise_for_status()
         return self._decode_json_ordered(response.text)
 
-    def delete(self, path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
+    def delete(self, path: Union[str, List[str]], body=None, data_type=default_type, use_base=False, **kwargs):
         """
             Performs a DELETE request
 
@@ -173,7 +174,7 @@ class Http:
         else:
             raise TypeError("Expecting a string or a list!")
 
-    def _prepare_header(self, type="default", accept="json"):
+    def _prepare_header(self, type=default_type, accept="json"):
         """
             Prepare the header of the HTTP request by fetching the token from the config
             and few other things.
@@ -193,7 +194,7 @@ class Http:
             header["Authorization"] = "Bearer " + self.token
         return header
 
-    def _prepare_body(self, data, type="default"):
+    def _prepare_body(self, data, type=default_type):
         """
             Prepare the body of the HTTP request
 

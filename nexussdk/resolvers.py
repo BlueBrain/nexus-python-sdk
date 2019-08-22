@@ -35,7 +35,7 @@ class Resolvers:
         :return: The Nexus metadata of the created resolver.
         """
         payload = self._payload(projects, identities, priority, id, resource_types)
-        return self._http.post([Resolvers.segment, org_label, project_label], payload)
+        return self._http.post([self.segment, org_label, project_label], payload)
 
     def create_(self, path: str, payload: Dict, id: str = None) -> Dict:
         """Create a resolver (path version).
@@ -69,7 +69,7 @@ class Resolvers:
         """
         self._check(rev, tag)
         encoded_id = encode_url(id)
-        return self._http.get([Resolvers.segment, org_label, project_label, encoded_id], rev=rev, tag=tag)
+        return self._http.get([self.segment, org_label, project_label, encoded_id], rev=rev, tag=tag)
 
     def fetch_(self, path: str, tag: str = None, rev: int = None) -> Dict:
         """Fetch a resolver (full path version).
@@ -105,7 +105,7 @@ class Resolvers:
         :return: A Nexus results list with the Nexus metadata of the matching resolvers.
         """
         params = self._params(pagination_from, pagination_size, deprecated, type, created_by, updated_by, rev)
-        return self._http.get([Resolvers.segment, org_label, project_label], params=params)
+        return self._http.get([self.segment, org_label, project_label], params=params)
 
     def list_(self, path: str, pagination_from: int = None, pagination_size: int = None,
               deprecated: bool = None, type: str = None, created_by: str = None,
@@ -149,7 +149,7 @@ class Resolvers:
         """
         encoded_id = encode_url(id)
         payload = self._payload(projects, identities, priority, id, resource_types)
-        return self._http.put([Resolvers.segment, org_label, project_label, encoded_id], payload, rev=rev)
+        return self._http.put([self.segment, org_label, project_label, encoded_id], payload, rev=rev)
 
     def update_(self, path: str, payload: Dict, rev: int) -> Dict:
         """Update a resolver (full path version).
@@ -177,7 +177,7 @@ class Resolvers:
             "tag": tag,
             "rev": rev_to_tag,
         }
-        return self._http.post([Resolvers.segment, org_label, project_label, encoded_id, "tags"], payload, rev=rev)
+        return self._http.post([self.segment, org_label, project_label, encoded_id, "tags"], payload, rev=rev)
 
     def tag_(self, path: str, payload: Dict, rev: int) -> Dict:
         """Tag a revision of a resolver (full path version).
@@ -202,7 +202,7 @@ class Resolvers:
         :return: The Nexus metadata of the deprecated resolver.
         """
         encoded_id = encode_url(id)
-        return self._http.delete([Resolvers.segment, org_label, project_label, encoded_id], rev=rev)
+        return self._http.delete([self.segment, org_label, project_label, encoded_id], rev=rev)
 
     def deprecate_(self, path: str, rev: int) -> Dict:
         """Deprecate a resolver (full path version).

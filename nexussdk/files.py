@@ -47,7 +47,7 @@ class Files:
         project_label = url_encode(project_label)
         file_id = url_encode(file_id)
 
-        path = [Files.segment, org_label, project_label, file_id]
+        path = [self.segment, org_label, project_label, file_id]
 
         response_metadata = self._http.get(path, rev=rev, tag=tag)
         response_binary = self._http.get(path, get_raw_response=True, accept="all", stream=True, rev=rev, tag=tag)
@@ -86,7 +86,7 @@ class Files:
         org_label = url_encode(org_label)
         project_label = url_encode(project_label)
 
-        path = [Files.segment, org_label, project_label]
+        path = [self.segment, org_label, project_label]
 
         if filename is None:
             filename = filepath.split("/")[-1]
@@ -129,7 +129,7 @@ class Files:
             "mediaType": media_type
         }
 
-        request_path = [Files.segment, org_label, project_label]
+        request_path = [self.segment, org_label, project_label]
 
         if file_id is not None:
             request_path.append(url_encode(file_id))
@@ -161,7 +161,7 @@ class Files:
         org_label = url_encode(org_label)
         project_label = url_encode(project_label)
 
-        path = [Files.segment, org_label, project_label, url_encode(file_id)]
+        path = [self.segment, org_label, project_label, url_encode(file_id)]
 
         if filename is None:
             filename = filepath.split("/")[-1]
@@ -225,7 +225,7 @@ class Files:
             "mediaType": media_type
         }
 
-        request_path = [Files.segment, org_label, project_label, url_encode(file_id)]
+        request_path = [self.segment, org_label, project_label, url_encode(file_id)]
 
         return self._http.put(request_path, body=payload, rev=rev, storage=storage_id)
 
@@ -285,7 +285,7 @@ class Files:
         org_label = url_encode(org_label)
         project_label = url_encode(project_label)
 
-        path = [Files.segment, org_label, project_label]
+        path = [self.segment, org_label, project_label]
 
         params = {
             "from": pagination_from,
@@ -312,7 +312,7 @@ class Files:
             :param rev: The last revision of the file.
             :return: A payload containing only the Nexus metadata for this deprecated file.
         """
-        path = [Files.segment, org_label, project_label, url_encode(file_id)]
+        path = [self.segment, org_label, project_label, url_encode(file_id)]
         return self._http.delete(path, rev=rev)
 
     def deprecate_(self, file: Dict, rev: Optional[int] = None) -> Dict:
@@ -344,7 +344,7 @@ class Files:
             :param rev: The last revision of the file.
             :return: A payload containing only the Nexus metadata for this file.
         """
-        path = [Files.segment, org_label, project_label, url_encode(file_id), "tags"]
+        path = [self.segment, org_label, project_label, url_encode(file_id), "tags"]
 
         payload = {
             "tag": tag_value,
@@ -397,8 +397,8 @@ class Files:
             try:
                 guessed_content_type = puremagic.from_file(filepath, True)
             except puremagic.main.PureError as e:
-                print(f"{e}, using the default content type instead: {Files._default_content_type}")
-                guessed_content_type = Files._default_content_type
+                print(f"{e}, using the default content type instead: {self._default_content_type}")
+                guessed_content_type = self._default_content_type
             return guessed_content_type
         else:
             return content_type

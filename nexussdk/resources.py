@@ -13,7 +13,7 @@ from nexussdk.utils.http import Http
 class Resources:
     def __init__(self, http: Http):
         self._http = http
-    
+
     def fetch(self, org_label, project_label, resource_id, schema_id="_", rev=None, tag=None):
         """
             Fetches a distant resource and returns the payload as a dictionary.
@@ -27,26 +27,25 @@ class Resources:
             :param tag: OPTIONAL fetches the resource version that has a specific tag (default: None)
             :return: Payload of the whole resource as a dictionary
         """
-    
+
         if rev is not None and tag is not None:
             raise Exception("The arguments rev and tag are mutually exclusive. One or the other must be chosen.")
-    
+
         # the element composing the query URL need to be URL-encoded
         org_label = url_encode(org_label)
         project_label = url_encode(project_label)
         schema_id = url_encode(schema_id)
         resource_id = url_encode(resource_id)
         path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
-    
+
         if rev is not None:
             path = path + "?rev=" + str(rev)
-    
+
         if tag is not None:
             path = path + "?tag=" + str(tag)
-    
+
         return self._http.get(path, use_base=True)
-    
-    
+
     def update(self, resource, rev=None):
         """
         Update a resource. The resource object is most likely the returned value of a
@@ -59,50 +58,48 @@ class Resources:
             If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this updated resource.
         """
-    
+
         if rev is None:
             rev = resource["_rev"]
-    
+
         path = resource["_self"] + "?rev=" + str(rev)
-    
+
         return self._http.put(path, resource, use_base=False)
-    
-    
-    def create(self, org_label, project_label, data, schema_id="_", resource_id=None):
+
+    def create(self, org_label, project_label, data, schema_id=None, resource_id=None):
         """
             Create a resource. If resource_id is provided, this given ID will be used. If resource_id not provided,
             an ID will be automatically generated for this new resource.
     
             :param org_label: The label of the organization that the resource belongs to
             :param project_label: The label of the project that the resource belongs to
-            :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: "resource)
+            :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: "_")
             :param data: dictionary containing the data to store in this new resource
             :param resource_id: OPTIONAL force the use of a specific id when creating the new resource
             :return: A payload containing only the Nexus metadata for this updated resource.
     
             If the data does not have a "@context" value, a default one is automatically added.
         """
-    
+
         # if no schema is provided, we can create a resource with a non-constraining
-        # default schema called "resource"
+        # default schema called "_"
         if schema_id is None:
-            schema_id = "resource"
-    
+            schema_id = "_"
+
         # the element composing the query URL need to be URL-encoded
         org_label = url_encode(org_label)
         project_label = url_encode(project_label)
         schema_id = url_encode(schema_id)
-    
+
         path = "/resources/" + org_label + "/" + project_label + "/" + schema_id
-    
+
         if resource_id is None:
             return self._http.post(path, data, use_base=True)
         else:
             resource_id = url_encode(resource_id)
             path = path + "/" + resource_id
             return self._http.put(path, data, use_base=True)
-    
-    
+
     def list(self, org_label, project_label, pagination_from=0, pagination_size=20,
              deprecated=None, type=None, rev=None, schema=None, created_by=None, updated_by=None, resource_id=None):
         """
@@ -122,16 +119,16 @@ class Resources:
         :param resource_id: OPTIONAL List only the resources with this id. Relevant only when combined with other args
         :return: The raw payload as a dictionary
         """
-    
+
         org_label = url_encode(org_label)
         project_label = url_encode(project_label)
-    
+
         path = "/resources/" + org_label + "/" + project_label
-    
+
         # if schema:
         #     schema = url_encode(schema)
         #     path = path + "/" + schema
-    
+
         params = {
             "from": pagination_from,
             "size": pagination_size,
@@ -143,10 +140,9 @@ class Resources:
             "updated_by": updated_by,
             "id": resource_id
         }
-    
+
         return self._http.get(path, use_base=True, params=params)
-    
-    
+
     def deprecate(self, resource, rev=None):
         """
         Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
@@ -157,15 +153,14 @@ class Resources:
             If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this deprecated resource.
         """
-    
+
         if rev is None:
             rev = resource["_rev"]
-    
+
         path = resource["_self"] + "?rev=" + str(rev)
-    
+
         return self._http.delete(path, use_base=False)
-    
-    
+
     def tag(self, resource, tag_value, rev_to_tag=None, rev=None):
         """
         Add a tag to a a specific revision of the resource. Note that a new revision (untagged) will be created
@@ -178,23 +173,22 @@ class Resources:
             If not provided, the rev from the resource argument will be used.
         :return: A payload containing only the Nexus metadata for this resource.
         """
-    
+
         if rev is None:
             rev = resource["_rev"]
-    
+
         if rev_to_tag is None:
             rev_to_tag = resource["_rev"]
-    
+
         path = resource["_self"] + "/tags?rev=" + str(rev)
-    
+
         data = {
             "tag": tag_value,
             "rev": rev_to_tag
         }
-    
+
         return self._http.post(path, body=data, use_base=False)
-    
-    
+
     def tags(self, resource):
         """
         List all the tags added to this resource, along with their version numbers
@@ -202,11 +196,10 @@ class Resources:
         :param resource: payload of a previously fetched resource
         :return: payload containing the list of tags and versions
         """
-    
+
         path = resource["_self"] + "/tags"
         return self._http.get(path, use_base=False)
-    
-    
+
     def events(self, last_id: Optional[str] = None):
         """
         Fetches resource related events.
@@ -216,8 +209,7 @@ class Resources:
         :return: iterator of resource events
         """
         return self.sse_request("/resources/events", last_id)
-    
-    
+
     def project_events(self, org_label: str, project_label: str, last_id: Optional[str] = None):
         """
         Fetches resource related events for a project.
@@ -229,8 +221,7 @@ class Resources:
         :return: iterator of resource events for the given project
         """
         return self.sse_request("/resources/" + org_label + "/" + project_label + "/events", last_id)
-    
-    
+
     def org_events(self, org_label: str, last_id: Optional[str] = None):
         """
         Fetches resource related events for a organization.

@@ -27,7 +27,7 @@ class Realms:
         :return: The Nexus metadata of the created realm.
         """
         payload = self._payload(name, openid_config, logo)
-        return self._http.put([Realms.segment, subpath], payload)
+        return self._http.put([self.segment, subpath], payload)
 
     def create_(self, path: str, payload: Dict) -> Dict:
         """Create a realm (full path version).
@@ -47,7 +47,7 @@ class Realms:
         :param rev: (optional) Revision number of the realm.
         :return: The Nexus payload of the fetched realm.
         """
-        return self._http.get([Realms.segment, subpath], rev=rev)
+        return self._http.get([self.segment, subpath], rev=rev)
 
     def fetch_(self, path: str, rev: int = None) -> Dict:
         """Fetch a realm (full path version).
@@ -63,7 +63,7 @@ class Realms:
     
         :return: A Nexus results list with the Nexus payloads of the realms.
         """
-        return self._http.get([Realms.segment])
+        return self._http.get([self.segment])
 
     def list_(self, endpoint: str) -> Dict:
         """List realms (full path version).
@@ -86,7 +86,7 @@ class Realms:
         :return: The Nexus metadata of the realm.
         """
         payload = self._payload(name, openid_config, logo)
-        return self._http.put([Realms.segment, subpath], payload, rev=rev)
+        return self._http.put([self.segment, subpath], payload, rev=rev)
 
     def replace_(self, path: str, payload: Dict, rev: int) -> Dict:
         """Replace a realm (full path version).
@@ -107,7 +107,7 @@ class Realms:
         :param rev: Last revision of the realm.
         :return: The Nexus metadata of the deprecated realm.
         """
-        return self._http.delete([Realms.segment, subpath], rev=rev)
+        return self._http.delete([self.segment, subpath], rev=rev)
 
     def deprecate_(self, path: str, rev: int) -> Dict:
         """Deprecate a realm (full path version).

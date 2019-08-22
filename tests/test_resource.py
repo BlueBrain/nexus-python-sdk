@@ -1,103 +1,84 @@
-import nexussdk as nexus
+import time
+import unittest
+
+from nexussdk.utils.tools import pretty_print
+from . import *
 
 
-prod = "https://bbp.epfl.ch/nexus/v1/"
-staging = 'https://bbp-nexus.epfl.ch/staging/v1'
+class TestResources(unittest.TestCase):
 
-# token = open('token.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment(staging)
+    def __init__(self, *args, **kwargs):
+        super(TestResources, self).__init__(*args, **kwargs)
+        self.nexus = new_client()
+        self.org = random_string()
+        self.prj = random_string()
+        self.nexus.organizations.create(self.org)
+        self.nexus.projects.create(self.org, self.prj)
+        self.data = {
+            "firstname": "Johnny",
+            "lastname": "Bravo"
+        }
 
-# DEV with Github token
-token = open('token-gh.txt', 'r').read().strip()
-nexus.config.set_token(token)
-nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
+    # Create a resource (NOT providing an ID)
+    def _post(self):
+        payload = self.nexus.resources.create(self.org, self.prj, self.data)
+        payload = self.nexus.resources.fetch(self.org, self.prj, payload["@id"])
+        pretty_print(payload)
+        self.assertEqual(payload["_rev"], 1)
 
-# DEV with Github token
-# token = open('token-gh.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
+    # Create a resource (providing an ID)
+    def _put(self, id=random_string()):
+        self.nexus.resources.create(self.org, self.prj, self.data, resource_id=id)
+        payload = self.nexus.resources.fetch(self.org, self.prj, id)
+        pretty_print(payload)
+        self.assertEqual(payload["_rev"], 1)
 
+    # Update a resource
+    def test_update(self):
+        id = random_string()
+        payload = self._put(id)
+        data = self.data
+        data["birthdate"] = 1566380674
+        data["_rev"] = 1
+        data["@id"] = payload["@id"]
+        data["_self"] = payload["_self"]
+        self.nexus.resources.update(data)
+        update = self.nexus.resources.fetch(self.org, self.prj, id)
+        self.assertEqual(update["birthdate"], 1566380674)
 
-# # # WORKS but the API does not list everything
-# payload = nexus.resources.list('my_org', 'first_project')
-# nexus.tools.pretty_print(payload)
-#
-# exit()
+    def test_deprecate(self):
+        id = random_string()
+        payload = self.nexus.resources.create(self.org, self.prj, self.data, resource_id=id)
+        deprecated = self.nexus.resources.deprecate(payload)
+        pretty_print(deprecated)
+        self.assertEqual(deprecated["_deprecated"], True)
 
-# # WORKS but the API does not list everything
-# payload = nexus.resources.list('my_org', 'first_project', schema="resource")
-# nexus.tools.pretty_print(payload)
+    def test_tag(self):
+        id = random_string()
+        payload = self.nexus.resources.create(self.org, self.prj, self.data, resource_id=id)
+        self.nexus.resources.tag(payload, "mytag")
+        tags = self.nexus.resources.tags(payload)
+        pretty_print(tags)
+        self.assertEqual(tags["tags"][0]["tag"], "mytag")
 
+    def test_attach(self):
+        # Attach a file to an existing resource
+        id = random_string()
+        self._put(id)
+        payload = self.nexus.resources.fetch(self.org, self.prj, resource_id=id)
+        f = "./an_attachment.txt"
+        payload = self.nexus.resources.add_attachement(payload, f)
+        f = "./an_attachment_image.jpg"
+        payload = self.nexus.resources.add_attachement(payload, f)
+        pretty_print(payload)
 
-# WORKS
-# payload = None
+    def test_list(self):
+        self._post()
+        self._put()
+        time.sleep(10)
+        payload = self.nexus.resources.list(self.org, self.prj)
+        pretty_print(payload)
+        self.assertGreater(len(payload["_results"]), 0)
 
-# payload = nexus.resources.fetch('my_org', 'first_project', 'resource', "13744e26-92a7-45fa-b9c5-7e5e4dd80110")
-# nexus.tools.pretty_print(payload)
-# #
-# #
-# print('===========================================================')
-#
-# exit()
-
-# Create a resource (NOT providing an ID)
-# data = {
-#     "firstname": "Johnny2",
-#     "lastname": "Bravo2"
-# }
-# payload = nexus.resources.create('my_org', 'first_project', data)
-# # payload = nexus.resources.create('bbp', 'example', data)
-# nexus.tools.pretty_print(payload)
-
-
-# Create a resource (providing an ID)
-# data = {
-#     "firstname": "Johnny1",
-#     "lastname": "Bravo1"
-# }
-# payload = nexus.resources.create('my_org', 'first_project', data )
-# # payload = nexus.resources.create('jojorg', 'second_project', data, id="the-fancy-id-i-absolutely-need")
-# nexus.tools.pretty_print(payload)
-
-
-# WORKS
-# payload["birthdate"] = "Some day, a long time ago"
-# payload["alignment"] = "chaotic good"
-# response = nexus.resources.update(payload)
-# nexus.tools.pretty_print(response)
-#
-# exit()
-
-# payload = nexus.resources.deprecate(payload)
-# nexus.tools.pretty_print(payload)
-
-
-# Attach a file to an existing resource
-# f = "./an_attachment.txt"
-# f = "./an_attachment_image.jpg"
-# payload = nexus.resources.add_attachement(payload, f)
-# nexus.tools.pretty_print(payload)
-
-
-# Delete an attachment from a resource
-# payload = nexus.resources.delete_attachment(payload, "an_attachment.txt")
-# nexus.tools.pretty_print(payload)
-
-
-# Fetch en attachment
-#payload = nexus.resources.fetch_attachment(payload, "an_attachment.txt", out_filename="an_attachment_OUT.txt")
-# payload = nexus.resources.fetch_attachment(payload, "an_attachment_image.jpg", out_filename="an_attachment_image_OUT.jpg")
-# print(payload)
-
-
-# Works
-# Tag a resource
-# payload = nexus.resources.fetch('my_org', 'first_project', 'resource', "http://dev.nexus.ocp.bbp.epfl.ch/v1/resources/my_org/first_project/_/13744e26-92a7-45fa-b9c5-7e5e4dd80110")
-# payload = nexus.resources.tag(payload, "some_tag")
-# nexus.tools.pretty_print(payload)
-
-# Get all the tags for a resource
-payload = nexus.resources.fetch('my_org', 'first_project', 'resource', "13744e26-92a7-45fa-b9c5-7e5e4dd80110")
-payload = nexus.resources.tags(payload)
-nexus.tools.pretty_print(payload)
+        payload = self.nexus.resources.list(self.org, self.prj, schema="context")
+        self.assertEqual(len(payload["_results"]), 0)

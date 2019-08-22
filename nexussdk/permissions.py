@@ -23,7 +23,7 @@ class Permissions:
         :param rev: (optional) Revision number of the permissions.
         :return: A Nexus payload with the permissions.
         """
-        return self._http.get([Permissions.segment], rev=rev)
+        return self._http.get([self.segment], rev=rev)
 
     def fetch_(self, endpoint: str, rev: int = None) -> Dict:
         """Fetch the permissions (full path version).
@@ -44,7 +44,7 @@ class Permissions:
         :return: The Nexus metadata of the permissions.
         """
         payload = self._payload(permissions)
-        return self._http.put([Permissions.segment], payload, rev=rev)
+        return self._http.put([self.segment], payload, rev=rev)
 
     def replace_(self, endpoint: str, payload: Dict, rev: int) -> Dict:
         """Replace the user-defined permissions (full path version).
@@ -64,7 +64,7 @@ class Permissions:
         :return: The Nexus metadata of the permissions.
         """
         payload = self._payload(permissions, "Append")
-        return self._http.patch([Permissions.segment], payload, rev=rev)
+        return self._http.patch([self.segment], payload, rev=rev)
 
     def append_(self, endpoint: str, payload: Dict, rev: int) -> Dict:
         """Append user-defined permissions (full path version).
@@ -84,7 +84,7 @@ class Permissions:
         :return: The Nexus metadata of the permissions.
         """
         payload = self._payload(permissions, "Subtract")
-        return self._http.patch([Permissions.segment], payload, rev=rev)
+        return self._http.patch([self.segment], payload, rev=rev)
 
     def subtract_(self, endpoint: str, payload: Dict, rev: int) -> Dict:
         """Subtract user-defined permissions (full path version).
@@ -104,7 +104,7 @@ class Permissions:
         :param rev: Last revision of the permissions.
         :return: The Nexus metadata of the permissions.
         """
-        return self._http.delete([Permissions.segment], rev=rev)
+        return self._http.delete([self.segment], rev=rev)
 
     def delete_(self, endpoint: str, rev: int) -> Dict:
         """Delete user-defined permissions (full path version).

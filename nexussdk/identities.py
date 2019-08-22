@@ -22,7 +22,7 @@ class Identities:
 
         :return: A list with the Nexus payloads of the identities.
         """
-        return self._http.get([Identities.segment])
+        return self._http.get([self.segment])
 
     def fetch_(self, endpoint: str) -> Dict:
         """Fetch the identities (full path version).

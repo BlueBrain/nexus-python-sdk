@@ -11,15 +11,13 @@ from urllib.parse import quote_plus as url_encode
 from nexussdk.utils.http import Http
 from nexussdk.utils.tools import listing_params
 
+
 class Storages:
-    
-    
     segment = "storages"
-    
-    
+
     def __init__(self, http: Http):
         self._http = http
-    
+
     def create_(self, org_label: str, project_label: str, payload: Dict, storage_id: Optional[str]) -> Dict:
         """Create storage.
     
@@ -31,10 +29,9 @@ class Storages:
         """
         if storage_id is not None:
             payload["@id"] = storage_id
-    
-        return self._http.post([Storages.segment, org_label, project_label], body=payload)
-    
-    
+
+        return self._http.post([self.segment, org_label, project_label], body=payload)
+
     def update_(self, org_label: str, project_label: str, payload: Dict, storage_id: str, rev: int) -> Dict:
         """Update storage.
     
@@ -45,9 +42,8 @@ class Storages:
         :param rev: last known revision of the storage
         :return: The Nexus metadata of the updated storage.
         """
-        return self._http.put([Storages.segment, org_label, project_label, url_encode(storage_id)], body=payload, rev=rev)
-    
-    
+        return self._http.put([self.segment, org_label, project_label, url_encode(storage_id)], body=payload, rev=rev)
+
     def create_disk_storage(self, org_label: str, project_label: str, volume: str,
                             storage_id: Optional[str] = None, read_permission: Optional[str] = None,
                             write_permission: Optional[str] = None, default: bool = False) -> Dict:
@@ -67,19 +63,18 @@ class Storages:
             "volume": volume,
             "default": default
         }
-    
+
         if storage_id is not None:
             payload["@id"] = storage_id
-    
+
         if read_permission is not None:
             payload["readPermission"] = read_permission
-    
+
         if write_permission is not None:
             payload["writePermission"] = write_permission
-    
+
         return self.create_(org_label, project_label, payload, storage_id)
-    
-    
+
     def create_s3_storage(self, org_label: str, project_label: str,
                           bucket: str,
                           storage_id: Optional[str] = None, read_permission: Optional[str] = None,
@@ -107,31 +102,30 @@ class Storages:
             "bucket": bucket,
             "default": default
         }
-    
+
         if storage_id is not None:
             payload["@id"] = storage_id
-    
+
         if read_permission is not None:
             payload["readPermission"] = read_permission
-    
+
         if write_permission is not None:
             payload["writePermission"] = write_permission
-    
+
         if endpoint is not None:
             payload["endpoint"] = endpoint
-    
+
         if region is not None:
             payload["region"] = region
-    
+
         if access_key is not None:
             payload["accessKey"] = access_key
-    
+
         if secret_key is not None:
             payload["secretKey"] = secret_key
-    
+
         return self.create_(org_label, project_label, payload, storage_id)
-    
-    
+
     def create_external_disk_storage(self, org_label: str, project_label: str, endpoint: str, folder: str,
                                      storage_id: Optional[str] = None, read_permission: Optional[str] = None,
                                      write_permission: Optional[str] = None, default: bool = False,
@@ -155,22 +149,21 @@ class Storages:
             "folder": folder,
             "default": default
         }
-    
+
         if storage_id is not None:
             payload["@id"] = storage_id
-    
+
         if read_permission is not None:
             payload["readPermission"] = read_permission
-    
+
         if write_permission is not None:
             payload["writePermission"] = write_permission
-    
+
         if credentials is not None:
             payload["credentials"] = credentials
-    
+
         return self.create_(org_label, project_label, payload, storage_id)
-    
-    
+
     def update_disk_storage(self, org_label: str, project_label: str, volume: str,
                             storage_id: str, rev: int, read_permission: Optional[str] = None,
                             write_permission: Optional[str] = None, default: bool = False) -> Dict:
@@ -192,19 +185,18 @@ class Storages:
             "volume": volume,
             "default": default
         }
-    
+
         if storage_id is not None:
             payload["@id"] = storage_id
-    
+
         if read_permission is not None:
             payload["readPermission"] = read_permission
-    
+
         if write_permission is not None:
             payload["writePermission"] = write_permission
-    
+
         return self.update_(org_label, project_label, payload, storage_id, rev)
-    
-    
+
     def update_s3_storage(self, org_label: str, project_label: str,
                           bucket: str,
                           storage_id: str, rev: int, read_permission: Optional[str] = None,
@@ -234,31 +226,30 @@ class Storages:
             "bucket": bucket,
             "default": default
         }
-    
+
         if storage_id is not None:
             payload["@id"] = storage_id
-    
+
         if read_permission is not None:
             payload["readPermission"] = read_permission
-    
+
         if write_permission is not None:
             payload["writePermission"] = write_permission
-    
+
         if endpoint is not None:
             payload["endpoint"] = endpoint
-    
+
         if region is not None:
             payload["region"] = region
-    
+
         if access_key is not None:
             payload["accessKey"] = access_key
-    
+
         if secret_key is not None:
             payload["secretKey"] = secret_key
-    
+
         return self.update_(org_label, project_label, payload, storage_id, rev)
-    
-    
+
     def update_external_disk_storage(self, org_label: str, project_label: str, endpoint: str, folder: str,
                                      storage_id: str, rev: int, read_permission: Optional[str] = None,
                                      write_permission: Optional[str] = None, default: bool = False,
@@ -283,22 +274,21 @@ class Storages:
             "folder": folder,
             "default": default
         }
-    
+
         if storage_id is not None:
             payload["@id"] = storage_id
-    
+
         if read_permission is not None:
             payload["readPermission"] = read_permission
-    
+
         if write_permission is not None:
             payload["writePermission"] = write_permission
-    
+
         if credentials is not None:
             payload["credentials"] = credentials
-    
+
         return self.update_(org_label, project_label, payload, storage_id, rev)
-    
-    
+
     def deprecate(self, org_label: str, project_label: str, storage_id: str, rev: int) -> Dict:
         """Deprecate storage
     
@@ -308,9 +298,8 @@ class Storages:
         :param rev: last known revision of the storage
         :return: The Nexus metadata of the storage.
         """
-        return self._http.delete([Storages.segment, org_label, project_label, url_encode(storage_id)], rev=rev)
-    
-    
+        return self._http.delete([self.segment, org_label, project_label, url_encode(storage_id)], rev=rev)
+
     def tag(self, org_label: str, project_label: str, storage_id: str, tag: str, rev_to_tag: str, rev: int) -> Dict:
         """Tag a storage
     
@@ -326,9 +315,9 @@ class Storages:
             "tag": tag,
             "rev": rev_to_tag,
         }
-        return self._http.post([Storages.segment, org_label, project_label, url_encode(storage_id), "tags"], payload, rev=rev)
-    
-    
+        return self._http.post([self.segment, org_label, project_label, url_encode(storage_id), "tags"], payload,
+                               rev=rev)
+
     def tags(self, org_label: str, project_label: str, storage_id: str) -> Dict:
         """Fetch tags for storage.
     
@@ -337,9 +326,8 @@ class Storages:
         :param storage_id: the storage ID
         :return: The tags for the storage.
         """
-        return self._http.get([Storages.segment, org_label, project_label, url_encode(storage_id), "tags"])
-    
-    
+        return self._http.get([self.segment, org_label, project_label, url_encode(storage_id), "tags"])
+
     def fetch(self, org_label: str, project_label: str, storage_id: str, tag: Optional[str] = None,
               rev: Optional[int] = None) -> Dict:
         """Fetch a storage
@@ -351,9 +339,8 @@ class Storages:
         :param rev: revision to fetch
         :return: storage payload
         """
-        return self._http.get([Storages.segment, org_label, project_label, url_encode(storage_id)], rev=rev, tag=tag)
-    
-    
+        return self._http.get([self.segment, org_label, project_label, url_encode(storage_id)], rev=rev, tag=tag)
+
     def list(self, org_label: str, project_label: str, pagination_from: Optional[int] = None,
              pagination_size: Optional[int] = None, deprecated: Optional[bool] = None, type: Optional[str] = None,
              created_by: Optional[str] = None, updated_by: Optional[str] = None, rev: Optional[int] = None) -> Dict:
@@ -374,6 +361,7 @@ class Storages:
         :param rev: (optional) Revision number of the storages to keep.
         :return: A Nexus results list with the Nexus metadata of the matching storages.
         """
-        return self._http.get([Storages.segment, org_label, project_label],
-                        params=listing_params(pagination_from, pagination_size, deprecated, type, created_by, updated_by,
-                                              rev))
+        return self._http.get([self.segment, org_label, project_label],
+                              params=listing_params(pagination_from, pagination_size, deprecated, type, created_by,
+                                                    updated_by,
+                                                    rev))

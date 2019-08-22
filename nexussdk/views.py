@@ -67,7 +67,7 @@ class Views:
         :return: The Nexus metadata of the created view.
         """
         payload = {
-            "@type": ["View", Views._elastic_type],
+            "@type": ["View", self._elastic_type],
             "mapping": mapping,
             "includeMetadata": include_metadata,
             "includeDeprecated": include_deprecated
@@ -257,7 +257,7 @@ class Views:
         :param viewlist: the payload returned by .list()
         :return: the list of ElasticSearch view metadata (beware: not complete payloads like if it was the result of .fetch() calls)
         """
-        return self._filter_list_by_type(viewlist, Views._elastic_type)
+        return self._filter_list_by_type(viewlist, self._elastic_type)
 
     def list_keep_only_sparql(self, viewlist):
         """
@@ -266,7 +266,7 @@ class Views:
         :param viewlist: the payload returned by .list()
         :return: the list of SparQL view metadata (beware: not complete payloads like if it was the result of .fetch() calls)
         """
-        return self._filter_list_by_type(viewlist, Views._sparql_type)
+        return self._filter_list_by_type(viewlist, self._sparql_type)
 
     def _filter_list_by_type(self, list, type):
         new_list = []
@@ -322,7 +322,7 @@ class Views:
         :return: The Nexus metadata of the created view.
         """
         payload = {
-            "@type": ["View", Views._sparql_type],
+            "@type": ["View", self._sparql_type],
             "includeMetadata": include_metadata,
             "includeDeprecated": include_deprecated
         }

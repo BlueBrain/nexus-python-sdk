@@ -7,6 +7,7 @@ from nexussdk.organizations import Organizations
 from nexussdk.permissions import Permissions
 from nexussdk.projects import Projects
 from nexussdk.realms import Realms
+from nexussdk.resources import Resources
 from nexussdk.resolvers import Resolvers
 from nexussdk.schemas import Schemas
 from nexussdk.storages import Storages
@@ -25,6 +26,7 @@ class NexusClient:
         self.projects = Projects(self._http)
         self.realms = Realms(self._http)
         self.resolvers = Resolvers(self._http)
+        self.resources = Resources(self._http)
         self.schemas = Schemas(self._http)
         self.storages = Storages(self._http)
         self.views = Views(self._http)

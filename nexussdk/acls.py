@@ -28,7 +28,7 @@ class Acls:
             ACLs on the current subpath are returned.
         :return: A Nexus results list with the Nexus payloads of the ACLs.
         """
-        return this._http.get([Acls.segment, subpath], rev=rev, self=self)
+        return this._http.get([self.segment, subpath], rev=rev, self=self)
     
     
     def fetch_(this, path: str, rev: int = None, self: bool = True) -> Dict:
@@ -56,7 +56,7 @@ class Acls:
             ACLs on the current subpath are returned.
         :return: A Nexus results list with the Nexus payloads of the ACLs.
         """
-        return this._http.get([Acls.segment, subpath], ancestors=ancestors, self=self)
+        return this._http.get([self.segment, subpath], ancestors=ancestors, self=self)
     
     
     def list_(this, path: str, ancestors: bool = False, self: bool = True) -> Dict:
@@ -88,7 +88,7 @@ class Acls:
         :return: The Nexus metadata of the ACLs.
         """
         payload = self._payload(permissions, identities)
-        return self._http.put([Acls.segment, subpath], payload, rev=rev)
+        return self._http.put([self.segment, subpath], payload, rev=rev)
     
     
     def replace_(self, path: str, payload: Dict, rev: int) -> Dict:
@@ -114,7 +114,7 @@ class Acls:
         :return: The Nexus metadata of the ACLs.
         """
         payload = self._payload(permissions, identities, "Append")
-        return self._http.patch([Acls.segment, subpath], payload, rev=rev)
+        return self._http.patch([self.segment, subpath], payload, rev=rev)
     
     
     def append_(self, path: str, payload: Dict, rev: int) -> Dict:
@@ -140,7 +140,7 @@ class Acls:
         :return: The Nexus metadata of the ACLs.
         """
         payload = self._payload(permissions, identities, "Subtract")
-        return self._http.patch([Acls.segment, subpath], payload, rev=rev)
+        return self._http.patch([self.segment, subpath], payload, rev=rev)
     
     
     def subtract_(self, path: str, payload: Dict, rev: int) -> Dict:
@@ -163,7 +163,7 @@ class Acls:
         :param rev: Last revision of the ACLs.
         :return: The Nexus metadata of the ACLs.
         """
-        return self._http.delete([Acls.segment, subpath], rev=rev)
+        return self._http.delete([self.segment, subpath], rev=rev)
     
     
     def delete_(self, path: str, rev: int) -> Dict:

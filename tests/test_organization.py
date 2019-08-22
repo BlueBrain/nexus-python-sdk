@@ -1,44 +1,32 @@
-import nexussdk as nexus
+import unittest
+
+from nexussdk.utils.tools import pretty_print
+from . import *
 
 
-# STAGING
-# token = open('token.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment('https://bbp-nexus.epfl.ch/staging/v1')
+class TestOrgs(unittest.TestCase):
 
-# DEV with Github token
-token = open('token-gh.txt', 'r').read().strip()
-nexus.config.set_token(token)
-nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
+    def test_orgs(self):
+        nexus = new_client()
+        org = random_string()
 
+        # listing organizations
+        payload = nexus.organizations.list(pagination_size=100)
+        pretty_print(payload)
 
-# listing organizations
-# NOT WORKING due to API
-# payload = nexus.organizations.list(pagination_size=100)
-# nexus.tools.pretty_print(payload)
+        # getting a specific organization
+        nexus.organizations.create(org)
+        payload = nexus.organizations.fetch(org)
+        pretty_print(payload)
+        self.assertEqual(payload["_rev"], 1)
 
-# getting a specific organization
-# WORKS
-# payload = nexus.organizations.fetch("jojorg")
-# nexus.tools.pretty_print(payload)
+        # Updating values of an organization
+        payload["description"] = "an updated description v2"
+        payload = nexus.organizations.update(payload)
+        pretty_print(payload)
+        self.assertEqual(payload["_rev"], 2)
 
-
-# Updating values of an organization
-# WORKS
-# payload["description"] = "an updated description v2"
-# payload = nexus.organizations.update(payload)
-# nexus.tools.pretty_print(payload)
-
-
-# payload = nexus.organizations.fetch("jojorg")
-# nexus.tools.pretty_print(payload)
-
-# Create an Organization
-# WORKS
-payload = nexus.organizations.create("my_org", name="My Org", description="This is my org, there are many like it but this one is mine.")
-nexus.tools.pretty_print(payload)
-
-# Deprecate an Organization
-# WORKS
-# payload = nexus.organizations.deprecate("somefancyorg6", 1)
-# nexus.tools.pretty_print(payload)
+        # Deprecate an Organization
+        payload = nexus.organizations.deprecate(org, 2)
+        pretty_print(payload)
+        self.assertEqual(payload["_rev"], 3)

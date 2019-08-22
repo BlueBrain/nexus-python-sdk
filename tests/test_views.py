@@ -1,119 +1,79 @@
-import nexussdk as nexus
+import time
+import unittest
+
+from nexussdk.utils.tools import pretty_print
+from . import *
 
 
-prod = "https://bbp.epfl.ch/nexus/v1/"
-staging = 'https://bbp-nexus.epfl.ch/staging/v1'
+class TestViews(unittest.TestCase):
 
-token = open('token.txt', 'r').read().strip()
-nexus.config.set_token(token)
-nexus.config.set_environment(staging)
+    def __init__(self, *args, **kwargs):
+        super(TestViews, self).__init__(*args, **kwargs)
+        self.nexus = new_client()
+        self.org = random_string()
+        self.prj = random_string()
+        self.nexus.organizations.create(self.org)
+        self.nexus.projects.create(self.org, self.prj)
+        self.mapping = {
+            "dynamic": False,
+            "properties": {
+                "@id": {
+                    "type": "keyword"
+                },
+                "@type": {
+                    "type": "keyword"
+                },
+                "firstname": {
+                    "type": "keyword"
+                },
+                "lastname": {
+                    "type": "keyword"
+                }
+            }
+        }
 
-# DEV with Github token
-# token = open('token-gh.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
+    # Create a ES view
+    def _put(self, id=f"nxv:{random_string()}"):
+        payload = self.nexus.views.create_es(self.org, self.prj, self.mapping, view_id=id)
+        pretty_print(payload)
 
-# DEV with Github token
-# token = open('token-gh.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
+    def test_list(self):
+        self._put()
+        time.sleep(10)
+        payload = self.nexus.views.list(self.org, self.prj)
+        pretty_print(payload)
+        self.assertGreater(len(payload["_results"]), 0)
+        es = self.nexus.views.list_keep_only_es(payload)
+        self.assertNotEqual(payload, es)
 
+    def test_es_query(self):
+        resource = self.nexus.resources.create(self.org, self.prj, {"firstname": "Johnny", "lastname": "Bravo"})
+        resource = self.nexus.resources.fetch(self.org, self.prj, resource["@id"])
+        self.assertEqual(resource["_rev"], 1)
+        query = """
+        {
+          "query": {
+            "term": {
+              "firstname": "Johnny"
+            }
+          }
+        }
+        """
+        id = f"nxv:{random_string()}"
+        self._put(id)
+        time.sleep(10)
+        payload_view = self.nexus.views.fetch(self.org, self.prj, id)
+        pretty_print(payload_view)
+        payload = self.nexus.views.query_es(self.org, self.prj, query, id)
+        pretty_print(payload)
+        self.assertGreater(len(payload["hits"]["hits"]), 0)
 
-# WORKS
-# Fetch a view
-# payload = nexus.views.fetch("bbp", "example", "http://example.comthe_id_of_this")
-# payload = nexus.views.fetch("bbp", "example", "http://example.comthe_id_of_this", tag="some_tag")
-# nexus.tools.pretty_print(payload)
-
-# WORKS
-# Create a ES view
-# view_data = """
-# {
-#   "mapping": {
-#     "dynamic": false,
-#     "properties": {
-#       "@id": {
-#         "type": "keyword"
-#       },
-#       "@type": {
-#         "type": "keyword"
-#       },
-#       "firstname": {
-#         "type": "keyword"
-#       },
-#       "lastname": {
-#         "type": "keyword"
-#       }
-#     }
-#   },
-#   "includeMetadata": false,
-#   "sourceAsText": false,
-#   "resourceSchemas": "nxs:myschema"
-# }
-# """
-# payload = nexus.views.create_es("bbp", "example", view_data, id="name_view")
-# nexus.tools.pretty_print(payload)
-
-
-# WORKS
-# List the views (all kinds)
-# payload = nexus.views.list("bbp", "example")
-# nexus.tools.pretty_print(payload)
-
-# Listing but keeping only the ElasticSearch view from the list
-# list_of_es_views = nexus.views.list_keep_only_es( nexus.views.list("bbp", "example") )
-# nexus.tools.pretty_print(list_of_es_views)
-
-# WORKS
-# Update a view
-# payload["mapping"]["dynamic"] = True
-# payload = nexus.views.update_es(payload)
-# nexus.tools.pretty_print(payload)
-
-# WORKS
-# Deprecate a view
-# payload = nexus.views.deprecate_es(payload)
-# nexus.tools.pretty_print(payload)
-
-
-# Tag a view
-# payload = nexus.views.tag_es(payload, "some_tag")
-# nexus.tools.pretty_print(payload)
-
-
-
-# # Aggregate some views
-# # 1- make a list of their ids
-# view_ids_to_aggregate = [
-#     "http://example.comthe_id_of_this",
-#     "nxv:myview1"
-# ]
-# # 2- gotta fetch'em all!
-# views_to_aggregate = []
-# for id in view_ids_to_aggregate:
-#     views_to_aggregate.append( nexus.views.fetch("bbp", "example", id) )
-#
-# # 3- make the call to Aggregate them
-# payload = nexus.views.aggregate_es("bbp", "example", views_to_aggregate, id="some_fancy_aggregation")
-# nexus.tools.pretty_print(payload)
-
-
-# # # Perform a ES query
-# query = """
-# {
-#   "query": {
-#     "term": {
-#       "firstname": "Johnny6"
-#     }
-#   }
-# }
-# """
-# payload_view = nexus.views.fetch("bbp", "example", "name_view")
-# payload = nexus.views.query_es(payload_view, query)
-# nexus.tools.pretty_print(payload)
-
-
-# SparQL query
-query = "SELECT ?s where {?s ?p ?o} LIMIT 2"
-payload = nexus.views.query_sparql("bbp", "example", query)
-nexus.tools.pretty_print(payload)
+    def test_sparql_query(self):
+        resource = self.nexus.resources.create(self.org, self.prj, {"firstname": "Johnny", "lastname": "Bravo"})
+        resource = self.nexus.resources.fetch(self.org, self.prj, resource["@id"])
+        self.assertEqual(resource["_rev"], 1)
+        time.sleep(10)
+        query = 'SELECT ?s where {?s ?p "Bravo"} LIMIT 10'
+        payload = self.nexus.views.query_sparql(self.org, self.prj, query)
+        pretty_print(payload)
+        self.assertGreater(len(payload["results"]["bindings"]), 0)
