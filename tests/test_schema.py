@@ -1,106 +1,120 @@
-import nexussdk as nexus
+import time
+import unittest
+
+from nexussdk.utils.tools import pretty_print
+from . import *
 
 
-prod = "https://bbp.epfl.ch/nexus/v1/"
-staging = 'https://bbp-nexus.epfl.ch/staging/v1'
+class TestSchemas(unittest.TestCase):
 
-token = open('token.txt', 'r').read().strip()
-nexus.config.set_token(token)
-nexus.config.set_environment(staging)
+    def __init__(self, *args, **kwargs):
+        super(TestSchemas, self).__init__(*args, **kwargs)
+        self.nexus = new_client()
+        self.org = random_string()
+        self.prj = random_string()
+        self.nexus.organizations.create(self.org)
+        self.nexus.projects.create(self.org, self.prj)
 
-# DEV with Github token
-# token = open('token-gh.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
+    # Create a schema (NO id provided)
+    def _post(self):
+        my_schema = """{
+          "shapes": [
+            {
+              "@id": "this:MyShape",
+              "@type": "sh:NodeShape",
+              "nodeKind": "sh:BlankNodeOrIRI",
+              "targetClass": "ex:Custom",
+              "property": [
+                {
+                  "path": "ex:name",
+                  "datatype": "xsd:string",
+                  "minCount": 1
+                },
+                {
+                  "path": "ex:number",
+                  "datatype": "xsd:integer",
+                  "minCount": 1
+                },
+                {
+                  "path": "ex:bool",
+                  "datatype": "xsd:boolean",
+                  "minCount": 1
+                }
+              ]
+            }
+          ]
+        }"""
+        payload = self.nexus.schemas.create(self.org, self.prj, my_schema)
+        pretty_print(payload)
+        id = payload["@id"]
+        payload = self.nexus.schemas.fetch(self.org, self.prj, id)
+        self.assertEqual(len(payload["shapes"]), 1)
 
-# WORKS
-# Listing schemas
-# payload = nexus.schemas.list('bbp', 'example')
-# nexus.tools.pretty_print(payload)
+    # Create a schema (id provided)
+    def _put(self, id=random_string()):
+        my_schema = """{
+          "shapes": [
+            {
+              "@id": "this:MyShape",
+              "@type": "sh:NodeShape",
+              "nodeKind": "sh:BlankNodeOrIRI",
+              "targetClass": "ex:Custom",
+              "property": [
+                {
+                  "path": "ex:name",
+                  "datatype": "xsd:string",
+                  "minCount": 1
+                },
+                {
+                  "path": "ex:number",
+                  "datatype": "xsd:integer",
+                  "minCount": 1
+                },
+                {
+                  "path": "ex:bool",
+                  "datatype": "xsd:boolean",
+                  "minCount": 1
+                }
+              ]
+            }
+          ]
+        }"""
+        payload = self.nexus.schemas.create(self.org, self.prj, my_schema, schema_id=id)
+        pretty_print(payload)
+        payload = self.nexus.schemas.fetch(self.org, self.prj, id)
+        self.assertEqual(len(payload["shapes"]), 1)
 
+    def test_update(self):
+        id = random_string()
+        self._put(id)
+        payload = self.nexus.schemas.fetch(self.org, self.prj, id)
+        payload["shapes"][0]["property"][0]["minCount"] = 10
+        payload = self.nexus.schemas.update(payload)
+        self.assertEqual(payload["_rev"], 2)
+        pretty_print(payload)
 
-# WORKS
-# Create a schema (NO id provided)
-# my_schema = """{
-#   "shapes": [
-#     {
-#       "@id": "this:MyShape",
-#       "@type": "sh:NodeShape",
-#       "nodeKind": "sh:BlankNodeOrIRI",
-#       "targetClass": "ex:Custom",
-#       "property": [
-#         {
-#           "path": "ex:name",
-#           "datatype": "xsd:string",
-#           "minCount": 1
-#         },
-#         {
-#           "path": "ex:number",
-#           "datatype": "xsd:integer",
-#           "minCount": 1
-#         },
-#         {
-#           "path": "ex:bool",
-#           "datatype": "xsd:boolean",
-#           "minCount": 1
-#         }
-#       ]
-#     }
-#   ]
-# }"""
-# payload = nexus.schemas.create('bbp', 'example', my_schema)
-# nexus.tools.pretty_print(payload)
+    # Deprecate
+    def test_deprecate(self):
+        id = random_string()
+        self._put(id)
+        payload = self.nexus.schemas.fetch(self.org, self.prj, id)
+        payload = self.nexus.schemas.deprecate(payload)
+        pretty_print(payload)
+        self.assertEqual(payload["_deprecated"], True)
 
+    def test_tag(self):
+        id = random_string()
+        self._put(id)
+        payload = self.nexus.schemas.fetch(self.org, self.prj, id)
+        payload = self.nexus.resources.tag(payload, "mytag")
+        tags = self.nexus.resources.tags(payload)
+        pretty_print(tags)
+        self.assertEqual(tags["tags"][0]["tag"], "mytag")
 
-# Create a schema (id provided)
-my_schema = """{
-  "shapes": [
-    {
-      "@id": "this:MyShape",
-      "@type": "sh:NodeShape",
-      "nodeKind": "sh:BlankNodeOrIRI",
-      "targetClass": "ex:Custom",
-      "property": [
-        {
-          "path": "ex:name",
-          "datatype": "xsd:string",
-          "minCount": 1
-        },
-        {
-          "path": "ex:number",
-          "datatype": "xsd:integer",
-          "minCount": 1
-        },
-        {
-          "path": "ex:bool",
-          "datatype": "xsd:boolean",
-          "minCount": 1
-        }
-      ]
-    }
-  ]
-}"""
-payload = nexus.schemas.create('bbp', 'example', my_schema, schema_id="the_id2")
-nexus.tools.pretty_print(payload)
-
-
-# WORKS
-# Fetching a schema
-# payload = nexus.schemas.fetch('bbp', 'example', "http://example.com/981c24c9-25b3-411a-a0b8-93a08da523df", rev=4)
-# nexus.tools.pretty_print(payload)
-
-
-# WORKS
-# Updating a schema
-# payload["shapes"][0]["property"][0]["minCount"] = 10
-# payload = nexus.schemas.update(payload)
-# nexus.tools.pretty_print(payload)
-
-# Deprecate a schema
-# payload = nexus.schemas.deprecate(payload)
-# nexus.tools.pretty_print(payload)
-
-
-# Tag a schema
-# payload = nexus.schemas.tag(payload, "big_tag", 4)
-# nexus.tools.pretty_print(payload)
+    # Listing schemas
+    def test_list(self):
+        self._post()
+        self._put()
+        time.sleep(10)
+        payload = self.nexus.schemas.list(self.org, self.prj)
+        self.assertGreater(len(payload["_results"]), 0)

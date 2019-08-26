@@ -1,48 +1,43 @@
-import nexussdk as nexus
+import filecmp
+import time
+import unittest
 
-prod = "https://bbp.epfl.ch/nexus/v1/"
-staging = 'https://bbp-nexus.epfl.ch/staging/v1'
-dev = 'http://dev.nexus.ocp.bbp.epfl.ch/v1'
-
-# token = open('token.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment(staging)
-
-# DEV with Github token
-token = open('token-gh.txt', 'r').read().strip()
-nexus.config.set_token(token)
-nexus.config.set_environment(dev)
-
-# payload = nexus.files.list("my_org", "first_project")
-# nexus.tools.pretty_print(payload)
-
-# WORKS
-# Uploading a file (providing an ID)
-# payload = nexus.files.create("my_org", "first_project", "./an_attachment.txt", "some_file_id")
-# nexus.tools.pretty_print(payload)
-
-# WORKS
-# Uploading a file (NOT providing an ID)
-# payload = nexus.files.create("my_org", "first_project", "./an_attachment_image.jpg")
-# nexus.tools.pretty_print(payload)
-
-# WORKS
-# Fetch a file
-# payload = nexus.files.fetch("my_org", "first_project", "a8074a47-19f6-405e-83bc-f9b203b9dc91", out_filepath="./out/", tag="THE_TAG")
-# nexus.tools.pretty_print(payload)
-
-# Tag a file
-# payload = nexus.files.fetch("my_org", "first_project", "a8074a47-19f6-405e-83bc-f9b203b9dc91")
-# payload = nexus.files.tag(payload, tag_value="THE_TAG")
-# nexus.tools.pretty_print(payload)
-
-# Update a file
-# # payload = nexus.files.fetch("my_org", "first_project", "a8074a47-19f6-405e-83bc-f9b203b9dc91")
-# payload = nexus.files.update(payload, filepath="./other_image.png")
-# nexus.tools.pretty_print(payload)
+from nexussdk.utils.tools import pretty_print
+from . import *
 
 
-# Get the tags of a given file
-payload = nexus.files.fetch("my_org", "first_project", "a8074a47-19f6-405e-83bc-f9b203b9dc91")
-payload = nexus.files.tags(payload)
-nexus.tools.pretty_print(payload)
+class TestResources(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(TestResources, self).__init__(*args, **kwargs)
+        self.nexus = new_client()
+        self.org = random_string()
+        self.prj = random_string()
+        self.nexus.organizations.create(self.org)
+        self.nexus.projects.create(self.org, self.prj)
+        self.data = {
+            "firstname": "Johnny",
+            "lastname": "Bravo"
+        }
+
+    # Create a resource (NOT providing an ID)
+    def _post(self):
+        payload = self.nexus.files.create(self.org, self.prj, "tests/an_attachment.txt")
+        pretty_print(payload)
+        self.nexus.files.fetch(self.org, self.prj, payload["@id"], out_filepath="/tmp/")
+        self.assertTrue(filecmp.cmp("tests/an_attachment.txt", "/tmp/an_attachment.txt"))
+
+    # Create a resource (providing an ID)
+    def _put(self, id=random_string()):
+        payload = self.nexus.files.create(self.org, self.prj, "tests/an_attachment_image.jpg", file_id=id)
+        pretty_print(payload)
+        self.nexus.files.fetch(self.org, self.prj, id, out_filepath="/tmp/")
+        self.assertTrue(filecmp.cmp("tests/an_attachment_image.jpg", "/tmp/an_attachment_image.jpg"))
+
+    def test_list(self):
+        self._post()
+        self._put()
+        time.sleep(10)
+        payload = self.nexus.files.list(self.org, self.prj)
+        pretty_print(payload)
+        self.assertGreater(len(payload["_results"]), 0)

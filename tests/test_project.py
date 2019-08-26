@@ -1,38 +1,35 @@
-import nexussdk as nexus
+import unittest
 
-# # STAGING
-# token = open('token.txt', 'r').read().strip()
-# nexus.config.set_token(token)
-# nexus.config.set_environment('https://bbp-nexus.epfl.ch/staging/v1')
-
-# # DEV with Github token
-token = open('token-gh.txt', 'r').read().strip()
-nexus.config.set_token(token)
-nexus.config.set_environment('http://dev.nexus.ocp.bbp.epfl.ch/v1')
+from nexussdk.utils.tools import pretty_print
+from . import *
 
 
-# listing projects
-payload = nexus.projects.list()
-nexus.tools.pretty_print(payload)
+class TestProjects(unittest.TestCase):
 
-# getting a specific organization
-# payload = nexus.projects.fetch("my_org", "third_project")
-# nexus.tools.pretty_print(payload)
+    def test_projects(self):
+        nexus = new_client()
+        org = random_string()
+        prj = random_string()
 
+        # listing projects
+        payload = nexus.projects.list()
+        pretty_print(payload)
 
-# Updating values of an organization
-# WORKS
-# payload["apiMappings"] = ["not", "sure", "what", "to", "put", "there"]
-# payload = nexus.projects.update(payload)
-# nexus.tools.pretty_print(payload)
+        nexus.organizations.create(org, description="This is my org, there are many like it but this one is mine.")
+        nexus.projects.create(org, prj, "This is my awesome project")
 
-# Create an Project
-# WORKS
-# payload = nexus.projects.create("my_org", "third_project", description="bla bla", api_mappings=None, vocab=None)
-# nexus.tools.pretty_print(payload)
+        # Getting a specific project
+        project = nexus.projects.fetch(org, prj)
+        pretty_print(project)
 
+        # Updating a project
+        project["apiMappings"] = ["not", "sure", "what", "to", "put", "there"]
+        updated = nexus.projects.update(project)
+        pretty_print(updated)
+        rev = updated["_rev"]
+        self.assertEqual(rev, 2)
 
-# Deprecate an project
-# WORKS
-# payload = nexus.projects.deprecate(payload)
-# nexus.tools.pretty_print(payload)
+        # Deprecate a project
+        deprecated = nexus.projects.deprecate(project, rev)
+        pretty_print(project)
+        self.assertEqual(deprecated["_rev"], 3)

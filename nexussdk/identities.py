@@ -6,24 +6,27 @@ https://bluebrain.github.io/nexus/docs/api/iam/iam-identities.html
 
 from typing import Dict
 
-from nexussdk.utils.http import http_get
-
-SEGMENT = "identities"
+from nexussdk.utils.http import Http
 
 
-# Read functions.
+class Identities:
+    segment = "identities"
 
-def fetch() -> Dict:
-    """Fetch the identities.
+    def __init__(self, http: Http):
+        self._http = http
 
-    :return: A list with the Nexus payloads of the identities.
-    """
-    return http_get([SEGMENT])
+    # Read functions.
 
+    def fetch(self) -> Dict:
+        """Fetch the identities.
 
-def fetch_(endpoint: str) -> Dict:
-    """Fetch the identities (full path version).
+        :return: A list with the Nexus payloads of the identities.
+        """
+        return self._http.get([self.segment])
 
-    :return: A list with the Nexus payloads of the identities.
-    """
-    return http_get(endpoint)
+    def fetch_(self, endpoint: str) -> Dict:
+        """Fetch the identities (full path version).
+
+        :return: A list with the Nexus payloads of the identities.
+        """
+        return self._http.get(endpoint)
