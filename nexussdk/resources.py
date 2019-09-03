@@ -208,7 +208,7 @@ class Resources:
                 the event with the provided ID will be returned.
         :return: iterator of resource events
         """
-        return self.sse_request("/resources/events", last_id)
+        return self._http.sse_request("/resources/events", last_id)
 
     def project_events(self, org_label: str, project_label: str, last_id: Optional[str] = None):
         """
@@ -220,7 +220,7 @@ class Resources:
                 the event with the provided ID will be returned.
         :return: iterator of resource events for the given project
         """
-        return self.sse_request("/resources/" + org_label + "/" + project_label + "/events", last_id)
+        return self._http.sse_request("/resources/" + org_label + "/" + project_label + "/events", last_id)
 
     def org_events(self, org_label: str, last_id: Optional[str] = None):
         """
@@ -231,4 +231,4 @@ class Resources:
                 the event with the provided ID will be returned.
         :return: iterator of resource events for the given organization
         """
-        return self.sse_request("/resources/" + org_label + "/events", last_id)
+        return self._http.sse_request("/resources/" + org_label + "/events", last_id)
