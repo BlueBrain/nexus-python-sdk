@@ -46,7 +46,8 @@ class Storages:
 
     def create_disk_storage(self, org_label: str, project_label: str, volume: str,
                             storage_id: Optional[str] = None, read_permission: Optional[str] = None,
-                            write_permission: Optional[str] = None, default: bool = False) -> Dict:
+                            write_permission: Optional[str] = None, max_file_size: Optional[int] = None,
+                            default: bool = False) -> Dict:
         """Create disk storage.
     
         :param org_label: Label of the organization the storage belongs to.
@@ -55,6 +56,7 @@ class Storages:
         :param storage_id: (optional) User-defined ID of the storage, given as an IRI which is not URL encoded.
         :param read_permission: (optional) the permission required in order to download a file from this storage
         :param write_permission: (optional) the permission required in order to upload a file to this storage
+        :param max_file_size: (optional) maximum file size (in bytes) of files which can be created by a user
         :param default: (optional) whether the storage should be the default storage for the project, defaults to False
         :return: The Nexus metadata of the created storage.
         """
@@ -73,6 +75,9 @@ class Storages:
         if write_permission is not None:
             payload["writePermission"] = write_permission
 
+        if max_file_size is not None:
+            payload["maxFileSize"] = max_file_size
+
         return self.create_(org_label, project_label, payload, storage_id)
 
     def create_s3_storage(self, org_label: str, project_label: str,
@@ -81,7 +86,7 @@ class Storages:
                           write_permission: Optional[str] = None, default: bool = False, endpoint: Optional[str] = None,
                           region: Optional[str] = None,
                           access_key: Optional[str] = None,
-                          secret_key: Optional[str] = None) -> Dict:
+                          secret_key: Optional[str] = None, max_file_size: Optional[int] = None) -> Dict:
         """Create S3 storage.
     
         :param org_label: Label of the organization the storage belongs to.
@@ -95,6 +100,7 @@ class Storages:
         :param region: (optional) S3 region
         :param access_key: (optional) S3 access key
         :param secret_key: (optional) S3 secret key
+        :param max_file_size: (optional) maximum file size (in bytes) of files which can be created by a user
         :return: The Nexus metadata of the created storage.
         """
         payload = {
@@ -124,34 +130,41 @@ class Storages:
         if secret_key is not None:
             payload["secretKey"] = secret_key
 
+        if max_file_size is not None:
+            payload["maxFileSize"] = max_file_size
+
         return self.create_(org_label, project_label, payload, storage_id)
 
-    def create_external_disk_storage(self, org_label: str, project_label: str, endpoint: str, folder: str,
-                                     storage_id: Optional[str] = None, read_permission: Optional[str] = None,
+    def create_remote_disk_storage(self, org_label: str, project_label: str, folder: str,
+                        storage_id: Optional[str] = None, endpoint: Optional[str] = None,
+                                    read_permission: Optional[str] = None,
                                      write_permission: Optional[str] = None, default: bool = False,
-                                     credentials: Optional[str] = None) -> Dict:
-        """Create external disk storage.
+                                     credentials: Optional[str] = None, max_file_size: Optional[int] = None) -> Dict:
+        """Create remote disk storage.
     
         :param org_label: Label of the organization the storage belongs to.
         :param project_label: Label of the project the storage belongs to.
-        :param endpoint: endpoint to communicate with the external storage
-        :param folder:  external storage folder (similar concept to bucket in the S3)
+        :param folder: remote storage folder (similar concept to bucket in the S3)
         :param storage_id: (optional) User-defined ID of the storage, given as an IRI which is not URL encoded.
+        :param endpoint: (optional) endpoint to communicate with the remote storage
         :param read_permission: (optional) the permission required in order to download a file from this storage
         :param write_permission: (optional) the permission required in order to upload a file to this storage
         :param default: (optional) whether the storage should be the default storage for the project, defaults to False
-        :param credentials: (optional) external storage optional Bearer Token
+        :param credentials: (optional) remote storage optional Bearer Token
+        :param max_file_size: (optional) maximum file size (in bytes) of files which can be created by a user
         :return: The Nexus metadata of the created storage.
         """
         payload = {
-            "@type": "nxv:ExternalDiskStorage",
-            "endpoint": endpoint,
+            "@type": "nxv:RemoteDiskStorage",
             "folder": folder,
             "default": default
         }
 
         if storage_id is not None:
             payload["@id"] = storage_id
+
+        if endpoint is not None:
+            payload["endpoint"] = endpoint
 
         if read_permission is not None:
             payload["readPermission"] = read_permission
@@ -162,11 +175,15 @@ class Storages:
         if credentials is not None:
             payload["credentials"] = credentials
 
+        if max_file_size is not None:
+            payload["maxFileSize"] = max_file_size
+
         return self.create_(org_label, project_label, payload, storage_id)
 
     def update_disk_storage(self, org_label: str, project_label: str, volume: str,
                             storage_id: str, rev: int, read_permission: Optional[str] = None,
-                            write_permission: Optional[str] = None, default: bool = False) -> Dict:
+                            write_permission: Optional[str] = None, max_file_size: Optional[int] = None,
+                            default: bool = False) -> Dict:
         """Update disk storage.
     
         :param org_label: Label of the organization the storage belongs to.
@@ -176,6 +193,7 @@ class Storages:
         :param rev: last known revision of the storage
         :param read_permission: (optional) the permission required in order to download a file from this storage
         :param write_permission: (optional) the permission required in order to upload a file to this storage
+        :param max_file_size: (optional) maximum file size (in bytes) of files which can be created by a user
         :param default: (optional) whether the storage should be the default storage for the project, defaults to False
         :return: The Nexus metadata of the updated storage.
         """
@@ -195,6 +213,9 @@ class Storages:
         if write_permission is not None:
             payload["writePermission"] = write_permission
 
+        if max_file_size is not None:
+            payload["maxFileSize"] = max_file_size
+
         return self.update_(org_label, project_label, payload, storage_id, rev)
 
     def update_s3_storage(self, org_label: str, project_label: str,
@@ -203,7 +224,7 @@ class Storages:
                           write_permission: Optional[str] = None, default: bool = False, endpoint: Optional[str] = None,
                           region: Optional[str] = None,
                           access_key: Optional[str] = None,
-                          secret_key: Optional[str] = None) -> Dict:
+                          secret_key: Optional[str] = None, max_file_size: Optional[int] = None) -> Dict:
         """Update S3 storage.
     
         :param org_label: Label of the organization the storage belongs to.
@@ -218,6 +239,7 @@ class Storages:
         :param region: (optional) S3 region
         :param access_key: (optional) S3 access key
         :param secret_key: (optional) S3 secret key
+        :param max_file_size: (optional) maximum file size (in bytes) of files which can be created by a user
         :return: The Nexus metadata of the updated storage.
         """
         payload = {
@@ -248,35 +270,41 @@ class Storages:
         if secret_key is not None:
             payload["secretKey"] = secret_key
 
+        if max_file_size is not None:
+            payload["maxFileSize"] = max_file_size
+
         return self.update_(org_label, project_label, payload, storage_id, rev)
 
-    def update_external_disk_storage(self, org_label: str, project_label: str, endpoint: str, folder: str,
-                                     storage_id: str, rev: int, read_permission: Optional[str] = None,
-                                     write_permission: Optional[str] = None, default: bool = False,
-                                     credentials: Optional[str] = None) -> Dict:
-        """Update external disk storage.
+    def update_remote_disk_storage(self, org_label: str, project_label: str, folder: str,
+                                   storage_id: str, rev: int, endpoint: Optional[str] = None,
+                                   read_permission: Optional[str] = None, write_permission: Optional[str] = None,
+                                   default: bool = False, credentials: Optional[str] = None,
+                                   max_file_size: Optional[int] = None) -> Dict:
+        """Update remote disk storage.
     
         :param org_label: Label of the organization the storage belongs to.
         :param project_label: Label of the project the storage belongs to.
-        :param endpoint: endpoint to communicate with the external storage
-        :param folder:  external storage folder (similar concept to bucket in the S3)
+        :param folder: remote storage folder (similar concept to bucket in the S3)
         :param storage_id: the storage ID
         :param rev: last known revision of the storage
+        :param endpoint: (optional)endpoint to communicate with the remote storage
         :param read_permission: (optional) the permission required in order to download a file from this storage
         :param write_permission: (optional) the permission required in order to upload a file to this storage
         :param default: (optional) whether the storage should be the default storage for the project, defaults to False
-        :param credentials: (optional) external storage optional Bearer Token
+        :param credentials: (optional) remote storage optional Bearer Token
         :return: The Nexus metadata of the updated storage.
         """
         payload = {
-            "@type": "nxv:ExternalDiskStorage",
-            "endpoint": endpoint,
+            "@type": "nxv:RemoteDiskStorage",
             "folder": folder,
             "default": default
         }
 
         if storage_id is not None:
             payload["@id"] = storage_id
+
+        if endpoint is not None:
+            payload["endpoint"] = endpoint
 
         if read_permission is not None:
             payload["readPermission"] = read_permission
@@ -286,6 +314,9 @@ class Storages:
 
         if credentials is not None:
             payload["credentials"] = credentials
+
+        if max_file_size is not None:
+            payload["maxFileSize"] = max_file_size
 
         return self.update_(org_label, project_label, payload, storage_id, rev)
 
