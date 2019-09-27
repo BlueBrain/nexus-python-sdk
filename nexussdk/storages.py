@@ -61,7 +61,7 @@ class Storages:
         :return: The Nexus metadata of the created storage.
         """
         payload = {
-            "@type": "nxv:DiskStorage",
+            "@type": "DiskStorage",
             "volume": volume,
             "default": default
         }
@@ -104,7 +104,7 @@ class Storages:
         :return: The Nexus metadata of the created storage.
         """
         payload = {
-            "@type": "nxv:S3Storage",
+            "@type": "S3Storage",
             "bucket": bucket,
             "default": default
         }
@@ -155,7 +155,7 @@ class Storages:
         :return: The Nexus metadata of the created storage.
         """
         payload = {
-            "@type": "nxv:RemoteDiskStorage",
+            "@type": "RemoteDiskStorage",
             "folder": folder,
             "default": default
         }
@@ -199,7 +199,7 @@ class Storages:
         """
         payload = {
             "@id": storage_id,
-            "@type": "nxv:DiskStorage",
+            "@type": "DiskStorage",
             "volume": volume,
             "default": default
         }
@@ -244,7 +244,7 @@ class Storages:
         """
         payload = {
             "@id": storage_id,
-            "@type": "nxv:S3Storage",
+            "@type": "S3Storage",
             "bucket": bucket,
             "default": default
         }
@@ -295,7 +295,7 @@ class Storages:
         :return: The Nexus metadata of the updated storage.
         """
         payload = {
-            "@type": "nxv:RemoteDiskStorage",
+            "@type": "RemoteDiskStorage",
             "folder": folder,
             "default": default
         }
