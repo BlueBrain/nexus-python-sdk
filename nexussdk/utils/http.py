@@ -1,3 +1,7 @@
+import asyncio
+from asyncio import Task
+
+from aiohttp import ClientResponseError, ClientSession
 import collections
 import json
 from typing import List, Union, Optional
@@ -217,3 +221,40 @@ class Http:
     # to make sure the output response dictionary are always ordered like the response's json
     def _decode_json_ordered(self, s: str):
         return json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(s)
+
+    # Bulk operations primitives
+    def _init_aio_session(self):
+        return ClientSession(headers=self._prepare_header(), raise_for_status=False)
+
+    def _init_file_session(self):
+        return ClientSession(headers=self._prepare_header("file"), raise_for_status=False)
+
+    async def _request(self, session, method, index, url, **kwargs):
+        try:
+            async with session.request(method, url, **kwargs) as response:
+                json = await response.json()
+                return index, response.status, json
+        except Exception as e:
+            return index, e, None
+
+    def _build_fetch_task(self, index, path, session, callback):
+        task = Task(self._request(session, "GET", index, self._full_url(path, True)))
+        if callback is not None:
+            task.add_done_callback(callback)
+        return task
+
+    async def bulk_fetch(self, paths, callback):
+        async with self._init_aio_session() as session:
+            tasks = (self._build_fetch_task(i, path, session, callback) for i, path in enumerate(paths))
+            return await asyncio.gather(*tasks)
+
+    def _build_create_task(self, index, path, body, session, callback):
+        task = Task(self._request(session, "POST", index, self._full_url(path, True), data=self._prepare_body(body)))
+        if callback is not None:
+            task.add_done_callback(callback)
+        return task
+
+    async def bulk_create(self, resources, callback):
+        async with self._init_aio_session() as session:
+            tasks = (self._build_create_task(i, path, body, session, callback) for i, (path, body) in enumerate(resources))
+            return await asyncio.gather(*tasks)
