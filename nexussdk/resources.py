@@ -69,6 +69,7 @@ class Resources:
         res_self_to_use = None
 
         if "_self" in resource:
+            print("⚠️ Warning: updating a resource should be done from a source version instead of a framed version.")
             res_self_to_use = resource["_self"]
 
         # overload because the one given in args has priority
