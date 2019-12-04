@@ -25,6 +25,7 @@ class Resources:
             :param schema_id: OPTIONAL id of the schema (default: "_" means whatever)
             :param rev: OPTIONAL fetches a specific revision of a resource (default: None, fetches the last)
             :param tag: OPTIONAL fetches the resource version that has a specific tag (default: None)
+            :param source: OPTIONAL fetch the /source instead of the framed version (adviced when the purpose id to update a resource)
             :return: Payload of the whole resource as a dictionary
         """
 
@@ -39,7 +40,7 @@ class Resources:
         path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
 
         if source:
-        path = path + "/source"
+            path = path + "/source"
 
         if rev is not None:
             path = path + "?rev=" + str(rev)
@@ -50,7 +51,7 @@ class Resources:
         return self._http.get(path, use_base=True)
 
 
-    def update(self, resource, rev=None):
+    def update(self, resource, rev=None, resource_self=None):
         """
         Update a resource. The resource object is most likely the returned value of a
         nexus.resource.fetch(), where some fields where modified, added or removed.
@@ -60,21 +61,41 @@ class Resources:
         :param resource: payload of a previously fetched resource, with the modification to be updated
         :param rev: OPTIONAL The previous revision you want to update from.
             If not provided, the rev from the resource argument will be used.
+        :param resource_self: OPTIONAL if the resource does not contain any _self
+            (because from a /source), then a self must be provided.
         :return: A payload containing only the Nexus metadata for this updated resource.
         """
-        self = resource["_self"]
 
-        if rev is None:
-            rev = resource["_rev"]
+        res_self_to_use = None
 
-        path = self + "?rev=" + str(rev)
+        if "_self" in resource:
+            res_self_to_use = resource["_self"]
+
+        # overload because the one given in args has priority
+        if resource_self:
+            res_self_to_use = resource_self
+
+        if res_self_to_use == None:
+            raise Exception("The resource_self arg or the _self property must be present.")
+            return
+
+        revision = None
+
+        if "_rev" in resource:
+            revision = resource["_rev"]
+
+        # we give the priority to the one given in arg
+        if rev:
+            revision = rev
+
+        path = res_self_to_use + "?rev=" + str(revision)
 
         # sanitizing the system props
         for k in builtins.list(resource): # builtins because otherwise we have a conflict with this.list
             if k.startswith("_"):
                 del resource[k]
 
-        return http_put(path, resource, use_base=False)
+        return self._http.put(path, resource, use_base=False)
 
 
     def create(self, org_label, project_label, data, schema_id=None, resource_id=None):
