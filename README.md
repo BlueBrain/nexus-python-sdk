@@ -1,12 +1,14 @@
+<p align="center"><a href="https://github.com/BlueBrain/nexus-sdk-js" target="_blank" rel="noopener noreferrer"><img src="/docs/_static/Blue-Brain-Nexus-Python-SDK-Github-Banner.jpg" alt="Nexus JS Banner"></a></p>
+
+# Nexus Python SDK
+
+Python SDK for [Blue Brain Nexus](https://github.com/BlueBrain/nexus) v1.
+
 [Status](#status) |
 [Getting Started](#getting-started) |
 [Upgrade](#upgrade) |
 [Releases](#releases) |
 [Contributing](#contributing)
-
-# Nexus Python SDK
-
-Python SDK for [Blue Brain Nexus](https://github.com/BlueBrain/nexus) v1.
 
 ---
 
