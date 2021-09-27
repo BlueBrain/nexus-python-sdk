@@ -1,9 +1,6 @@
-Authors
--------
-
-* Lurie Jonathan
-* Fonta Pierre-Alexandre
-* Genet Henry
-* Kaufmann Anna-Kristin
-* Wajerowicz Wojciech
-* Sy Mohameth François
+Lurie Jonathan (author)
+Fonta Pierre-Alexandre (author)
+Genet Henry (author)
+Kaufmann Anna-Kristin (author)
+Wajerowicz Wojciech (author)
+Sy Mohameth François (author)
