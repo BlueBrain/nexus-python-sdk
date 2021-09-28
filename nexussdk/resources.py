@@ -14,17 +14,18 @@ class Resources:
     def __init__(self, http: Http):
         self._http = http
 
-    def fetch(self, org_label, project_label, resource_id, schema_id="_", rev=None, tag=None):
+    def fetch(self, org_label, project_label, resource_id, schema_id="_", rev=None, tag=None, source=False):
         """
             Fetches a distant resource and returns the payload as a dictionary.
             In case of error, an exception is thrown.
-    
+
             :param org_label: The label of the organization that the resource belongs to
             :param project_label: The label of the project that the resource belongs to
             :param resource_id: id of the resource
             :param schema_id: OPTIONAL id of the schema (default: "_" means whatever)
             :param rev: OPTIONAL fetches a specific revision of a resource (default: None, fetches the last)
             :param tag: OPTIONAL fetches the resource version that has a specific tag (default: None)
+            :param source: OPTIONAL fetch the /source instead of the framed version (adviced when the purpose id to update a resource)
             :return: Payload of the whole resource as a dictionary
         """
 
@@ -38,6 +39,9 @@ class Resources:
         resource_id = url_encode(resource_id)
         path = "/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + resource_id
 
+        if source:
+            path = path + "/source"
+
         if rev is not None:
             path = path + "?rev=" + str(rev)
 
@@ -46,38 +50,67 @@ class Resources:
 
         return self._http.get(path, use_base=True)
 
-    def update(self, resource, rev=None):
+
+    def update(self, resource, rev=None, resource_self=None):
         """
         Update a resource. The resource object is most likely the returned value of a
         nexus.resource.fetch(), where some fields where modified, added or removed.
         Note that the returned payload only contains the Nexus metadata and not the
         complete resource.
-    
+
         :param resource: payload of a previously fetched resource, with the modification to be updated
         :param rev: OPTIONAL The previous revision you want to update from.
             If not provided, the rev from the resource argument will be used.
+        :param resource_self: OPTIONAL if the resource does not contain any _self
+            (because from a /source), then a self must be provided.
         :return: A payload containing only the Nexus metadata for this updated resource.
         """
 
-        if rev is None:
-            rev = resource["_rev"]
+        res_self_to_use = None
 
-        path = resource["_self"] + "?rev=" + str(rev)
+        if "_self" in resource:
+            print("⚠️ Warning: updating a resource should be done from a source version instead of a framed version.")
+            res_self_to_use = resource["_self"]
+
+        # overload because the one given in args has priority
+        if resource_self:
+            res_self_to_use = resource_self
+
+        if res_self_to_use == None:
+            raise Exception("The resource_self arg or the _self property must be present.")
+            return
+
+        revision = None
+
+        if "_rev" in resource:
+            revision = resource["_rev"]
+
+        # we give the priority to the one given in arg
+        if rev:
+            revision = rev
+
+        path = res_self_to_use + "?rev=" + str(revision)
+
+        # sanitizing the system props
+        for k in builtins.list(resource): # builtins because otherwise we have a conflict with this.list
+            if k.startswith("_"):
+                del resource[k]
 
         return self._http.put(path, resource, use_base=False)
+
 
     def create(self, org_label, project_label, data, schema_id=None, resource_id=None):
         """
             Create a resource. If resource_id is provided, this given ID will be used. If resource_id not provided,
             an ID will be automatically generated for this new resource.
-    
+
             :param org_label: The label of the organization that the resource belongs to
             :param project_label: The label of the project that the resource belongs to
             :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: "_")
             :param data: dictionary containing the data to store in this new resource
             :param resource_id: OPTIONAL force the use of a specific id when creating the new resource
             :return: A payload containing only the Nexus metadata for this updated resource.
-    
+
             If the data does not have a "@context" value, a default one is automatically added.
         """
 
@@ -104,7 +137,7 @@ class Resources:
              deprecated=None, type=None, rev=None, schema=None, created_by=None, updated_by=None, resource_id=None):
         """
         List the resources available for a given organization and project.
-    
+
         :param org_label: The label of the organization that the resource belongs to
         :param project_label: The label of the project that the resource belongs to
         :param schema: OPTIONAL Lists only the resource for a given schema (default: None)
@@ -147,7 +180,7 @@ class Resources:
         """
         Flag a resource as deprecated. Resources cannot be deleted in Nexus, once one is deprecated, it is no longer
         possible to update it.
-    
+
         :param resource: payload of a previously fetched resource
         :param rev: OPTIONAL The previous revision you want to update from.
             If not provided, the rev from the resource argument will be used.
@@ -164,7 +197,7 @@ class Resources:
     def tag(self, resource, tag_value, rev_to_tag=None, rev=None):
         """
         Add a tag to a a specific revision of the resource. Note that a new revision (untagged) will be created
-    
+
         :param resource: payload of a previously fetched resource
         :param tag_value: The value (or name) of a tag
         :param rev_to_tag: OPTIONAL Number of the revision to tag. If not provided, this will take the revision number
@@ -192,7 +225,7 @@ class Resources:
     def tags(self, resource):
         """
         List all the tags added to this resource, along with their version numbers
-    
+
         :param resource: payload of a previously fetched resource
         :return: payload containing the list of tags and versions
         """
@@ -203,7 +236,7 @@ class Resources:
     def events(self, last_id: Optional[str] = None):
         """
         Fetches resource related events.
-    
+
         :param last_id: ID of the last processed event, if provided, only events after
                 the event with the provided ID will be returned.
         :return: iterator of resource events
@@ -213,7 +246,7 @@ class Resources:
     def project_events(self, org_label: str, project_label: str, last_id: Optional[str] = None):
         """
         Fetches resource related events for a project.
-    
+
         :param org_label: organization label
         :param project_label: project label
         :param last_id: ID of the last processed event, if provided, only events after
@@ -225,7 +258,7 @@ class Resources:
     def org_events(self, org_label: str, last_id: Optional[str] = None):
         """
         Fetches resource related events for a organization.
-    
+
         :param org_label: organization label
         :param last_id: ID of the last processed event, if provided, only events after
                 the event with the provided ID will be returned.
