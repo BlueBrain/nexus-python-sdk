@@ -1,4 +1,3 @@
-import collections
 import json
 from typing import List, Union, Optional
 
@@ -56,7 +55,7 @@ class Http:
         if get_raw_response:
             return response
         else:
-            return this._decode_json_ordered(response.text)
+            return response.json()
 
     def post(self, path: Union[str, List[str]], body=None, data_type=default_type, use_base=False, **kwargs):
         """
@@ -83,7 +82,7 @@ class Http:
             response = requests.post(full_url, headers=header, files=body, params=kwargs)
 
         response.raise_for_status()
-        return self._decode_json_ordered(response.text)
+        return response.json()
 
     def put(self, path: Union[str, List[str]], body=None, data_type=default_type, use_base=False, **kwargs):
         """
@@ -109,7 +108,7 @@ class Http:
             response = requests.put(full_url, headers=header, files=body, params=kwargs)
 
         response.raise_for_status()
-        return self._decode_json_ordered(response.text)
+        return response.json()
 
     def patch(self, path: Union[str, List[str]], body=None, data_type=default_type, use_base=False, **kwargs):
         """
@@ -128,7 +127,7 @@ class Http:
         body_data = self._prepare_body(body, data_type)
         response = requests.patch(full_url, headers=header, data=body_data, params=kwargs)
         response.raise_for_status()
-        return self._decode_json_ordered(response.text)
+        return response.json()
 
     def delete(self, path: Union[str, List[str]], body=None, data_type=default_type, use_base=False, **kwargs):
         """
@@ -147,7 +146,7 @@ class Http:
         body_data = self._prepare_body(body, data_type)
         response = requests.delete(full_url, headers=header, data=body_data, params=kwargs)
         response.raise_for_status()
-        return self._decode_json_ordered(response.text)
+        return response.json()
 
     def sse_request(self, path: str, last_id: Optional[str], ):
         """
@@ -213,7 +212,3 @@ class Http:
             body = None
 
         return body
-
-    # to make sure the output response dictionary are always ordered like the response's json
-    def _decode_json_ordered(self, s: str):
-        return json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(s)
