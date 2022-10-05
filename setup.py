@@ -19,9 +19,12 @@ setup(
     url="https://github.com/BlueBrain/nexus-python-sdk",
     license="Apache License, Version 2.0",
     packages=find_packages(),
-    python_requires=">=3.5",
+    python_requires=">=3.6",
     install_requires=[
+        "aiohttp",
+        "asyncio",
         "puremagic",
+        "pytest-asyncio",
         "requests",
         "sseclient"
     ],

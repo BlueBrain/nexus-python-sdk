@@ -3,14 +3,15 @@ A resource represents a set of organized data represented with JSON. Hence, a re
 strings, arrays, boolean and complex objects made of those primitive types. In addition, Nexus adds some metadata.
 Resources belong to projects and their access rights are defined at the project level.
 """
-
+from typing import Optional, Dict, List, Callable
 from urllib.parse import quote_plus as url_encode
-from typing import Optional
 
 from nexussdk.utils.http import Http
 
 
 class Resources:
+    segment = "resources"
+
     def __init__(self, http: Http):
         self._http = http
 
@@ -232,3 +233,39 @@ class Resources:
         :return: iterator of resource events for the given organization
         """
         return self._http.sse_request("/resources/" + org_label + "/events", last_id)
+
+    async def bulk_fetch(self, org_label: str, project_label: str, resource_ids: List[str],
+                         schema_id="_", callback: Optional[Callable] = None):
+        """
+        Fetches resources in bulk.
+
+        :param org_label: organization label
+        :param project_label: project label
+        :param resource_ids: the list of IDs to fetch
+        :param schema_id: (optional) the resource schema ID (default: "_" means any schema)
+        :param callback: (optional) a callback that takes the request's resulting task as a parameter, which needs to
+                         be unpacked into a tuple of the form (index, status, json) (see unit tests for an example)
+        :return: a list of (index, status, json) tuples
+        """
+        paths = ("/resources/" + org_label + "/" + project_label + "/" + schema_id + "/" + url_encode(rid) for rid in
+                 resource_ids)
+
+        return await self._http.bulk_fetch(paths, callback)
+
+    async def bulk_create(self, org_label: str, project_label: str, resources: List[Dict],
+                          schema_id="_", callback: Optional[Callable] = None):
+        """
+        Creates resources in bulk.
+
+        :param org_label: organization label
+        :param project_label: project label
+        :param resources: the list of resource payloads to ingest
+        :param schema_id: (optional) the resource schema ID (default: "_" means any schema)
+        :param callback: (optional) a callback that takes the request's resulting task as a parameter, which needs to
+                         be unpacked into a tuple of the form (index, status, json) (see unit tests for an example)
+        :return: a list of (index, status, json) tuples
+        """
+        path = "/resources/" + org_label + "/" + project_label + "/" + schema_id
+        resources = map(lambda x: (path, x), resources)
+
+        return await self._http.bulk_create(resources, callback)

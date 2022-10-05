@@ -16,6 +16,12 @@ from nexussdk.views import Views
 
 
 class NexusClient:
+    """
+    Creates a new instance of NexusClient.
+
+    :param environment: Nexus API endpoint, including version prefix, e.g. https://bbp.epfl.ch/nexus/v1
+    :param token: bearer token used to authenticate requests or 'None' for anonymous access
+    """
     def __init__(self, environment: str, token: Optional[str] = None):
         self._http = Http(environment, token)
         self.acls = Acls(self._http)
