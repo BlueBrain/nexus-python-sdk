@@ -111,7 +111,15 @@ def http_get(path: Union[str, List[str]], stream=False, get_raw_response=False, 
     if get_raw_response:
         return response
     else:
-        return decode_json_ordered(response.text)
+        try:
+            return decode_json_ordered(response.text)
+        except Exception as e:
+            raise Exception(
+                f"While the request was successful (code: {response.status_code}), "
+                f"could not parse as json the following response body: {response.text}"
+            ) from e
+
+
 
 
 def http_post(path: Union[str, List[str]], body=None, data_type="default", use_base=False, **kwargs):
